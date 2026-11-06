@@ -1,0 +1,77 @@
+{
+    "run_id":  "cafdd2e8-461e-4677-9359-1d93a037d087",
+    "environment":  "MOCK_ONLY",
+    "checks":  {
+                   "qa":  {
+                              "status":  "PASS",
+                              "check":  "supplier price matches frozen sample evidence",
+                              "reported_cost_php":  180,
+                              "reference_cost_php":  180
+                          },
+                   "audit":  {
+                                 "status":  "PASS",
+                                 "check":  "campaign remains draft; no live payment/advertising",
+                                 "campaign_status":  "DRAFT"
+                             },
+                   "monitor":  {
+                                   "status":  "PASS",
+                                   "check":  "13 roles produced output; centralized event log written",
+                                   "completed":  13
+                               }
+               },
+    "business_margin_before_ads_php":  226,
+    "outputs":  [
+                    {
+                        "agent":  "Sales Director / Commander",
+                        "output":  "TrÃªn dá»¯ liá»u"
+                    },
+                    {
+                        "agent":  "Market Intelligence",
+                        "output":  "TrÃªn dá»¯ liá»u máº«u Philippines, phá»\u0085u 100 lead â 20 xÃ¡c nháº­n â 15 giao (2 hoÃ n) cho tháº¥y tá»· lá» giao/lead 15% vÃ  xÃ¡c nháº­n/lead 20%; ÄÃ¢y chá» lÃ  tÃ­n hiá»u giáº£ láº­p, **khÃ´ng pháº£i nhu cáº§u thá» trÆ°á»ng ÄÃ£ kiá»m chá»©ng**. Vá»i giÃ¡ 499, chi phÃ­ 180, ship 75 vÃ  phÃ­ thanh toÃ¡n 18 PHP, ÄÃ³ng gÃ³p Æ°á»c tÃ­nh lÃ  226 PHP/ÄÆ¡n giao trÆ°á»c chiáº¿n dá»ch/hoÃ n; chiáº¿n dá»ch DRAFT 4.000 PHP cáº§n khoáº£ng 18 ÄÆ¡n giao Äá» hÃ²a vá»n,"
+                    },
+                    {
+                        "agent":  "Product Scout",
+                        "output":  "Káº¿t quáº£ DRAFT trÃªn dá»¯ liá»u máº«u Philippines: phá»\u0085u 100 lead â 20 xÃ¡c nháº­n â 15 giao (2 hoÃ n) tÆ°Æ¡ng á»©ng 20% xÃ¡c nháº­n/lead vÃ  15% giao/lead; ÄÃ¢y chá» lÃ  tÃ­n hiá»u giáº£ láº­p, **khÃ´ng pháº£i nhu cáº§u thá» trÆ°á»ng ÄÃ£ kiá»m chá»©ng**. Vá»i giÃ¡ 499, chi phÃ­ 180, ship 75 vÃ  phÃ­ thanh toÃ¡n 18 PHP, ÄÃ³ng gÃ³p Æ°á»c tÃ­nh lÃ  226 PHP/ÄÆ¡n giao trÆ°á»c hoÃ n/chiáº¿n dá»ch; chiáº¿n dá»ch DRAFT 4.000 PHP cáº§n khoáº£ng 18 ÄÆ¡n giao Äá» hÃ²a vá»n, trong khi tá»n 50 vÃ  ngÃ¢n sÃ¡ch 15.000 PHP chÆ°a Äá»§ cÆ¡ sá» kháº³ng Äá»nh kháº£ thi. ChÆ°a cÃ³ dá»¯ liá»u vá» MOQ, thá»i gian giao, cháº¥t lÆ°á»£ng nhÃ  cung cáº¥p, chi phÃ­ hoÃ n vÃ  nhu cáº§u thá»±c; má»i hÃ nh Äá»ng chá» lÃ  DRAFT, khÃ´ng cÃ³ API/chi tiÃªu/gá»­i tin tháº­t."
+                    },
+                    {
+                        "agent":  "Offer \u0026 Strategy",
+                        "output":  "Äá» xuáº¥t GTM **DRAFT** cho Philippines: chÃ o bÃ¡n **Demo bracelet** (LU-PH-001) á» **499 PHP**, dá»±a trÃªn dá»¯ liá»u máº«u vá»i chi phÃ­ nhÃ  cung cáº¥p 180 PHP, ship 75 PHP vÃ  phÃ­ thanh toÃ¡n 18 PHP, tÆ°Æ¡ng á»©ng ÄÃ³ng gÃ³p Æ°á»c tÃ­nh **226 PHP/ÄÆ¡n giao trÆ°á»c hoÃ n/chiáº¿n dá»ch**. Vá»i ngÃ¢n sÃ¡ch 15.000 PHP, tá»n 50 vÃ  chiáº¿n dá»ch DRAFT 4.000 PHP (tracking_ok=true), cáº§n khoáº£ng **18 ÄÆ¡n giao** Äá» hÃ²a vá»n chiáº¿n dá»ch theo sá» liá»u giáº£ láº­p. **Giáº£ Äá»nh chÆ°a ÄÆ°á»£c há» trá»£/kiá»m chá»©ng:** nhu cáº§u thá» trÆ°á»ng thá»±c, MOQ/thá»i gian giao/cháº¥t lÆ°á»£ng nhÃ  cung cáº¥p, chi phÃ­ hoÃ n vÃ  hiá»u quáº£ quáº£ng cÃ¡o; má»i hÃ nh Äá»ng chá» lÃ  DRAFT, khÃ´ng cÃ³ API/chi tiÃªu/gá»­i tin/ÄÄng bÃ¡n tháº­t."
+                    },
+                    {
+                        "agent":  "Content \u0026 Creative",
+                        "output":  "[EMPTY RESPONSE: finish_reason=length]"
+                    },
+                    {
+                        "agent":  "Campaign Operator",
+                        "output":  "Káº¿t quáº£ **DRAFT** cho Philippines (dá»¯ liá»u giáº£ láº­p): phá»\u0085u 100 leads â 20 confirmed â 15 delivered, 2 returned; vá»i chiáº¿n dá»ch DRAFT chi 4.000 PHP vÃ  ÄÃ³ng gÃ³p Æ°á»c tÃ­nh **226 PHP/ÄÆ¡n giao** (499â180â75â18), cáº§n khoáº£ng **18 ÄÆ¡n giao** Äá» hÃ²a vá»n chiáº¿n dá»ch nÃªn má»©c 15 ÄÆ¡n hiá»n chÆ°a Äáº¡t. NgÃ¢n sÃ¡ch 15.000 PHP vÃ  tá»n 50 phÃ¹ há»£p quy mÃ´ nhá», nhÆ°ng tá»· lá» hoÃ n 2/15 cáº§n chi phÃ­ hoÃ n chÆ°a cÃ³ Äá» ÄÃ¡nh giÃ¡ Äáº§y Äá»§. **Giáº£ Äá»nh chÆ°a ÄÆ°á»£c há» trá»£/kiá»m chá»©ng:** nhu cáº§u thá» trÆ°á»ng thá»±c, MOQ/thá»i gian giao/cháº¥t lÆ°á»£ng nhÃ  cung cáº¥p, chi phÃ­ hoÃ n vÃ  hiá»u quáº£ quáº£ng cÃ¡o; má»i hÃ nh Äá»ng chá» lÃ  **DRAFT**, khÃ´ng publish/API/chi tiÃªu/gá»­i tin tháº­t."
+                    },
+                    {
+                        "agent":  "Lead \u0026 Sales",
+                        "output":  "Káº¿t quáº£ **DRAFT** cho Philippines (dá»¯ liá»u giáº£ láº­p): 100 leads â 20 confirmed â 15 delivered, 2 returned; tá»n 50, ngÃ¢n sÃ¡ch 15.000 PHP, chiáº¿n dá»ch DRAFT chi 4.000 PHP vÃ  tracking_ok=true. Vá»i giÃ¡ 499 PHP vÃ  chi phÃ­ 180+75+18 PHP, ÄÃ³ng gÃ³p Æ°á»c tÃ­nh **226 PHP/ÄÆ¡n giao**, cáº§n khoáº£ng **18 ÄÆ¡n giao** Äá» hÃ²a vá»n chiáº¿n dá»ch nÃªn 15 ÄÆ¡n hiá»n chÆ°a Äáº¡t; tá»· lá» hoÃ n 2/15 chÆ°a ÄÃ¡nh giÃ¡ Äá»§ vÃ¬ thiáº¿u chi phÃ­ hoÃ n. **Giáº£ Äá»nh chÆ°a ÄÆ°á»£c há» trá»£/kiá»m chá»©ng:** nhu cáº§u thá» trÆ°á»ng thá»±c, MOQ/thá»i gian giao/cháº¥t lÆ°á»£ng nhÃ  cung cáº¥p, chi phÃ­ hoÃ n vÃ  hiá»u quáº£ quáº£ng cÃ¡o; má»i hÃ nh Äá»ng chá» lÃ  **DRAFT**, khÃ´ng publish/API/chi tiÃªu/gá»­i tin tháº­t."
+                    },
+                    {
+                        "agent":  "Customer Success",
+                        "output":  "Báº£n nhÃ¡p theo dÃµi **DRAFT** cho Philippines (dá»¯ liá»u giáº£ láº­p): SKU LU-PH-001 cÃ³ giÃ¡ 499 PHP, chi phÃ­ 180+75+18 PHP, ÄÃ³ng gÃ³p Æ°á»c tÃ­nh **226 PHP/ÄÆ¡n giao**; ngÃ¢n sÃ¡ch 15.000 PHP, tá»n 50, chiáº¿n dá»ch DRAFT chi 4.000 PHP vÃ  tracking_ok=true. Phá»\u0085u 100 leads â 20 confirmed â 15 delivered, 2 returned; cáº§n khoáº£ng **18 ÄÆ¡n giao** Äá» hÃ²a vá»n chiáº¿n dá»ch nÃªn má»©c 15 ÄÆ¡n hiá»n chÆ°a Äáº¡t. ChÆ°a ÄÃ¡nh giÃ¡ Äá»§ tá»· lá» hoÃ n 2/15 vÃ¬ thiáº¿u chi phÃ­ hoÃ n. **Giáº£ Äá»nh chÆ°a ÄÆ°á»£c há» trá»£/kiá»m chá»©ng:** nhu cáº§u thá» trÆ°á»ng thá»±c, MOQ/thá»i gian giao/cháº¥t lÆ°á»£ng nhÃ  cung cáº¥p, chi phÃ­ hoÃ n vÃ  hiá»u quáº£ quáº£ng cÃ¡o; má»i hÃ nh Äá»ng chá» lÃ  **DRAFT**, khÃ´ng publish/API/chi tiÃªu/gá»­i tin tháº­t."
+                    },
+                    {
+                        "agent":  "Sales Analyst",
+                        "output":  "Vá»i SKU **LU-PH-001** (dá»¯ liá»u giáº£ láº­p), biÃªn ÄÃ³ng gÃ³p Æ°á»c tÃ­nh lÃ  **226 PHP/ÄÆ¡n giao** (499â180â75â18); 15 ÄÆ¡n giao táº¡o khoáº£ng **3.390 PHP**, tháº¥p hÆ¡n chiáº¿n dá»ch **DRAFT** 4.000 PHP khoáº£ng **610 PHP**, vÃ  cáº§n khoáº£ng **18 ÄÆ¡n giao** Äá» hÃ²a vá»n chiáº¿n dá»ch. Tá»· lá» hoÃ n **2/15** chÆ°a Äá»§ ÄÃ¡nh giÃ¡ vÃ¬ thiáº¿u chi phÃ­ hoÃ n. **Giáº£ Äá»nh chÆ°a ÄÆ°á»£c há» trá»£/kiá»m chá»©ng:** nhu cáº§u thá» trÆ°á»ng thá»±c, MOQ/thá»i gian giao/cháº¥t lÆ°á»£ng nhÃ  cung cáº¥p, chi phÃ­ hoÃ n vÃ  hiá»u quáº£ quáº£ng cÃ¡o; má»i hÃ nh Äá»ng chá» lÃ  **DRAFT**, khÃ´ng publish/API/chi tiÃªu/gá»­i tin tháº­t."
+                    },
+                    {
+                        "agent":  "Finance \u0026 Risk",
+                        "output":  "Vá»i dá»¯ liá»u giáº£ láº­p, rá»§i ro ngÃ¢n sÃ¡ch lÃ  chiáº¿n dá»ch **DRAFT** chi 4.000 PHP nhÆ°ng 15 ÄÆ¡n giao Ã 226 PHP ÄÃ³ng gÃ³p â **3.390 PHP**, thiáº¿u â **610 PHP** vÃ  cáº§n â **18 ÄÆ¡n giao** Äá» hÃ²a vá»n chiáº¿n dá»ch. Rá»§i ro biÃªn lÃ  226 PHP/ÄÆ¡n giao chÆ°a trá»« chi phÃ­ hoÃ n, nÃªn tá»· lá» hoÃ n **2/15** cÃ³ thá» Än mÃ²n biÃªn; ngÃ¢n sÃ¡ch 15.000 PHP vÃ  tá»n 50 chá» lÃ  bá»i cáº£nh, chÆ°a Äá»§ Äá» káº¿t luáº­n hiá»u quáº£. **Giáº£ Äá»nh chÆ°a ÄÆ°á»£c há» trá»£/kiá»m chá»©ng:** nhu cáº§u thá» trÆ°á»ng thá»±c, MOQ/thá»i gian giao/cháº¥t lÆ°á»£ng nhÃ  cung cáº¥p, chi phÃ­ hoÃ n vÃ  hiá»u quáº£ quáº£ng cÃ¡o. Má»i hÃ nh Äá»ng chá» lÃ  **DRAFT**, khÃ´ng publish/API/chi tiÃªu/gá»­i tin tháº­t."
+                    },
+                    {
+                        "agent":  "QA Tester",
+                        "output":  "Vá»i dá»¯ liá»u giáº£ láº­p cho Philippines, **LU-PH-001** cÃ³ biÃªn ÄÃ³ng gÃ³p Æ°á»c tÃ­nh **226 PHP/ÄÆ¡n giao**; 15 ÄÆ¡n giao táº¡o khoáº£ng **3.390 PHP**, tháº¥p hÆ¡n chiáº¿n dá»ch **DRAFT** 4.000 PHP khoáº£ng **610 PHP** vÃ  cáº§n khoáº£ng **18 ÄÆ¡n giao** Äá» hÃ²a vá»n chiáº¿n dá»ch. Phá»\u0085u **100 lead â 20 xÃ¡c nháº­n â 15 giao**, hoÃ n **2/15**, cho tháº¥y cáº§n theo dÃµi chi phÃ­ hoÃ n vÃ  tá»· lá» chuyá»n Äá»i, nhÆ°ng ngÃ¢n sÃ¡ch 15.000 PHP vÃ  tá»n 50 chá» lÃ  bá»i cáº£nh. **Giáº£ Äá»nh chÆ°a ÄÆ°á»£c há» trá»£/kiá»m chá»©ng:** nhu cáº§u thá» trÆ°á»ng thá»±c, MOQ/thá»i gian giao/cháº¥t lÆ°á»£ng nhÃ  cung cáº¥p, chi phÃ­ hoÃ n vÃ  hiá»u quáº£ quáº£ng cÃ¡o; má»i hÃ nh Äá»ng chá» lÃ  **DRAFT**, khÃ´ng publish/API/chi tiÃªu/gá»­i tin tháº­t."
+                    },
+                    {
+                        "agent":  "Auditor",
+                        "output":  "Vá»i dá»¯ liá»u giáº£ láº­p, ngÃ¢n sÃ¡ch 15.000 PHP bao phá»§ chiáº¿n dá»ch **DRAFT** 4.000 PHP, nhÆ°ng 15 ÄÆ¡n giao Ã 226 PHP â 3.390 PHP, thiáº¿u â 610 PHP so vá»i chi tiÃªu vÃ  cáº§n â 18 ÄÆ¡n giao Äá» hÃ²a vá»n chiáº¿n dá»ch. KhÃ´ng cÃ³ thÃ´ng tin vá» **quyá»n/permissions** hay **phÃª duyá»t/approval**, nÃªn khÃ´ng thá» coi chiáº¿n dá»ch lÃ  ÄÆ°á»£c phÃ©p chi tiÃªu hoáº·c publish. **Giáº£ Äá»nh chÆ°a ÄÆ°á»£c há» trá»£/kiá»m chá»©ng:** nhu cáº§u thá» trÆ°á»ng Philippines, MOQ/cháº¥t lÆ°á»£ng/thá»i gian nhÃ  cung cáº¥p, chi phÃ­ hoÃ n vÃ  hiá»u quáº£ quáº£ng cÃ¡o. Má»i hÃ nh Äá»ng chá» lÃ  **DRAFT**, khÃ´ng cÃ³ chi tiÃªu/gá»­i tin/publish/API tháº­t."
+                    },
+                    {
+                        "agent":  "Monitor",
+                        "output":  "**Sá»± kiá»n sá»©c khá»e:** vá»i dá»¯ liá»u giáº£ láº­p, `tracking_ok=true` vÃ  chiáº¿n dá»ch á» tráº¡ng thÃ¡i **DRAFT**; phá»\u0085u lÃ  **100 lead â 20 xÃ¡c nháº­n â 15 giao**, hoÃ n **2/15**.  \n**Cáº£nh bÃ¡o sá»± cá»:** 15 ÄÆ¡n giao Ã 226 PHP â **3.390 PHP**, tháº¥p hÆ¡n chi tiÃªu chiáº¿n dá»ch **DRAFT 4.000 PHP** khoáº£ng **610 PHP**, nÃªn cáº§n khoáº£ng **18 ÄÆ¡n giao** Äá» hÃ²a vá»n chiáº¿n dá»ch.  \n**Giáº£ Äá»nh chÆ°a ÄÆ°á»£c há» trá»£/kiá»m chá»©ng:** nhu cáº§u thá» trÆ°á»ng Philippines, MOQ/cháº¥t lÆ°á»£ng/thá»i gian nhÃ  cung cáº¥p, chi phÃ­ hoÃ n, hiá»u quáº£ quáº£ng cÃ¡o vÃ  quyá»n/phÃª duyá»t; má»i hÃ nh Äá»ng chá» lÃ  **DRAFT**, khÃ´ng cÃ³ API/chi tiÃªu/gá»­i tin/publish tháº­t."
+                    }
+                ]
+}

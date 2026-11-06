@@ -1,0 +1,16 @@
+{
+ "mode": "fallback_internal_runtime",
+ "node": "v22.23.4",
+ "platform": "linux",
+ "outcome": {
+  "run_id": "abed1dca-cc66-460c-a71b-452475c3b296",
+  "status": "COMPLETED"
+ },
+ "trace": [
+  {
+   "t": "2026-11-05T03:59:14.558Z",
+   "event": "aris_failed",
+   "error": "Cannot find module '/nope/dispatch.ts' imported from /spike/spike.mjs"
+  }
+ ]
+}

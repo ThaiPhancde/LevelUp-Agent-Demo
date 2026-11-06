@@ -1,0 +1,1 @@
+Phase A0 documentation ONLY. Read docs/DEMO_PLAN_OPTION_A.md section 8 API and phase A0. Edit ONLY docs/DEMO_API.md: append a concise Vietnamese planned endpoints table for Option A with method/path/purpose/phase. Clearly mark ALL new endpoints as KE HOACH, CHUA TRIEN KHAI. Preserve existing API docs. No app code, no installs, no test runs, no other edits. Return brief summary.

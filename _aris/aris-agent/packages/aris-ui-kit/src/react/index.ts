@@ -1,0 +1,102 @@
+/**
+ * Bộ thành phần React của aris (`@aris/ui-kit/react`). Gói client của aris đóng
+ * gói kèm mã nguồn này; React do Web UI của dsh cung cấp lúc chạy. Mọi thành
+ * phần phải nằm trong một gốc có lớp `aris` và trang phải gắn {@link mountKitCss}.
+ * @module @aris/ui-kit/react
+ */
+export { KIT_CSS, mountKitCss } from './css.js'
+export * from './icons.js'
+export {
+  BrandMark,
+  Button,
+  Card,
+  CardRow,
+  IconButton,
+  Mascot,
+  Pill,
+  StatusGlyph,
+  StatusPill,
+  Tag,
+  type ButtonProps,
+  type IconButtonProps,
+} from './basics.js'
+export * from './controls.js'
+export * from './overlays.js'
+export * from './layout.js'
+export * from './taskline.js'
+export { TeamOrbit, type OrbitBot, type TeamOrbitProps } from './TeamOrbit.js'
+export { splitMascot, orbitLayout } from './orbit.js'
+export * from './nav.js'
+export { KnowledgeGraph, ZOOM_MAX, ZOOM_MIN, clampZoom, type KnowledgeGraphProps } from './KnowledgeGraph.js'
+export * from './graph.js'
+export {
+  BotPicker,
+  Select,
+  filterBotOptions,
+  type BotOption,
+  type SelectOption,
+  type SelectProps,
+} from './BotPicker.js'
+export {
+  currentTeam,
+  latestCommanderSession,
+  openBotSession,
+  personalize,
+  registerPersonal,
+  youWord,
+  refreshTeam,
+  teamAction,
+  teamView,
+  toMember,
+  useSessionBot,
+  useTeam,
+  useTeamData,
+  useTeamLive,
+  type ActivityItem,
+  type BotLive,
+  type TeamLive,
+  type BotData,
+  type McpData,
+  type ConnectorData,
+  TEAM_MCP_OWNER,
+  isTeamMcp,
+  mcpInScope,
+  mcpScopeLabel,
+  stricterMcpAsk,
+  teamMcpOf,
+  type ExternalAgent,
+  type ExternalData,
+  type CatalogGroup,
+  type OwnerAddress,
+  type RolePreset,
+  type DepartmentData,
+  type PolicyData,
+  type TeamSnapshot,
+  type TeamView,
+  type TemplateData,
+} from './team.js'
+export {
+  PROJECTS_CHANGED,
+  boardAction,
+  refreshBoard,
+  useBoard,
+  type BoardCard,
+  type BoardData,
+  projectAction,
+  refreshProjects,
+  useProjectByPath,
+  useProjects,
+  type ProjectData,
+  type ProjectEntry,
+  type ProjectRules,
+} from './projects.js'
+export * from './external.js'
+export { fetchInboxCount, inboxTotal, useInboxCount, type InboxCount } from './inbox.js'
+export {
+  fetchRoomStatus,
+  roomRole,
+  stopRoom,
+  useRoomStatus,
+  type RoomSpoke,
+  type RoomStatus,
+} from './room.js'

@@ -1,0 +1,125 @@
+import os, json, sqlite3, uuid, datetime, asyncio
+from pathlib import Path
+import httpx
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
+
+app = FastAPI(title="Level Up 13-Agent Sandbox Demo", version="0.1.0")
+DB_PATH = Path('/app/data/demo.sqlite')
+MODEL = os.getenv('DEEPSEEK_MODEL', 'deepseek-v4-flash')
+BASE_URL = os.getenv('DEEPSEEK_BASE_URL', 'https://api.deepseek.com').rstrip('/')
+ROLES = [
+ ('01','Sales Director / Commander','Define tasks and consolidate approvals'),
+ ('02','Market Intelligence','Analyze sample market demand'),
+ ('03','Product Scout','Evaluate mock products and suppliers'),
+ ('04','Offer & Strategy','Draft go-to-market offer'),
+ ('05','Content & Creative','Draft an ad creative pack'),
+ ('06','Campaign Operator','Draft a campaign; NEVER publish'),
+ ('07','Lead & Sales','Draft responses to simulated leads'),
+ ('08','Customer Success','Draft simulated follow-up'),
+ ('09','Sales Analyst','Analyze mock metrics and margin'),
+ ('10','Finance & Risk','Identify budget and margin risks'),
+ ('11','QA Tester','Check results against sample evidence'),
+ ('12','Auditor','Evaluate permissions, budget and approval'),
+ ('13','Monitor','Explain health events and incident alerts'),
+]
+SAMPLE = {
+ 'market':'Philippines', 'currency':'PHP', 'budget_php':15000,
+ 'product':{'sku':'LU-PH-001','name':'Demo bracelet','supplier_unit_cost_php':180,'selling_price_php':499,'shipping_php':75,'payment_fee_php':18,'stock':50},
+ 'orders':{'leads':100,'confirmed':20,'delivered':15,'returned':2},
+ 'campaign':{'status':'DRAFT','spend_php':4000,'tracking_ok':True},
+ 'note':'All numbers are synthetic. No verified market demand or live supplier data.'
+}
+
+def conn():
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    c = sqlite3.connect(DB_PATH)
+    c.execute('create table if not exists events (id integer primary key autoincrement, run_id text, ts text, actor text, event text, detail text)')
+    c.commit()
+    return c
+
+def log(run_id, actor, event, detail):
+    c=conn()
+    try:
+        c.execute('insert into events(run_id,ts,actor,event,detail) values(?,?,?,?,?)',
+                  (run_id, datetime.datetime.now(datetime.timezone.utc).isoformat(),actor,event,json.dumps(detail,ensure_ascii=False)))
+        c.commit()
+    finally: c.close()
+
+class DemoRequest(BaseModel):
+    objective: str = Field(default='Đề xuất kế hoạch bán thử sản phẩm tại Philippines, không chạy quảng cáo thật.',max_length=600)
+    inject_error: bool = False
+    use_llm: bool = True
+
+async def ai(role, objective, facts, prior):
+    key=os.getenv('DEEPSEEK_API_KEY','')
+    if not key or key == 'PUT_YOUR_KEY_HERE':
+        raise HTTPException(400,'Missing DEEPSEEK_API_KEY. Configure .env or set use_llm=false.')
+    system=(f'You are the {role[1]} for a synthetic-only business demo. {role[2]}. '
+      'Only use the facts given. Do not claim live API access, current market information or actual sales. '
+      'No real spending, purchasing, messaging or publishing. Output a concise Vietnamese result, 2-4 sentences. '
+      'Explicitly flag unsupported assumptions. All actions are DRAFT.')
+    prompt=json.dumps({'objective':objective,'facts':facts,'previous_results':prior[-2:]},ensure_ascii=False)
+    async with httpx.AsyncClient(timeout=60) as client:
+        r=await client.post(f'{BASE_URL}/chat/completions',headers={'Authorization':f'Bearer {key}'},
+             json={'model':MODEL,'max_tokens':280,'temperature':0.2,'messages':[{'role':'system','content':system},{'role':'user','content':prompt}]})
+    if r.status_code >= 400:
+        raise HTTPException(502, f'DeepSeek status {r.status_code}: {r.text[:280]}')
+    data=r.json()
+    return data['choices'][0]['message']['content'] or '(empty model result)'
+
+@app.get('/health')
+def health(): return {'ok':True,'service':'levelup-demo','live_integrations':False,'model':MODEL}
+
+@app.get('/agents')
+def agents(): return [{'id':n,'name':name,'responsibility':desc} for n,name,desc in ROLES]
+
+@app.get('/sample')
+def sample(): return SAMPLE
+
+@app.get('/events/{run_id}')
+def events(run_id:str):
+    c=conn()
+    try:
+        rows=c.execute('select ts,actor,event,detail from events where run_id=? order by id',(run_id,)).fetchall()
+        return [{'ts':a,'actor':b,'event':d,'detail':json.loads(e)} for a,b,d,e in rows]
+    finally: c.close()
+
+@app.post('/demo/run')
+async def run(req:DemoRequest):
+    run_id=str(uuid.uuid4())
+    facts=json.loads(json.dumps(SAMPLE))
+    if req.inject_error:
+        facts['product']['supplier_unit_cost_php']=9999
+    real_cost=SAMPLE['product']['supplier_unit_cost_php']
+    result=[]
+    log(run_id,'Commander','run_started',{'objective':req.objective,'inject_error':req.inject_error,'live':False})
+    for role in ROLES:
+        n,name,description=role
+        log(run_id,name,'task_started',{'role':description})
+        if req.use_llm:
+            try: output=await ai(role,req.objective,facts,[x['output'] for x in result])
+            except Exception as e:
+                log(run_id,name,'llm_error',{'error':str(e)[:300]})
+                raise
+        else:
+            output=f'[SIMULATED] {name}: processed synthetic inputs; no LLM called.'
+        result.append({'agent':name,'output':output})
+        log(run_id,name,'task_completed',{'result':output[:1000]})
+    price=facts['product']['selling_price_php']
+    cost=facts['product']['supplier_unit_cost_php']
+    qa={'status':'FAIL' if cost!=real_cost else 'PASS','check':'supplier price matches frozen sample evidence',
+        'reported_cost_php':cost,'reference_cost_php':real_cost}
+    audit={'status':'PASS','check':'campaign remains draft; no live payment/advertising',
+           'campaign_status':facts['campaign']['status']}
+    monitor={'status':'PASS','check':'13 roles produced output; centralized event log written', 'completed':len(result)}
+    log(run_id,'QA Engine','validation',qa)
+    log(run_id,'Audit Engine','validation',audit)
+    log(run_id,'Monitoring Engine','validation',monitor)
+    if qa['status']=='FAIL':
+        log(run_id,'Commander','task_rejected',{'reason':'price discrepancy','action':'return to Product Scout for review'})
+    else:
+        log(run_id,'Commander','run_completed',{'result':'DRAFT_READY'})
+    return {'run_id':run_id,'environment':'MOCK_ONLY','checks':{'qa':qa,'audit':audit,'monitor':monitor},
+            'business_margin_before_ads_php':price-cost-facts['product']['shipping_php']-facts['product']['payment_fee_php'],
+            'outputs':result}

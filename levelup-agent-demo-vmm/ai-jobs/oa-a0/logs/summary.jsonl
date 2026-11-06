@@ -1,0 +1,2 @@
+{"event": "job", "id": "api-plan", "mode": "write", "exit": 0, "seconds": 120.4, "timed_out": false, "error": null, "log_bytes": 735}
+{"event": "run", "jobs": 1, "failed": 0, "failed_ids": [], "stray_writes": 0, "seconds": 120.5, "exit": 0}

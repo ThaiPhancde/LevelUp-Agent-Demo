@@ -1,0 +1,53 @@
+[
+ {
+  "id": "qa-tests",
+  "mode": "write",
+  "model": "gemini-4-argon-high",
+  "prompt_file": "prompts/qa-tests.md",
+  "allowed_paths": [
+   "tests/test_engine_qa_table.py"
+  ],
+  "check": [
+   "python",
+   "-I",
+   "ai-jobs/p5-engines/checker.py",
+   "qa-tests",
+   "."
+  ],
+  "timeout_s": 1800
+ },
+ {
+  "id": "audit-monitor-tests",
+  "mode": "write",
+  "model": "gemini-4-argon-high",
+  "prompt_file": "prompts/audit-monitor-tests.md",
+  "allowed_paths": [
+   "tests/test_engine_audit_monitor_table.py"
+  ],
+  "check": [
+   "python",
+   "-I",
+   "ai-jobs/p5-engines/checker.py",
+   "audit-monitor-tests",
+   "."
+  ],
+  "timeout_s": 1800
+ },
+ {
+  "id": "graph-soft-tests",
+  "mode": "write",
+  "model": "gemini-4-argon-high",
+  "prompt_file": "prompts/graph-soft-tests.md",
+  "allowed_paths": [
+   "tests/test_graph_soft_table.py"
+  ],
+  "check": [
+   "python",
+   "-I",
+   "ai-jobs/p5-engines/checker.py",
+   "graph-soft-tests",
+   "."
+  ],
+  "timeout_s": 1800
+ }
+]

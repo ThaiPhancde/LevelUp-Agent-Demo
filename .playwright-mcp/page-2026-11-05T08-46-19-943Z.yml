@@ -1,0 +1,146 @@
+- generic [ref=e1]:
+  - generic "Văn phòng 3D" [ref=e2]:
+    - generic:
+      - generic [ref=e89] [cursor=pointer]: ⚙ 01 · Phòng Chỉ huy
+      - generic [ref=e90] [cursor=pointer]: "Đang làm: plan…"
+      - generic [ref=e91] [cursor=pointer]: ⏸ 02 · Thị trường & Sản phẩm
+      - generic [ref=e92] [cursor=pointer]: ⏸ 03 · Thị trường & Sản phẩm
+      - generic [ref=e93] [cursor=pointer]: ⏸ 04 · Chiến lược & Sáng tạo
+      - generic [ref=e94] [cursor=pointer]: ⏸ 05 · Chiến lược & Sáng tạo
+      - generic [ref=e95] [cursor=pointer]: ⏸ 06 · Quảng cáo
+      - generic [ref=e96] [cursor=pointer]: ⏸ 07 · Bán hàng & CSKH
+      - generic [ref=e97] [cursor=pointer]: ⏸ 08 · Bán hàng & CSKH
+      - generic [ref=e98] [cursor=pointer]: ⏸ 09 · Phân tích & Tài chính
+      - generic [ref=e99] [cursor=pointer]: ⏸ 10 · Phân tích & Tài chính
+      - generic [ref=e100] [cursor=pointer]: ⏸ 11 · Phòng Giám sát
+      - generic [ref=e101] [cursor=pointer]: ⏸ 12 · Phòng Giám sát
+      - generic [ref=e102] [cursor=pointer]: ⏸ 13 · Phòng Giám sát
+      - generic: Mock Tool Gateway
+      - generic: Meta Ads (mock)
+      - generic: CRM (mock)
+      - generic: Thanh toán (mock)
+  - generic:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - heading "Văn phòng Level Up" [level=1] [ref=e5]
+        - generic [ref=e6]: MOCK ONLY — dữ liệu giả lập
+        - generic [ref=e7]: 13 agent
+        - generic [ref=e8]: Bước 0/14
+        - generic [ref=e9]: RUNNING
+      - toolbar "Thanh công cụ điều khiển" [ref=e10]:
+        - button "Dừng xoay (Tự xoay)" [pressed] [ref=e11] [cursor=pointer]
+        - button "Tên" [pressed] [ref=e12] [cursor=pointer]
+        - button "Bong bóng" [pressed] [ref=e13] [cursor=pointer]
+        - button "Toàn cảnh" [ref=e14] [cursor=pointer]
+        - button "Tổng quan (2D)" [ref=e15] [cursor=pointer]
+        - button "Start Demo ▶" [active] [ref=e16] [cursor=pointer]
+    - region "Cấu hình chạy kịch bản Demo" [ref=e17]:
+      - generic [ref=e18]:
+        - heading "Khởi chạy kịch bản Demo" [level=2] [ref=e19]
+        - button "Thu gọn ▾" [expanded] [ref=e20] [cursor=pointer]
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e23]: Mục tiêu kinh doanh (Objective)
+          - textbox "Mục tiêu chiến dịch (Objective)" [ref=e24]: Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.
+        - generic [ref=e25]:
+          - generic [ref=e26]: Chế độ suy luận (Mode)
+          - generic [ref=e27]:
+            - generic [ref=e28] [cursor=pointer]:
+              - radio "Mock (mặc định)" [checked] [ref=e29]
+              - text: Mock (mặc định)
+            - generic [ref=e30] [cursor=pointer]:
+              - radio "DeepSeek" [ref=e31]
+              - text: DeepSeek
+        - generic [ref=e32]:
+          - generic [ref=e33]: Tiêm lỗi giả lập (Phase 5 Error Injection)
+          - generic [ref=e34]:
+            - generic [ref=e35] [cursor=pointer]:
+              - checkbox "bad_cost — Sai lệch giá vốn" [ref=e36]
+              - code [ref=e37]: bad_cost
+              - text: — Sai lệch giá vốn
+            - generic [ref=e38] [cursor=pointer]:
+              - checkbox "publish_attempt — Cố publish quảng cáo thật" [ref=e39]
+              - code [ref=e40]: publish_attempt
+              - text: — Cố publish quảng cáo thật
+            - generic [ref=e41]:
+              - generic [ref=e42] [cursor=pointer]:
+                - checkbox "timeout:" [ref=e43]
+                - code [ref=e44]: "timeout:"
+              - combobox "Chọn task cho timeout:" [ref=e45]:
+                - option "plan — 01 Sales Director / Commander"
+                - option "market — 02 Market Intelligence" [selected]
+                - option "product — 03 Product Scout"
+                - option "offer — 04 Offer & Strategy"
+                - option "content — 05 Content & Creative"
+                - option "campaign — 06 Campaign Operator"
+                - option "leads — 07 Lead & Sales"
+                - option "care — 08 Customer Success"
+                - option "kpi — 09 Sales Analyst"
+                - option "finance — 10 Finance & Risk"
+                - option "qa — 11 QA Tester"
+                - option "audit — 12 Auditor"
+                - option "monitor — 13 Monitor"
+                - option "summary — 01 Sales Director / Commander"
+            - generic [ref=e46]:
+              - generic [ref=e47] [cursor=pointer]:
+                - checkbox "missing_field:" [ref=e48]
+                - code [ref=e49]: "missing_field:"
+              - combobox "Chọn task cho missing_field:" [ref=e50]:
+                - option "plan — 01 Sales Director / Commander"
+                - option "market — 02 Market Intelligence"
+                - option "product — 03 Product Scout"
+                - option "offer — 04 Offer & Strategy" [selected]
+                - option "content — 05 Content & Creative"
+                - option "campaign — 06 Campaign Operator"
+                - option "leads — 07 Lead & Sales"
+                - option "care — 08 Customer Success"
+                - option "kpi — 09 Sales Analyst"
+                - option "finance — 10 Finance & Risk"
+                - option "qa — 11 QA Tester"
+                - option "audit — 12 Auditor"
+                - option "monitor — 13 Monitor"
+                - option "summary — 01 Sales Director / Commander"
+            - generic [ref=e51]:
+              - generic [ref=e52] [cursor=pointer]:
+                - checkbox "empty_response:" [ref=e53]
+                - code [ref=e54]: "empty_response:"
+              - combobox "Chọn task cho empty_response:" [ref=e55]:
+                - option "plan — 01 Sales Director / Commander"
+                - option "market — 02 Market Intelligence"
+                - option "product — 03 Product Scout"
+                - option "offer — 04 Offer & Strategy"
+                - option "content — 05 Content & Creative" [selected]
+                - option "campaign — 06 Campaign Operator"
+                - option "leads — 07 Lead & Sales"
+                - option "care — 08 Customer Success"
+                - option "kpi — 09 Sales Analyst"
+                - option "finance — 10 Finance & Risk"
+                - option "qa — 11 QA Tester"
+                - option "audit — 12 Auditor"
+                - option "monitor — 13 Monitor"
+                - option "summary — 01 Sales Director / Commander"
+            - generic [ref=e56]: "inject: []"
+        - generic [ref=e57]:
+          - button "Start Demo ▶" [ref=e58] [cursor=pointer]
+          - button "Xóa lỗi tiêm" [ref=e59] [cursor=pointer]
+    - contentinfo [ref=e60]:
+      - generic [ref=e61]:
+        - tablist [ref=e62]:
+          - tab "Kết quả cuối" [selected] [ref=e63] [cursor=pointer]
+          - tab "QA / Audit / Monitor" [ref=e64] [cursor=pointer]
+          - tab "Token & chi phí" [ref=e65] [cursor=pointer]
+          - tab "Nhật ký" [ref=e66] [cursor=pointer]
+          - tab "Lịch sử" [ref=e67] [cursor=pointer]
+        - generic [ref=e68]:
+          - generic "Chú thích các khu vực phòng ban" [ref=e69]:
+            - generic [ref=e70]: Phòng Chỉ huy
+            - generic [ref=e72]: Thị trường & Sản phẩm
+            - generic [ref=e74]: Chiến lược & Sáng tạo
+            - generic [ref=e76]: Quảng cáo
+            - generic [ref=e78]: Bán hàng & CSKH
+            - generic [ref=e80]: Phân tích & Tài chính
+            - generic [ref=e82]: Phòng Giám sát
+            - generic [ref=e84]: Cổng Mock
+          - button "Cancel (Hủy chạy)" [ref=e103] [cursor=pointer]
+      - tabpanel [ref=e86]:
+        - paragraph [ref=e104]: Bước tổng kết (summary) đang ở trạng thái PENDING.

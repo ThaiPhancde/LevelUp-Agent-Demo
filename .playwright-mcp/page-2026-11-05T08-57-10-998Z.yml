@@ -1,0 +1,212 @@
+- generic [active] [ref=f4e1]:
+  - generic "Văn phòng 3D" [ref=f4e2]:
+    - generic:
+      - generic [ref=f4e4] [cursor=pointer]: ✓ 01 · Phòng Chỉ huy
+      - generic [ref=f4e5] [cursor=pointer]: "Kết luận: HOLD_DRAFT. SKU LU-PH-001, rủi ro HIGH."
+      - generic [ref=f4e6] [cursor=pointer]: ✓ 02 · Thị trường & Sản phẩm
+      - generic [ref=f4e7] [cursor=pointer]: "Phễu giả lập Philippines: 100 lead, 20 xác nhận, 15 giao, 2 hoàn."
+      - generic [ref=f4e8] [cursor=pointer]: ✓ 03 · Thị trường & Sản phẩm
+      - generic [ref=f4e9] [cursor=pointer]: Chọn LU-PH-001 (Demo bracelet), biên 45.29%.
+      - generic [ref=f4e10] [cursor=pointer]: ✓ 04 · Chiến lược & Sáng tạo
+      - generic [ref=f4e11] [cursor=pointer]: "LU-PH-001: giá 499 PHP, biên 226 PHP/đơn, hòa vốn 18 đơn với ngân sách 4000 PHP."
+      - generic [ref=f4e12] [cursor=pointer]: ✓ 05 · Chiến lược & Sáng tạo
+      - generic [ref=f4e13] [cursor=pointer]: "3 mẫu quảng cáo DRAFT cho Demo bracelet, góc nhìn: price_question, product_question, shipp"
+      - generic [ref=f4e14] [cursor=pointer]: ✓ 06 · Quảng cáo
+      - generic [ref=f4e15] [cursor=pointer]: Chiến dịch CMP-LU-PH-001 ở trạng thái DRAFT, ngân sách 4000 PHP.
+      - generic [ref=f4e16] [cursor=pointer]: ✓ 07 · Bán hàng & CSKH
+      - generic [ref=f4e17] [cursor=pointer]: 100 lead, 20 xác nhận; 3 hội thoại lead cần trả lời nháp.
+      - generic [ref=f4e18] [cursor=pointer]: ✓ 08 · Bán hàng & CSKH
+      - generic [ref=f4e19] [cursor=pointer]: 15 đơn đã giao, 2 hoàn, 5 đang giao; 4 ticket sau bán.
+      - generic [ref=f4e20] [cursor=pointer]: ✓ 09 · Phân tích & Tài chính
+      - generic [ref=f4e21] [cursor=pointer]: ROAS 1.62, CPA giao 266.67 PHP.
+      - generic [ref=f4e22] [cursor=pointer]: ✓ 10 · Phân tích & Tài chính
+      - generic [ref=f4e23] [cursor=pointer]: Lợi nhuận sau quảng cáo -1062.0 PHP, rủi ro HIGH.
+      - generic [ref=f4e24] [cursor=pointer]: ✓ 11 · Phòng Giám sát
+      - generic [ref=f4e25] [cursor=pointer]: "QA PASS: 0 lỗi, 0 cảnh báo."
+      - generic [ref=f4e26] [cursor=pointer]: ✓ 12 · Phòng Giám sát
+      - generic [ref=f4e27] [cursor=pointer]: "Audit PASS: 0 lỗi, 0 cảnh báo."
+      - generic [ref=f4e28] [cursor=pointer]: ✓ 13 · Phòng Giám sát
+      - generic [ref=f4e29] [cursor=pointer]: "Monitor PASS: 0 lỗi, 0 cảnh báo."
+      - generic: Mock Tool Gateway
+      - generic: Meta Ads (mock)
+      - generic: CRM (mock)
+      - generic: Thanh toán (mock)
+  - generic:
+    - banner [ref=f4e30]:
+      - generic [ref=f4e31]:
+        - heading "Văn phòng Level Up" [level=1] [ref=f4e32]
+        - generic [ref=f4e33]: MOCK ONLY — dữ liệu giả lập
+        - generic [ref=f4e34]: 13 agent
+        - generic [ref=f4e35]: Bước 14/14
+        - generic [ref=f4e36]: COMPLETED
+      - toolbar "Thanh công cụ điều khiển" [ref=f4e37]:
+        - button "Dừng xoay (Tự xoay)" [pressed] [ref=f4e38] [cursor=pointer]
+        - button "Tên" [pressed] [ref=f4e39] [cursor=pointer]
+        - button "Bong bóng" [pressed] [ref=f4e40] [cursor=pointer]
+        - button "Toàn cảnh" [ref=f4e41] [cursor=pointer]
+        - button "Tổng quan (2D)" [ref=f4e42] [cursor=pointer]
+        - button "Start Demo ▶" [ref=f4e43] [cursor=pointer]
+    - region "Cấu hình chạy kịch bản Demo" [ref=f4e45]:
+      - generic [ref=f4e46]:
+        - heading "Khởi chạy kịch bản Demo" [level=2] [ref=f4e47]
+        - button "Thu gọn ▾" [expanded] [ref=f4e48] [cursor=pointer]
+      - generic [ref=f4e49]:
+        - generic [ref=f4e50]:
+          - generic [ref=f4e51]: Mục tiêu kinh doanh (Objective)
+          - textbox "Mục tiêu chiến dịch (Objective)" [ref=f4e52]: Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.
+        - generic [ref=f4e53]:
+          - generic [ref=f4e54]: Chế độ suy luận (Mode)
+          - generic [ref=f4e55]:
+            - generic [ref=f4e56] [cursor=pointer]:
+              - radio "Mock (mặc định)" [checked] [ref=f4e57]
+              - text: Mock (mặc định)
+            - generic [ref=f4e58] [cursor=pointer]:
+              - radio "DeepSeek" [ref=f4e59]
+              - text: DeepSeek
+        - generic [ref=f4e60]:
+          - generic [ref=f4e61]: Tiêm lỗi giả lập (Phase 5 Error Injection)
+          - generic [ref=f4e62]:
+            - generic [ref=f4e63] [cursor=pointer]:
+              - checkbox "bad_cost — Sai lệch giá vốn" [ref=f4e64]
+              - code [ref=f4e65]: bad_cost
+              - text: — Sai lệch giá vốn
+            - generic [ref=f4e66] [cursor=pointer]:
+              - checkbox "publish_attempt — Cố publish quảng cáo thật" [ref=f4e67]
+              - code [ref=f4e68]: publish_attempt
+              - text: — Cố publish quảng cáo thật
+            - generic [ref=f4e69]:
+              - generic [ref=f4e70] [cursor=pointer]:
+                - checkbox "timeout:" [ref=f4e71]
+                - code [ref=f4e72]: "timeout:"
+              - combobox "Chọn task cho timeout:" [ref=f4e73]:
+                - option "plan — 01 Sales Director / Commander"
+                - option "market — 02 Market Intelligence" [selected]
+                - option "product — 03 Product Scout"
+                - option "offer — 04 Offer & Strategy"
+                - option "content — 05 Content & Creative"
+                - option "campaign — 06 Campaign Operator"
+                - option "leads — 07 Lead & Sales"
+                - option "care — 08 Customer Success"
+                - option "kpi — 09 Sales Analyst"
+                - option "finance — 10 Finance & Risk"
+                - option "qa — 11 QA Tester"
+                - option "audit — 12 Auditor"
+                - option "monitor — 13 Monitor"
+                - option "summary — 01 Sales Director / Commander"
+            - generic [ref=f4e74]:
+              - generic [ref=f4e75] [cursor=pointer]:
+                - checkbox "missing_field:" [ref=f4e76]
+                - code [ref=f4e77]: "missing_field:"
+              - combobox "Chọn task cho missing_field:" [ref=f4e78]:
+                - option "plan — 01 Sales Director / Commander"
+                - option "market — 02 Market Intelligence"
+                - option "product — 03 Product Scout"
+                - option "offer — 04 Offer & Strategy" [selected]
+                - option "content — 05 Content & Creative"
+                - option "campaign — 06 Campaign Operator"
+                - option "leads — 07 Lead & Sales"
+                - option "care — 08 Customer Success"
+                - option "kpi — 09 Sales Analyst"
+                - option "finance — 10 Finance & Risk"
+                - option "qa — 11 QA Tester"
+                - option "audit — 12 Auditor"
+                - option "monitor — 13 Monitor"
+                - option "summary — 01 Sales Director / Commander"
+            - generic [ref=f4e79]:
+              - generic [ref=f4e80] [cursor=pointer]:
+                - checkbox "empty_response:" [ref=f4e81]
+                - code [ref=f4e82]: "empty_response:"
+              - combobox "Chọn task cho empty_response:" [ref=f4e83]:
+                - option "plan — 01 Sales Director / Commander"
+                - option "market — 02 Market Intelligence"
+                - option "product — 03 Product Scout"
+                - option "offer — 04 Offer & Strategy"
+                - option "content — 05 Content & Creative" [selected]
+                - option "campaign — 06 Campaign Operator"
+                - option "leads — 07 Lead & Sales"
+                - option "care — 08 Customer Success"
+                - option "kpi — 09 Sales Analyst"
+                - option "finance — 10 Finance & Risk"
+                - option "qa — 11 QA Tester"
+                - option "audit — 12 Auditor"
+                - option "monitor — 13 Monitor"
+                - option "summary — 01 Sales Director / Commander"
+            - generic [ref=f4e84]: "inject: []"
+        - generic [ref=f4e85]:
+          - button "Start Demo ▶" [ref=f4e86] [cursor=pointer]
+          - button "Xóa lỗi tiêm" [ref=f4e87] [cursor=pointer]
+    - contentinfo [ref=f4e88]:
+      - separator "Kéo để đổi chiều cao thanh dưới (phím mũi tên lên xuống cũng được)" [ref=f4e89]
+      - generic [ref=f4e90]:
+        - tablist [ref=f4e91]:
+          - tab "Kết quả cuối" [selected] [ref=f4e92] [cursor=pointer]
+          - tab "QA / Audit / Monitor" [ref=f4e93] [cursor=pointer]
+          - tab "Token & chi phí" [ref=f4e94] [cursor=pointer]
+          - tab "Nhật ký" [ref=f4e95] [cursor=pointer]
+          - tab "Lịch sử" [ref=f4e96] [cursor=pointer]
+        - generic [ref=f4e97]:
+          - button "Thu gọn thanh dưới ▾" [expanded] [ref=f4e98] [cursor=pointer]
+          - generic "Chú thích các khu vực phòng ban" [ref=f4e99]:
+            - generic [ref=f4e100]: Phòng Chỉ huy
+            - generic [ref=f4e102]: Thị trường & Sản phẩm
+            - generic [ref=f4e104]: Chiến lược & Sáng tạo
+            - generic [ref=f4e106]: Quảng cáo
+            - generic [ref=f4e108]: Bán hàng & CSKH
+            - generic [ref=f4e110]: Phân tích & Tài chính
+            - generic [ref=f4e112]: Phòng Giám sát
+            - generic [ref=f4e114]: Cổng Mock
+      - tabpanel [ref=f4e116]:
+        - generic [ref=f4e117]:
+          - strong [ref=f4e118]: "Quyết định (decision):"
+          - generic [ref=f4e119]: HOLD_DRAFT
+          - generic [ref=f4e120]: "SKU: LU-PH-001"
+          - generic [ref=f4e121]: "Kết luận: HOLD_DRAFT. SKU LU-PH-001, rủi ro HIGH."
+        - paragraph [ref=f4e122]: "Commander: Tổng kết mã LU-PH-001 kết luận HOLD_DRAFT (QA PASS, Audit PASS, Monitor PASS). Giá 499 PHP, biên 226.0 PHP, hòa vốn 18 đơn, ROAS 1.62, lợi nhuận sau quảng cáo -1062.0 PHP, rủi ro HIGH."
+        - table [ref=f4e123]:
+          - rowgroup [ref=f4e124]:
+            - row [ref=f4e125]:
+              - columnheader "Chỉ số (key)" [ref=f4e126]
+              - columnheader "Ý nghĩa" [ref=f4e127]
+              - columnheader "Giá trị" [ref=f4e128]
+          - rowgroup [ref=f4e129]:
+            - row [ref=f4e130]:
+              - cell [ref=f4e131]:
+                - code [ref=f4e132]: selling_price_php
+              - cell "Giá bán (PHP)" [ref=f4e133]
+              - cell [ref=f4e134]:
+                - strong [ref=f4e135]: "499"
+            - row [ref=f4e136]:
+              - cell [ref=f4e137]:
+                - code [ref=f4e138]: margin_per_unit_php
+              - cell "Biên lợi nhuận / đơn (PHP)" [ref=f4e139]
+              - cell [ref=f4e140]:
+                - strong [ref=f4e141]: "226"
+            - row [ref=f4e142]:
+              - cell [ref=f4e143]:
+                - code [ref=f4e144]: breakeven_orders
+              - cell "Điểm hòa vốn (đơn)" [ref=f4e145]
+              - cell [ref=f4e146]:
+                - strong [ref=f4e147]: "18"
+            - row [ref=f4e148]:
+              - cell [ref=f4e149]:
+                - code [ref=f4e150]: roas
+              - cell "ROAS" [ref=f4e151]
+              - cell [ref=f4e152]:
+                - strong [ref=f4e153]: "1.62"
+            - row [ref=f4e154]:
+              - cell [ref=f4e155]:
+                - code [ref=f4e156]: contribution_after_ads_php
+              - cell "Lợi nhuận sau quảng cáo (PHP)" [ref=f4e157]
+              - cell [ref=f4e158]:
+                - strong [ref=f4e159]: "-1062"
+            - row [ref=f4e160]:
+              - cell [ref=f4e161]:
+                - code [ref=f4e162]: risk_level
+              - cell "Mức độ rủi ro" [ref=f4e163]
+              - cell [ref=f4e164]:
+                - strong [ref=f4e165]: HIGH
+        - strong [ref=f4e166]: "Bước tiếp theo (next_steps):"
+        - list [ref=f4e167]:
+          - listitem [ref=f4e168]: Giữ chiến dịch DRAFT, không mở rộng
+          - listitem [ref=f4e169]: Người duyệt xem rủi ro Finance & Risk
+          - listitem [ref=f4e170]: Thu thêm dữ liệu bán thử hoặc điều chỉnh giá/chi phí

@@ -1,0 +1,5 @@
+[
+  {"id": "browser-e2e", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/browser-e2e.md",
+   "allowed_paths": ["tests/e2e/browser/dashboard.e2e.mjs"],
+   "check": ["python", "-I", "ai-jobs/p8-e2e/checker.py", "browser-e2e", "."], "timeout_s": 2400}
+]

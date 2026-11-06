@@ -1,0 +1,502 @@
+/**
+ * Sơ đồ đội 3D (màn R3 cột phải "Đội bot lúc này", dùng lại cho màn 1.3): Commander
+ * lơ lửng giữa, các bot xoay quanh trên vòng elip nghiêng, dây nối chạy khi bot
+ * đang làm hoặc chờ anh, vòng trạng thái động, mắt đổi theo trạng thái. Kéo để
+ * xoay, rê chuột để xem vai trò, bấm vào bot để mở. Vẽ bằng `<canvas>`; khi người
+ * dùng tắt chuyển động thì đứng yên và chỉ vẽ lại khi cần.
+ */
+import { FONTS } from '../tokens.js'
+import { useEffect, useRef } from 'react'
+import { ACCESSORY_VIEWBOX, accessoryOf } from '../accessories.js'
+import { getMascot } from '../mascots.js'
+import type { BotStatus } from '../status.js'
+import { depthOrder, orbitLayout, pickSeat, splitMascot, svgDataUrl, type OrbitSeat } from './orbit.js'
+
+export interface OrbitBot {
+  /** Mã bot. */
+  id: string
+  /** Mã linh vật; bỏ trống thì dùng mã bot. */
+  mascot?: string | undefined
+  /** Phụ kiện của linh vật (xem `resolveAccessory`); bỏ trống là mặc định của dáng. */
+  accessory?: string | undefined
+  name: string
+  /** Vai, hiện khi rê chuột. */
+  role: string
+  status: BotStatus
+}
+
+export interface TeamOrbitProps {
+  commander: OrbitBot
+  /** Nhãn trên đầu Commander, ví dụ "Aris · Chỉ huy". */
+  commanderLabel: string
+  members: readonly OrbitBot[]
+  /** Nhãn trạng thái đã dịch, viết thường ("đang làm"). */
+  statusLabel: (status: BotStatus) => string
+  /** Mô tả cả sơ đồ cho trình đọc màn hình. */
+  label: string
+  /** `pane`: ô trong cột phải; `stage`: sân khấu lớn của trang Bản đồ đội, co theo khung. */
+  variant?: 'pane' | 'stage' | undefined
+  /** Bot đang được xem (vòng chọn dưới chân). */
+  selected?: string | undefined
+  /** Chiều cao ô; bỏ trống thì lấp đầy khung chứa. */
+  height?: number | undefined
+  onSelect?: ((id: string) => void) | undefined
+}
+
+interface Sprite {
+  color: string
+  full: HTMLImageElement
+  shape: HTMLImageElement
+  eyes: [number, number][]
+  /** Phụ kiện đeo thêm (ảnh riêng, khung rộng hơn thân), `null` khi không đeo. */
+  acc: HTMLImageElement | null
+}
+
+interface Colors {
+  ink: string
+  muted: string
+  line: string
+  warn: string
+  ok: string
+  danger: string
+  accent: string
+  /** Viền mảnh của phụ kiện (`--acc-edge`). */
+  edge: string
+}
+
+const FONT = FONTS.canvas
+
+function rgba(hex: string, a: number): string {
+  const m = hex.match(/^#?([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i)
+  if (!m) return `rgba(16,132,254,${a})`
+  return `rgba(${parseInt(m[1]!, 16)},${parseInt(m[2]!, 16)},${parseInt(m[3]!, 16)},${a})`
+}
+
+function sprite(id: string, accessory: string | undefined, edge: string, onLoad: () => void): Sprite {
+  const m = getMascot(id) ?? getMascot('aris')!
+  const parts = splitMascot(m.body)
+  const img = (src: string) => {
+    const el = new Image()
+    el.onload = onLoad
+    el.src = src
+    return el
+  }
+  // Ảnh SVG riêng không thấy biến CSS của trang nên điền sẵn màu viền phụ kiện.
+  const acc = accessoryOf(m.id, accessory)?.replaceAll('var(--acc-edge)', edge)
+  return {
+    color: m.color,
+    full: img(svgDataUrl(m.body)),
+    shape: img(svgDataUrl(parts.shapeSvg)),
+    eyes: parts.eyes,
+    acc: acc ? img(svgDataUrl(acc, 240, ACCESSORY_VIEWBOX)) : null,
+  }
+}
+
+/** Linh vật với mắt theo trạng thái (xem `drawBody`), phụ kiện đeo lên trên cùng. */
+function drawMascot(
+  ctx: CanvasRenderingContext2D,
+  sp: Sprite,
+  status: BotStatus,
+  x: number,
+  y: number,
+  size: number,
+) {
+  drawBody(ctx, sp, status, x, y, size)
+  // Ảnh phụ kiện phủ khung -10 -16 120 120 của thân: lệch trái 0,1 và lên 0,16 cỡ thân, to gấp 1,2 lần.
+  if (sp.acc?.complete) ctx.drawImage(sp.acc, x - size * 0.6, y - size * 0.66, size * 1.2, size * 1.2)
+}
+
+/** Thân linh vật với mắt theo trạng thái: rảnh nhắm hờ, chờ mắt tròn to, xong mắt cười, còn lại mắt gốc. */
+function drawBody(
+  ctx: CanvasRenderingContext2D,
+  sp: Sprite,
+  status: BotStatus,
+  x: number,
+  y: number,
+  size: number,
+) {
+  const expressive = status === 'idle' || status === 'waiting' || status === 'done'
+  if (!expressive || sp.eyes.length === 0) {
+    if (sp.full.complete) ctx.drawImage(sp.full, x - size / 2, y - size / 2, size, size)
+    return
+  }
+  if (sp.shape.complete) ctx.drawImage(sp.shape, x - size / 2, y - size / 2, size, size)
+  ctx.save()
+  ctx.translate(x - size / 2, y - size / 2)
+  ctx.scale(size / 100, size / 100)
+  ctx.strokeStyle = '#fff'
+  ctx.fillStyle = '#fff'
+  ctx.lineCap = 'round'
+  ctx.lineWidth = 6
+  for (const [ex, ey] of sp.eyes) {
+    ctx.beginPath()
+    if (status === 'idle') {
+      ctx.moveTo(ex - 4.5, ey)
+      ctx.lineTo(ex + 4.5, ey)
+      ctx.stroke()
+    } else if (status === 'waiting') {
+      ctx.arc(ex, ey, 8, 0, Math.PI * 2)
+      ctx.fill()
+    } else {
+      ctx.moveTo(ex - 5.5, ey + 3)
+      ctx.quadraticCurveTo(ex, ey - 6, ex + 5.5, ey + 3)
+      ctx.stroke()
+    }
+  }
+  ctx.restore()
+}
+
+/** Vòng trạng thái quanh linh vật: cung quay (đang làm), vòng thở (chờ), vòng đặc (xong, vấp), nét đứt (rảnh). */
+function drawRing(
+  ctx: CanvasRenderingContext2D,
+  status: BotStatus,
+  color: string,
+  x: number,
+  y: number,
+  r: number,
+  ts: number,
+  C: Colors,
+  hot: boolean,
+  stage = false,
+) {
+  ctx.save()
+  ctx.lineWidth = stage ? (hot ? 4 : 2.8) : hot ? 3.5 : 2.5
+  ctx.beginPath()
+  if (status === 'working') {
+    ctx.strokeStyle = C.line
+    ctx.arc(x, y, r, 0, Math.PI * 2)
+    ctx.stroke()
+    ctx.strokeStyle = color
+    const a = (ts / 380) % (Math.PI * 2)
+    ctx.beginPath()
+    ctx.arc(x, y, r, a, a + 1.4)
+  } else if (status === 'waiting') {
+    ctx.globalAlpha *= 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(ts / 260))
+    ctx.strokeStyle = C.warn
+    ctx.arc(x, y, r, 0, Math.PI * 2)
+  } else if (status === 'done' || status === 'failed') {
+    ctx.strokeStyle = status === 'done' ? C.ok : C.danger
+    ctx.arc(x, y, r, 0, Math.PI * 2)
+  } else {
+    ctx.strokeStyle = C.muted
+    ctx.setLineDash([3, 4])
+    ctx.arc(x, y, r, 0, Math.PI * 2)
+  }
+  ctx.stroke()
+  ctx.restore()
+}
+
+export function TeamOrbit(props: TeamOrbitProps) {
+  const canvas = useRef<HTMLCanvasElement>(null)
+  // Vòng vẽ đọc props mới nhất mà không phải dựng lại.
+  const latest = useRef(props)
+  latest.current = props
+  const height = props.height ?? (props.variant === 'stage' ? '100%' : 300)
+
+  useEffect(() => {
+    const cv = canvas.current
+    if (!cv) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const sprites = new Map<string, Sprite>()
+    const state = {
+      ang: 0.6,
+      hover: -1,
+      dragging: false,
+      lastX: 0,
+      downX: 0,
+      raf: 0,
+      visible: true,
+      colorsAt: -Infinity,
+    }
+    let C: Colors = {
+      ink: '#16171B',
+      muted: '#5C616C',
+      line: '#E4E2DC',
+      warn: '#B45309',
+      ok: '#15803D',
+      danger: '#C0262D',
+      accent: '#1D6FE0',
+      edge: 'transparent',
+    }
+    let hits: ({ x: number; y: number; r: number } | undefined)[] = []
+    // Một ảnh theo dáng, phụ kiện và màu viền hiện tại (đổi giao diện sáng tối thì dựng lại ảnh phụ kiện).
+    const spriteOf = (id: string, accessory: string | undefined) => {
+      const key = `${id}|${accessory ?? ''}|${C.edge}`
+      let sp = sprites.get(key)
+      if (!sp) {
+        sp = sprite(id, accessory, C.edge, () => reduced && draw(0))
+        sprites.set(key, sp)
+      }
+      return sp
+    }
+
+    const draw = (ts: number) => {
+      const { commander, commanderLabel, members, statusLabel, selected } = latest.current
+      const stage = latest.current.variant === 'stage'
+      const w = cv.clientWidth
+      const h = cv.clientHeight
+      if (!w || !h) return
+      const dpr = window.devicePixelRatio || 1
+      if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) {
+        cv.width = Math.round(w * dpr)
+        cv.height = Math.round(h * dpr)
+      }
+      const ctx = cv.getContext('2d')
+      if (!ctx) return
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.clearRect(0, 0, w, h)
+      // Màu theo theme sáng/tối, đọc lại vài lần mỗi giây.
+      if (ts - state.colorsAt > 400 || reduced) {
+        const s = getComputedStyle(cv)
+        const v = (k: string, d: string) => s.getPropertyValue(k).trim() || d
+        C = {
+          ink: v('--a-ink', C.ink),
+          muted: v('--a-muted', C.muted),
+          line: v('--a-line', C.line),
+          warn: v('--a-warn', C.warn),
+          ok: v('--a-ok', C.ok),
+          danger: v('--a-danger', C.danger),
+          accent: v('--a-accent', C.accent),
+          edge: v('--acc-edge', C.edge),
+        }
+        state.colorsAt = ts
+      }
+      if (!state.dragging && !reduced) state.ang += (state.hover >= 0 ? 0.0012 : 0.0038) * (stage ? 0.8 : 1)
+
+      const L = orbitLayout(members.length, state.ang, w, h, stage ? 'stage' : 'pane')
+      const { K, member: M, commander: CM } = L
+      const cmd = spriteOf(commander.mascot ?? commander.id, commander.accessory)
+      const glowAt = (a: number) => rgba(cmd.color, a)
+      const selectedIndex = members.findIndex((m) => m.id === selected)
+
+      // Quầng sáng trên sàn và các vòng quỹ đạo.
+      ctx.save()
+      ctx.translate(L.cx, L.fy)
+      ctx.scale(1, L.tilt)
+      const halo = stage ? 1.45 : 1.4
+      const g = ctx.createRadialGradient(0, 0, 6, 0, 0, L.R * halo)
+      g.addColorStop(0, glowAt(stage ? 0.28 : 0.26))
+      g.addColorStop(0.6, glowAt(0.08))
+      g.addColorStop(1, glowAt(0))
+      ctx.fillStyle = g
+      ctx.beginPath()
+      ctx.arc(0, 0, L.R * halo, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.restore()
+
+      const inner = stage ? 0.5 : 0.45
+      ctx.save()
+      ctx.strokeStyle = C.line
+      ctx.lineWidth = stage ? 1.3 : 1.2
+      ctx.setLineDash(stage ? [5, 7] : [4, 6])
+      ctx.lineDashOffset = -ts / 80
+      ctx.beginPath()
+      ctx.ellipse(L.cx, L.fy, L.R, L.R * L.tilt, 0, 0, Math.PI * 2)
+      ctx.stroke()
+      ctx.setLineDash([])
+      ctx.globalAlpha = 0.5
+      ctx.beginPath()
+      ctx.ellipse(L.cx, L.fy, L.R * inner, L.R * inner * L.tilt, 0, 0, Math.PI * 2)
+      ctx.stroke()
+      if (L.outerRing) {
+        ctx.globalAlpha = 0.3
+        ctx.beginPath()
+        ctx.ellipse(L.cx, L.fy, L.R * 1.25, L.R * 1.25 * L.tilt, 0, 0, Math.PI * 2)
+        ctx.stroke()
+      }
+      ctx.restore()
+
+      const cmdY = L.cmdY + Math.sin(ts / 650) * L.bob
+      const beamTop = cmdY + (stage ? 30 * K : 22)
+      const beam = ctx.createLinearGradient(0, beamTop - 2, 0, L.fy)
+      beam.addColorStop(0, glowAt(stage ? 0.2 : 0.18))
+      beam.addColorStop(1, glowAt(0))
+      ctx.fillStyle = beam
+      ctx.beginPath()
+      const bw = stage ? 14 * K : 12
+      ctx.moveTo(L.cx - bw, beamTop)
+      ctx.lineTo(L.cx + bw, beamTop)
+      ctx.lineTo(L.cx + L.R * inner, L.fy)
+      ctx.lineTo(L.cx - L.R * inner, L.fy)
+      ctx.closePath()
+      ctx.fill()
+
+      // Dây từ Commander tới từng bot; nét đứt chạy (và chấm chạy ở bản lớn) khi bot đang làm hoặc chờ anh.
+      for (const seat of L.seats) {
+        const m = members[seat.i]!
+        const color = spriteOf(m.mascot ?? m.id, m.accessory).color
+        const active = m.status === 'working' || m.status === 'waiting'
+        const ty = seat.y - L.wireTo * seat.s
+        const x0 = L.cx
+        const y0 = cmdY + L.wireFrom
+        const qx = (L.cx + seat.x) / 2
+        const qy = Math.min(cmdY, ty) + L.sag
+        ctx.save()
+        ctx.globalAlpha = 0.35 + (0.55 * (seat.z + 1)) / 2
+        ctx.lineWidth = active ? (stage ? 3 : 2.6) : stage ? 1.2 : 1.1
+        ctx.strokeStyle = active ? color : C.line
+        if (active) {
+          ctx.setLineDash(stage ? [9, 7] : [7, 6])
+          ctx.lineDashOffset = -ts / (stage ? 26 : 28)
+        }
+        ctx.beginPath()
+        ctx.moveTo(x0, y0)
+        ctx.quadraticCurveTo(qx, qy, seat.x, ty)
+        ctx.stroke()
+        if (active && L.travel) {
+          const t = (ts / 1400 + seat.i * 0.3) % 1
+          const px = (1 - t) * (1 - t) * x0 + 2 * (1 - t) * t * qx + t * t * seat.x
+          const py = (1 - t) * (1 - t) * y0 + 2 * (1 - t) * t * qy + t * t * ty
+          ctx.setLineDash([])
+          ctx.fillStyle = color
+          ctx.beginPath()
+          ctx.arc(px, py, 4 * K, 0, Math.PI * 2)
+          ctx.fill()
+        }
+        ctx.restore()
+      }
+
+      hits = []
+      const drawMember = (seat: OrbitSeat) => {
+        const m = members[seat.i]!
+        const sp = spriteOf(m.mascot ?? m.id, m.accessory)
+        const hovered = state.hover === seat.i
+        const picked = selectedIndex === seat.i
+        const s = seat.s * (hovered ? (stage ? 1.1 : 1.12) : 1)
+        const lift = m.status === 'working' ? Math.sin(ts / 300 + seat.i) * (stage ? 3 : 2.5) : 0
+        const my = seat.y - M.base * s + lift
+        ctx.save()
+        ctx.globalAlpha = 0.62 + (0.38 * (seat.z + 1)) / 2
+        ctx.fillStyle = stage ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.18)'
+        ctx.beginPath()
+        ctx.ellipse(seat.x, seat.y, M.shadow[0] * s, M.shadow[1] * s, 0, 0, Math.PI * 2)
+        ctx.fill()
+        if (picked) {
+          ctx.strokeStyle = C.accent
+          ctx.lineWidth = 2
+          ctx.beginPath()
+          ctx.ellipse(seat.x, seat.y, 34 * s, 9 * s, 0, 0, Math.PI * 2)
+          ctx.stroke()
+        }
+        drawRing(ctx, m.status, sp.color, seat.x, my, M.ring * s, ts, C, hovered || picked, stage)
+        drawMascot(ctx, sp, m.status, seat.x, my, M.mascot * s)
+        ctx.textAlign = 'center'
+        ctx.fillStyle = C.ink
+        ctx.font = `600 ${Math.round(M.nameSize * s)}px ${FONT}`
+        ctx.fillText(m.name, seat.x, seat.y + M.name * s)
+        const label = statusLabel(m.status)
+        ctx.fillStyle =
+          m.status === 'waiting'
+            ? C.warn
+            : m.status === 'done'
+              ? C.ok
+              : m.status === 'failed'
+                ? C.danger
+                : C.muted
+        ctx.font = `500 ${Math.round(M.statusSize * s)}px ${FONT}`
+        ctx.fillText(hovered ? `${m.role} · ${label}` : label, seat.x, seat.y + M.status * s)
+        ctx.restore()
+        hits[seat.i] = { x: seat.x, y: my, r: M.hit * s }
+      }
+
+      const { back, front } = depthOrder(L.seats)
+      back.forEach(drawMember)
+
+      ctx.save()
+      ctx.fillStyle = stage ? 'rgba(0,0,0,0.16)' : 'rgba(0,0,0,0.14)'
+      ctx.beginPath()
+      ctx.ellipse(L.cx, L.fy, CM.shadow[0], CM.shadow[1], 0, 0, Math.PI * 2)
+      ctx.fill()
+      const glow = ctx.createRadialGradient(L.cx, cmdY, 10, L.cx, cmdY, CM.glow)
+      glow.addColorStop(0, glowAt(stage ? 0.32 : 0.3))
+      glow.addColorStop(1, glowAt(0))
+      ctx.fillStyle = glow
+      ctx.beginPath()
+      ctx.arc(L.cx, cmdY, CM.glow, 0, Math.PI * 2)
+      ctx.fill()
+      drawRing(ctx, commander.status, cmd.color, L.cx, cmdY, CM.ring, ts, C, false, stage)
+      drawMascot(ctx, cmd, commander.status, L.cx, cmdY, CM.mascot)
+      ctx.fillStyle = C.ink
+      ctx.textAlign = 'center'
+      ctx.font = `600 ${Math.round(CM.labelSize)}px ${FONT}`
+      ctx.fillText(commanderLabel, L.cx, cmdY - CM.label)
+      ctx.restore()
+
+      front.forEach(drawMember)
+    }
+
+    const loop = (ts: number) => {
+      draw(ts)
+      state.raf = state.visible ? requestAnimationFrame(loop) : 0
+    }
+    const start = () => {
+      if (reduced) draw(0)
+      else if (!state.raf) state.raf = requestAnimationFrame(loop)
+    }
+    // Ngoài khung nhìn thì ngừng vẽ.
+    const io = new IntersectionObserver(([e]) => {
+      state.visible = !!e?.isIntersecting
+      if (state.visible) start()
+    })
+    io.observe(cv)
+    const ro = new ResizeObserver(() => reduced && draw(0))
+    ro.observe(cv)
+
+    const point = (e: PointerEvent) => {
+      const r = cv.getBoundingClientRect()
+      return pickSeat(hits, e.clientX - r.left, e.clientY - r.top)
+    }
+    const onDown = (e: PointerEvent) => {
+      state.dragging = true
+      state.lastX = e.clientX
+      state.downX = e.clientX
+      cv.setPointerCapture(e.pointerId)
+    }
+    const onMove = (e: PointerEvent) => {
+      if (state.dragging) {
+        state.ang += (e.clientX - state.lastX) * 0.012
+        state.lastX = e.clientX
+      } else {
+        state.hover = point(e)
+        cv.style.cursor = state.hover >= 0 ? 'pointer' : 'grab'
+      }
+      if (reduced) draw(0)
+    }
+    const onUp = (e: PointerEvent) => {
+      const moved = Math.abs(e.clientX - state.downX) > 3
+      state.dragging = false
+      const i = point(e)
+      const { members, onSelect } = latest.current
+      if (!moved && i >= 0 && onSelect) onSelect(members[i]!.id)
+    }
+    const onLeave = () => {
+      state.dragging = false
+      state.hover = -1
+      if (reduced) draw(0)
+    }
+    cv.addEventListener('pointerdown', onDown)
+    cv.addEventListener('pointermove', onMove)
+    cv.addEventListener('pointerup', onUp)
+    cv.addEventListener('pointerleave', onLeave)
+    start()
+    return () => {
+      cancelAnimationFrame(state.raf)
+      io.disconnect()
+      ro.disconnect()
+      cv.removeEventListener('pointerdown', onDown)
+      cv.removeEventListener('pointermove', onMove)
+      cv.removeEventListener('pointerup', onUp)
+      cv.removeEventListener('pointerleave', onLeave)
+    }
+  }, [])
+
+  return (
+    <canvas
+      ref={canvas}
+      className="a-orbit"
+      role="img"
+      aria-label={props.label}
+      style={{ height, cursor: 'grab' }}
+    />
+  )
+}

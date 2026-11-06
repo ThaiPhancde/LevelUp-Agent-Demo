@@ -1,0 +1,48 @@
+{
+  "name": "aris-agent",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh": "0.2.1-rc.2",
+    "@eslint/js": "10.0.1",
+    "@types/node": "22.20.5",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "esbuild": "0.28.2",
+    "eslint": "10.13.0",
+    "globals": "17.13.0",
+    "prettier": "3.9.10",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.0",
+    "vitest": "4.1.11"
+  },
+  "scripts": {
+    "build": "tsc -b packages/aris-shell packages/aris-keychain packages/aris-memory packages/aris-providers packages/aris-reflect packages/aris-skills packages/aris-autonomy packages/aris-routine packages/aris-checkpoints packages/aris-recall packages/aris-home packages/aris-ui-kit packages/aris-bots packages/aris-acp packages/aris-guard packages/aris-computer packages/aris-backup packages/aris-stats packages/aris-projects packages/aris-commander packages/aris-channels packages/aris-brain packages/aris-daemon packages/aris-ui-sidebar packages/aris-ui-chat-header packages/aris-ui-chat packages/aris-ui-team-pane packages/aris-ui-pages packages/aris-ui-theme packages/aris-ui-locale-vi && node scripts/build-client.mjs && tsc -p packages/aris-ui-kit/tsconfig.react.json && tsc -p packages/aris-ui-sidebar/tsconfig.client.json && tsc -p packages/aris-ui-chat-header/tsconfig.client.json && tsc -p packages/aris-ui-chat/tsconfig.client.json && tsc -p packages/aris-ui-team-pane/tsconfig.client.json && tsc -p packages/aris-ui-pages/tsconfig.client.json && tsc -p packages/aris-ui-theme/tsconfig.client.json && tsc -p packages/aris-ui-locale-vi/tsconfig.client.json",
+    "test": "vitest run",
+    "check:locale": "node scripts/ui/locale-coverage.mjs",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check:deps": "node scripts/check-deps.mjs",
+    "check:licenses": "node scripts/check-licenses.mjs",
+    "check": "pnpm build && pnpm lint && pnpm format:check && pnpm test && pnpm check:locale && pnpm check:deps && pnpm check:licenses",
+    "aris:setup": "node scripts/setup-profiles.mjs",
+    "aris": "node scripts/dsh.mjs --profile aris web",
+    "aris:acp": "node scripts/dsh.mjs --profile aris-acp",
+    "aris:ask": "node scripts/dsh.mjs --profile aris-headless",
+    "aris:config": "node scripts/dsh.mjs --profile aris --dump-config",
+    "aris:spike": "node scripts/acp-handshake.mjs",
+    "aris:cli": "node scripts/aris.mjs"
+  },
+  "bin": {
+    "aris": "scripts/aris.mjs"
+  }
+}

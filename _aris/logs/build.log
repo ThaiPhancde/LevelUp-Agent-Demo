@@ -1,0 +1,89 @@
+docker: error during connect: Post "http://%2F%2F.%2Fpipe%2FdockerDesktopLinuxEngine/v1.56/containers/create?name=aris-build": EOF
+
+Run 'docker run --help' for more information
+/dsh-subprocess-local postinstall: Done
+ WARN  Failed to create bin at /work/packages/aris-bundle/node_modules/.bin/aris-acp. ENOENT: no such file or directory, open '/work/packages/aris-acp/lib/bridge.js'
+
+devDependencies:
++ @deepseek-ai/dsh 0.2.1-rc.2
++ @eslint/js 10.0.1
++ @types/node 22.20.5
++ @types/react 18.3.12
++ @types/react-dom 18.3.1
++ esbuild 0.28.2
++ eslint 10.13.0
++ globals 17.13.0
++ prettier 3.9.10
++ react 18.3.1
++ react-dom 18.3.1
++ typescript 6.0.3
++ typescript-eslint 8.72.0
++ vitest 4.1.11
+
+ WARN  Failed to create bin at /work/packages/aris-bundle/node_modules/.bin/aris-acp. ENOENT: no such file or directory, open '/work/packages/aris-bundle/node_modules/@aris/acp/lib/bridge.js'
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: @google/genai@2.21.0, protobufjs@7.6.6.             │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Done in 11.7s using pnpm v10.33.0
+install_exit=0
+=== BUILD
+
+> aris-agent@0.0.0 build /work
+> tsc -b packages/aris-shell packages/aris-keychain packages/aris-memory packages/aris-providers packages/aris-reflect packages/aris-skills packages/aris-autonomy packages/aris-routine packages/aris-checkpoints packages/aris-recall packages/aris-home packages/aris-ui-kit packages/aris-bots packages/aris-acp packages/aris-guard packages/aris-computer packages/aris-backup packages/aris-stats packages/aris-projects packages/aris-commander packages/aris-channels packages/aris-brain packages/aris-daemon packages/aris-ui-sidebar packages/aris-ui-chat-header packages/aris-ui-chat packages/aris-ui-team-pane packages/aris-ui-pages packages/aris-ui-theme packages/aris-ui-locale-vi && node scripts/build-client.mjs && tsc -p packages/aris-ui-kit/tsconfig.react.json && tsc -p packages/aris-ui-sidebar/tsconfig.client.json && tsc -p packages/aris-ui-chat-header/tsconfig.client.json && tsc -p packages/aris-ui-chat/tsconfig.client.json && tsc -p packages/aris-ui-team-pane/tsconfig.client.json && tsc -p packages/aris-ui-pages/tsconfig.client.json && tsc -p packages/aris-ui-theme/tsconfig.client.json && tsc -p packages/aris-ui-locale-vi/tsconfig.client.json
+
+client: @aris/ui-chat → lib/client.js (243.6 KB)
+client: @aris/ui-chat-header → lib/client.js (102.1 KB)
+client: @aris/ui-locale-vi → lib/client.js (277.8 KB)
+client: @aris/ui-pages → lib/client.js (2647.7 KB)
+client: @aris/ui-sidebar → lib/client.js (127.4 KB)
+client: @aris/ui-team-pane → lib/client.js (128.2 KB)
+client: @aris/ui-theme → lib/client.js (11.1 KB)
+build_exit=0
+=== TEST
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -32, code: 'EPIPE', syscall: 'write' }[39m
+[31mThis error originated in "[1mpackages/aris-brain/src/brain.test.ts[22m" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.[39m
+[31mThe latest test that might've caused the error is "[1mcommit thay đổi của aris; gom thay đổi bên ngoài[22m". It might mean one of the following:
+- The error was thrown, while Vitest was running this test.
+- If the error occurred after the test had been completed, this was the last documented test before it was thrown.[39m
+
+[31m⎯⎯⎯⎯⎯[39m[1m[41m Uncaught Exception [49m[22m[31m⎯⎯⎯⎯⎯[39m
+[31m[1mError[22m: write EPIPE[39m
+[90m [2m❯[22m afterWriteDispatched node:internal/stream_base_commons:[2m159:15[22m[39m
+[90m [2m❯[22m writeGeneric node:internal/stream_base_commons:[2m150:3[22m[39m
+[90m [2m❯[22m Socket._writeGeneric node:net:[2m967:11[22m[39m
+[90m [2m❯[22m Socket._write node:net:[2m979:8[22m[39m
+[90m [2m❯[22m writeOrBuffer node:internal/streams/writable:[2m572:12[22m[39m
+[90m [2m❯[22m _write node:internal/streams/writable:[2m501:10[22m[39m
+[90m [2m❯[22m Writable.end node:internal/streams/writable:[2m823:17[22m[39m
+[90m [2m❯[22m Socket.end node:net:[2m738:31[22m[39m
+[36m [2m❯[22m packages/aris-brain/src/git.ts:[2m35:16[22m[39m
+    [90m 33|[39m         }[33m,[39m
+    [90m 34|[39m         (err, stdout, stderr) => (err ? fail(new Error(`${err.message}…
+    [90m 35|[39m       )[33m.[39mstdin[33m?.[39m[34mend[39m(input [33m??[39m [32m''[39m)[33m,[39m
+    [90m   |[39m                [31m^[39m
+    [90m 36|[39m     )
+    [90m 37|[39m   }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22m[39m
+[31m[1mSerialized Error:[22m[39m [90m{ errno: -32, code: 'EPIPE', syscall: 'write' }[39m
+[31mThis error originated in "[1mpackages/aris-brain/src/brain.test.ts[22m" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.[39m
+[31mThe latest test that might've caused the error is "[1mcommit thay đổi của aris; gom thay đổi bên ngoài[22m". It might mean one of the following:
+- The error was thrown, while Vitest was running this test.
+- If the error occurred after the test had been completed, this was the last documented test before it was thrown.[39m
+[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
+
+
+[2m Test Files [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m137 passed[39m[22m[90m (140)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1206 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (1209)[39m
+[2m     Errors [22m [1m[31m2 errors[39m[22m
+[2m   Start at [22m 04:26:52
+[2m   Duration [22m 16.35s[2m (transform 28.31s, setup 0ms, import 57.03s, tests 32.54s, environment 34ms)[22m
+
+ ELIFECYCLE  Test failed. See above for more details.
+test_exit=1
+docker_exit=0
+docker_exit=125

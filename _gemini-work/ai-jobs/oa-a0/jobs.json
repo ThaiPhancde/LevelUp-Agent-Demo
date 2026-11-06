@@ -1,0 +1,1 @@
+[{"id": "api-plan", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompt.md", "allowed_paths": ["docs/DEMO_API.md"], "timeout_s": 600}]

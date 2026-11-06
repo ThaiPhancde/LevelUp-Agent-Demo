@@ -1,0 +1,330 @@
+#!/usr/bin/env node
+// Lệnh `aris`: chạy ngầm bằng launchd trên Mac và nói chuyện với aris đang chạy qua socket
+// cục bộ ~/.aris/run/<băm>.sock (đặc tả: docs/specs/aris-daemon.md).
+import { spawn, spawnSync } from 'node:child_process'
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs'
+import { request } from 'node:http'
+import { connect } from 'node:net'
+import { homedir } from 'node:os'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { arisHome, repoRoot, socketPath } from './paths.mjs'
+
+export const LABEL = 'vn.aris.daemon'
+export const PORT = Number(process.env.ARIS_PORT ?? 3201)
+const PLIST = join(homedir(), 'Library', 'LaunchAgents', `${LABEL}.plist`)
+const LOG_DIR = join(homedir(), 'Library', 'Logs', 'aris')
+const LOG = join(LOG_DIR, 'daemon.log')
+
+const xml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+/**
+ * node chạy ngầm: `ARIS_NODE` nếu đặt; không thì node đang chạy lệnh này, trừ khi nó thuộc một
+ * bản cài agent khác (ví dụ `~/.hermes/node`, hay được trỏ tới từ `~/.local/bin/node`); khi đó
+ * lấy node của hệ thống (`/usr/local/bin`, Homebrew).
+ */
+export function pickNode(env = process.env, current = process.execPath, exists = existsSync) {
+  if (env.ARIS_NODE) return env.ARIS_NODE
+  if (!/[\\/]\.hermes[\\/]/.test(current)) return current
+  return ['/usr/local/bin/node', '/opt/homebrew/bin/node'].find((p) => exists(p)) ?? current
+}
+
+/**
+ * Thư mục chạy của aris chạy ngầm: chỗ chat riêng (`@aris/home`), ngoài Desktop và Documents mà
+ * macOS bảo vệ (tiến trình launchd chưa được cấp quyền thì bị giữ lại ngay khi mở thư mục).
+ */
+export const ARIS_WORKSPACE = join(homedir(), 'aris', 'workspace')
+
+/** Nội dung LaunchAgent: chạy dsh profile aris, chạy lại khi văng (cách nhau ít nhất 10 giây). */
+export function plist({ node, script, home, port, logFile, path, cwd = ARIS_WORKSPACE }) {
+  const args = [node, script, '--profile', 'aris', '--no-open', '--port', String(port)]
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>${LABEL}</string>
+  <key>ProgramArguments</key>
+  <array>
+${args.map((a) => `    <string>${xml(a)}</string>`).join('\n')}
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>ARIS_DSH_HOME</key><string>${xml(home)}</string>
+    <key>ARIS_DAEMON</key><string>1</string>
+    <key>PATH</key><string>${xml(path)}</string>
+  </dict>
+  <key>WorkingDirectory</key><string>${xml(cwd)}</string>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ThrottleInterval</key><integer>10</integer>
+  <key>ProcessType</key><string>Interactive</string>
+  <key>StandardOutPath</key><string>${xml(logFile)}</string>
+  <key>StandardErrorPath</key><string>${xml(logFile)}</string>
+</dict>
+</plist>
+`
+}
+
+/** Tách lệnh, cờ (`--json`, `-f`) và phần chữ còn lại. */
+export function parseArgs(argv) {
+  const [cmd = 'help', ...rest] = argv
+  const flags = new Set(rest.filter((a) => /^--?[a-z]/.test(a)))
+  const text = rest.filter((a) => !/^--?[a-z]/.test(a)).join(' ')
+  return { cmd, flags, text }
+}
+
+/** Gọi socket; trả null khi không có daemon. */
+export function callSocket(method, path, body, sock = socketPath()) {
+  return new Promise((resolve, reject) => {
+    if (!existsSync(sock)) return resolve(null)
+    const req = request(
+      { socketPath: sock, method, path, headers: { 'content-type': 'application/json' } },
+      (res) => {
+        const chunks = []
+        res.on('data', (b) => chunks.push(b))
+        res.on('end', () => {
+          const parsed = JSON.parse(Buffer.concat(chunks).toString() || '{}')
+          if ((res.statusCode ?? 500) >= 400) reject(new Error(parsed.error ?? `HTTP ${res.statusCode}`))
+          else resolve(parsed)
+        })
+      },
+    )
+    req.on('error', (e) => (e.code === 'ECONNREFUSED' || e.code === 'ENOENT' ? resolve(null) : reject(e)))
+    req.end(body === undefined ? undefined : JSON.stringify(body))
+  })
+}
+
+const portBusy = (port) =>
+  new Promise((resolve) => {
+    const s = connect({ host: '127.0.0.1', port })
+    s.once('connect', () => (s.destroy(), resolve(true)))
+    s.once('error', () => resolve(false))
+  })
+
+const uid = () => process.getuid()
+/** Lệnh cần aris đang chạy: báo và thoát mã 1 (script cron biết là hỏng). */
+function notRunning() {
+  console.error('aris không chạy. Bật bằng: aris start (chưa cài chạy ngầm thì: aris install)')
+  process.exitCode = 1
+}
+
+const launchctl = (...args) => spawnSync('launchctl', args, { encoding: 'utf8' })
+const loaded = () => launchctl('print', `gui/${uid()}/${LABEL}`).status === 0
+
+/** Hỏi một dòng trên terminal. */
+async function ask(q) {
+  const { createInterface } = await import('node:readline/promises')
+  const rl = createInterface({ input: process.stdin, output: process.stdout })
+  try {
+    return (await rl.question(q)).trim()
+  } finally {
+    rl.close()
+  }
+}
+
+/** `aris restore <tệp>`: khôi phục đè từ bản sao lưu (@aris/backup) khi aris đã dừng hẳn. */
+async function restore(file, yes) {
+  if (!file) return console.error('Dùng: aris restore <tệp .aris> [--yes]')
+  if ((await callSocket('GET', '/status')) || (process.platform === 'darwin' && loaded())) {
+    console.error('aris đang chạy. Tắt trước: aris stop, khôi phục xong thì aris start.')
+    process.exitCode = 1
+    return
+  }
+  const lib = (f) => new URL(`../packages/${f}`, import.meta.url).href
+  const { readHeader } = await import(lib('aris-backup/lib/archive.js'))
+  const { restoreBackup } = await import(lib('aris-backup/lib/restore.js'))
+  const { partSpecs } = await import(lib('aris-backup/lib/sources.js'))
+  const { normalizeCode } = await import(lib('aris-backup/lib/policy.js'))
+  const { Keychain } = await import(lib('aris-keychain/lib/keychain.js'))
+  const { header } = await readHeader(file)
+  const when = new Date(header.created).toLocaleString('vi-VN')
+  console.log(`Bản sao lưu lúc ${when} trên máy ${header.host}:`)
+  for (const p of header.parts) console.log(`  ${p.id}: ${p.files + p.sqlite.length} tệp`)
+  let code = await new Keychain(undefined, 'aris-backup').get(`code-${header.codeId}`)
+  if (!code) {
+    code = normalizeCode(await ask('Máy này không có khoá của bản này. Nhập mã khôi phục: '))
+    if (!code) {
+      console.error('Mã không hợp lệ (24 ký tự, sáu nhóm bốn).')
+      process.exitCode = 1
+      return
+    }
+  }
+  if (!yes) {
+    const ok = await ask(
+      'Khôi phục đè lên dữ liệu hiện tại? Dữ liệu cũ được cất sang bên, không xoá. Gõ "co" để tiếp: ',
+    )
+    if (ok.toLowerCase() !== 'co') return console.log('Đã huỷ.')
+  }
+  const roots = Object.fromEntries(
+    partSpecs({ ...process.env, DSH_HOME: arisHome() }).map((p) => [p.id, p.root]),
+  )
+  const r = await restoreBackup(file, code, roots)
+  for (const p of r.parts)
+    console.log(`Đã khôi phục ${p.id} vào ${p.root}${p.aside ? `; dữ liệu cũ ở ${p.aside}` : ''}`)
+  // Phần không có thư mục đích trên máy này (đã bỏ qua, không đụng gì).
+  for (const id of r.skipped) console.warn(`Bỏ qua phần "${id}": máy này không có thư mục đích cho phần đó.`)
+  console.log('Xong. Bật lại: aris start')
+}
+
+function mac() {
+  if (process.platform !== 'darwin') {
+    console.error('aris: chạy ngầm bằng launchd chỉ có trên macOS.')
+    process.exit(1)
+  }
+}
+
+const HELP = `aris — điều khiển aris chạy ngầm
+
+  aris install          cài LaunchAgent: aris tự chạy khi đăng nhập, văng thì chạy lại
+  aris uninstall        gỡ LaunchAgent (giữ nguyên dữ liệu)
+  aris start | stop | restart
+  aris status           trạng thái, web, bot Telegram
+  aris logs [-f]        xem log (theo dõi với -f)
+  aris open | url       mở web đã đăng nhập / in đường đăng nhập
+  aris send "…"         gửi Telegram tới nơi nhận (/sethome)
+  aris ask "…" [--json] giao một việc cho Aris và in câu trả lời cuối
+  aris computer doctor  kiểm lõi và quyền điều khiển máy (Trợ năng, Ghi màn hình)
+  aris restore <tệp>    khôi phục đè từ bản sao lưu .aris (aris phải dừng; dữ liệu cũ được cất sang bên)`
+
+async function main(argv) {
+  const { cmd, flags, text } = parseArgs(argv)
+  switch (cmd) {
+    case 'install': {
+      mac()
+      if (!(await callSocket('GET', '/status')) && (await portBusy(PORT))) {
+        console.error(
+          `aris: cổng ${PORT} đang có tiến trình khác giữ (máy chủ phát triển?). Tắt nó trước rồi cài.`,
+        )
+        process.exit(1)
+      }
+      mkdirSync(LOG_DIR, { recursive: true })
+      mkdirSync(ARIS_WORKSPACE, { recursive: true })
+      mkdirSync(join(homedir(), 'Library', 'LaunchAgents'), { recursive: true })
+      writeFileSync(
+        PLIST,
+        plist({
+          node: pickNode(),
+          script: join(repoRoot, 'scripts', 'dsh.mjs'),
+          home: arisHome(),
+          port: PORT,
+          logFile: LOG,
+          path: '/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin',
+        }),
+      )
+      if (loaded()) launchctl('bootout', `gui/${uid()}/${LABEL}`)
+      const r = launchctl('bootstrap', `gui/${uid()}`, PLIST)
+      if (r.status !== 0) {
+        console.error(`aris: launchctl bootstrap lỗi: ${r.stderr.trim()}`)
+        process.exit(1)
+      }
+      console.log(`Đã cài ${LABEL}. aris đang khởi động; xem: aris status, aris logs -f`)
+      return
+    }
+    case 'uninstall':
+      mac()
+      if (loaded()) launchctl('bootout', `gui/${uid()}/${LABEL}`)
+      rmSync(PLIST, { force: true })
+      console.log('Đã gỡ LaunchAgent. Dữ liệu (phiên, ký ức, kênh) vẫn giữ nguyên.')
+      return
+    case 'start': {
+      mac()
+      if (!existsSync(PLIST)) return console.error('aris: chưa cài. Chạy: aris install')
+      if (loaded()) return console.log('aris đang chạy.')
+      const r = launchctl('bootstrap', `gui/${uid()}`, PLIST)
+      return console.log(r.status === 0 ? 'Đã bật aris.' : `Lỗi: ${r.stderr.trim()}`)
+    }
+    case 'stop':
+      if (process.platform === 'darwin' && loaded()) {
+        launchctl('bootout', `gui/${uid()}/${LABEL}`)
+        return console.log('Đã tắt aris (launchd không chạy lại cho tới khi aris start).')
+      }
+      return console.log((await callSocket('POST', '/stop')) ? 'Đã yêu cầu aris dừng.' : 'aris không chạy.')
+    case 'restart':
+      mac()
+      if (!loaded()) return console.error('aris chưa được launchd giữ. Chạy: aris start')
+      launchctl('kickstart', '-k', `gui/${uid()}/${LABEL}`)
+      return console.log('Đã khởi động lại aris.')
+    case 'status': {
+      const s = await callSocket('GET', '/status')
+      const managed = process.platform === 'darwin' && loaded()
+      if (!s) {
+        console.log(`aris không chạy${managed ? ' (launchd đang cố khởi động, xem aris logs)' : ''}.`)
+        process.exitCode = 1
+        return
+      }
+      const up = `${Math.floor(s.uptimeSec / 3600)} giờ ${Math.floor((s.uptimeSec % 3600) / 60)} phút`
+      console.log(`aris đang chạy · pid ${s.pid} · ${up}${managed ? ' · launchd giữ' : ' · chạy tay'}`)
+      if (s.web) console.log(`Web: ${s.web} (đăng nhập: aris open)`)
+      for (const b of s.telegram ?? [])
+        console.log(
+          `Telegram: @${b.username} ${b.running ? 'đang nhận tin' : `dừng${b.error ? ` — ${b.error}` : ''}`}`,
+        )
+      const larkState = {
+        receiving: 'đang nhận tin',
+        connecting: 'đang kết nối',
+        reconnecting: 'đang thử nối lại',
+      }
+      for (const b of s.lark ?? [])
+        console.log(
+          `Lark: ${b.name} (${b.appId}) ${larkState[b.state] ?? `dừng${b.error ? ` — ${b.error}` : ''}`}`,
+        )
+      const zaloState = {
+        listening: 'đang nghe',
+        connecting: 'đang kết nối',
+        web: 'Zalo Web đang mở, aris tạm ngừng nghe',
+        retrying: 'mất kết nối, đang thử lại',
+        'needs-qr': 'Cần quét lại QR',
+      }
+      for (const b of s.zalo ?? [])
+        console.log(`Zalo: ${b.name} ${zaloState[b.state] ?? `dừng${b.error ? ` — ${b.error}` : ''}`}`)
+      return
+    }
+    case 'logs': {
+      if (!existsSync(LOG)) return console.log('Chưa có log (aris chưa chạy bằng launchd).')
+      const tail = spawn('tail', flags.has('-f') ? ['-n', '100', '-f', LOG] : ['-n', '100', LOG], {
+        stdio: 'inherit',
+      })
+      return new Promise((r) => tail.on('exit', r))
+    }
+    case 'url':
+    case 'open': {
+      const r = await callSocket('POST', '/login')
+      if (!r) return notRunning()
+      if (cmd === 'url') return console.log(r.url)
+      spawn('open', [r.url], { stdio: 'ignore', detached: true }).unref()
+      return console.log('Đã mở aris trong trình duyệt.')
+    }
+    case 'send': {
+      if (!text) return console.error('Dùng: aris send "nội dung"')
+      const r = await callSocket('POST', '/send', { text })
+      if (!r) return notRunning()
+      return console.log(r.result)
+    }
+    case 'ask': {
+      if (!text) return console.error('Dùng: aris ask "việc cần làm" [--json]')
+      const json = flags.has('--json')
+      const r = await callSocket('POST', '/ask', { text })
+      // Không có đường chạy một lần bằng headless: bản đó của dsh tắt kho khoá, không có kênh.
+      if (!r) return notRunning()
+      console.log(json ? JSON.stringify(r) : r.text)
+      process.exitCode = r.reason === 'completed' ? 0 : 1
+      return
+    }
+    case 'computer': {
+      if (text !== 'doctor') return console.error('Dùng: aris computer doctor')
+      const r = await callSocket('POST', '/computer-doctor')
+      if (!r) return notRunning()
+      return console.log(r.text)
+    }
+    case 'restore':
+      return restore(text, flags.has('--yes'))
+    default:
+      console.log(HELP)
+  }
+}
+
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1])
+  main(process.argv.slice(2)).catch((e) => {
+    console.error(`aris: ${e instanceof Error ? e.message : String(e)}`)
+    process.exit(1)
+  })

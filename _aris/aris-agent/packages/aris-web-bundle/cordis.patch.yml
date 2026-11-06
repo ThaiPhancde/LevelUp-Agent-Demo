@@ -1,0 +1,60 @@
+# Lớp giao diện web của aris, chỉ gắn vào profile `aris` (web), xếp sau
+# dsh-web-app và @aris/bundle. Mỗi mảnh giao diện của dsh khác với canvas được
+# tắt đi và thay bằng một gói aris giữ nguyên hợp đồng slot (dsh không cho đổi
+# tên gói của row có sẵn, nên phải tắt row gốc rồi chèn row mới).
+
+# Không in URL đăng nhập có token (`dsh web: http://127.0.0.1:3201/?token=…`) ra stdout: launchd ghi dòng đó vào
+# `~/Library/Logs/aris/daemon.log`, token sống tới khi daemon khởi động lại và bot đọc được log (đợt 7f, S4). Lấy URL
+# bằng `aris url` (đi qua socket 0600 của daemon). Patch thay cả `config` của row nên chép lại đủ các khoá của row gốc
+# (dsh-web-app/cordis.patch.yml); chỉ `printUrl` khác.
+- id: web-runtime
+  config:
+    openBrowser: !!js ctx.webStartup.openBrowser
+    printUrl: false
+    publicUrl: !!js ctx.webStartup.publicUrl
+    surfaceContext: true
+
+# Thanh bên trái: Đội hình, Việc mới, các trang theo canvas.
+- id: ui-sidebar
+  name: '@deepseek-ai/dsh-client-ui-sidebar'
+  disabled: true
+
+# Trang Plugins của dsh: gộp vào trang Plugin của aris (Cài đặt › Plugin). Trang aris khai báo các
+# khe cấu hình (plugins.item, plugins.bundle.config, plugins.row.config) và cấp `pluginNavigation`;
+# hai bên không cùng khai báo một khe được nên tắt trang gốc.
+- id: ui-plugin-manager
+  name: '@deepseek-ai/dsh-client-ui-plugin-manager'
+  disabled: true
+
+# Nhãn "1017" tạm của DeepSeek cạnh tên model: aris vẽ nhãn model riêng (@aris/ui-chat).
+- id: ui-deepseek-model-label-1017
+  name: '@deepseek-ai/dsh-client-ui-deepseek-model-label-1017'
+  disabled: true
+
+- insert:
+    # Theme aris cho toàn app: ghi đè token màu, nền, viền, chữ, phông của dsh.
+    - id: aris-ui-theme
+      name: '@aris/ui-theme'
+
+    # Thêm "Tiếng Việt" vào Cài đặt › Chung › Ngôn ngữ; tiếng Anh, tiếng Trung giữ nguyên.
+    - id: aris-ui-locale-vi
+      name: '@aris/ui-locale-vi'
+
+    - id: aris-ui-sidebar
+      name: '@aris/ui-sidebar'
+
+    # Đầu khung chat "Bot / Phiên ▾": cắm thêm vào slot đầu khung của dsh.
+    - id: aris-ui-chat-header
+      name: '@aris/ui-chat-header'
+
+    # Khung chat: màn trống, nút / và @, nhãn model, "dòng việc" khi giao việc cho bot con.
+    - id: aris-ui-chat
+      name: '@aris/ui-chat'
+
+    # Cột phải: "Đội bot lúc này" ở trang bắt đầu.
+    - id: aris-ui-team-pane
+      name: '@aris/ui-team-pane'
+
+    # Các trang và hộp thoại theo canvas: Cài đặt 6.x, Ký ức, Skill, Hộp duyệt, Bản đồ đội…
+    - id: aris-ui-pages
+      name: '@aris/ui-pages'

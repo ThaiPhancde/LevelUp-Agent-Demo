@@ -1,0 +1,42 @@
+{
+  "name": "@aris/bundle",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Lớp cấu hình aris xếp trên các profile dsh (web, acp, headless)",
+  "type": "module",
+  "files": [
+    "cordis.patch.yml"
+  ],
+  "license": "MIT",
+  "engines": {
+    "dsh": ">=0.2.1-rc.2 <0.3.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dependencies": {
+    "@aris/acp": "workspace:*",
+    "@aris/autonomy": "workspace:*",
+    "@aris/guard": "workspace:*",
+    "@aris/backup": "workspace:*",
+    "@aris/keychain": "workspace:*",
+    "@aris/bots": "workspace:*",
+    "@aris/brain": "workspace:*",
+    "@aris/channels": "workspace:*",
+    "@aris/checkpoints": "workspace:*",
+    "@aris/commander": "workspace:*",
+    "@aris/computer": "workspace:*",
+    "@aris/daemon": "workspace:*",
+    "@aris/home": "workspace:*",
+    "@aris/memory": "workspace:*",
+    "@aris/reflect": "workspace:*",
+    "@aris/skills": "workspace:*",
+    "@aris/projects": "workspace:*",
+    "@aris/providers": "workspace:*",
+    "@aris/recall": "workspace:*",
+    "@aris/routine": "workspace:*",
+    "@aris/stats": "workspace:*"
+  }
+}

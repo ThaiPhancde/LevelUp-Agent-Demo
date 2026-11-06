@@ -1,0 +1,9 @@
+.env
+data/
+ai-jobs/
+docs/
+tools/
+tests/e2e/results/
+app/main.py.bak
+**/__pycache__
+*.pyc

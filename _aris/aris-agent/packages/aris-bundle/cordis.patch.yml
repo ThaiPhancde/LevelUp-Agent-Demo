@@ -1,0 +1,69 @@
+# Lớp aris: mọi năng lực của aris là một row ở đây. Lớp này xếp sau bundle của
+# dsh (dsh-base, rồi web/acp/headless), nên cùng một bộ row chạy được ở mọi mặt.
+# Kho khoá: aris giữ khoá API trong Keychain của macOS (@aris/keychain), kho dạng tệp của dsh làm lớp dưới.
+# dsh không cho đổi tên gói của row có sẵn nên tắt row gốc rồi chèn row aris cùng dịch vụ `credentials`.
+- id: credentials
+  name: '@deepseek-ai/dsh-credentials-local'
+  disabled: true
+
+- insert:
+    - id: aris-keychain
+      name: '@aris/keychain'
+    - id: aris-bots
+      name: '@aris/bots'
+    - id: aris-commander
+      name: '@aris/commander'
+    - id: aris-projects
+      name: '@aris/projects'
+    - id: aris-memory
+      name: '@aris/memory'
+    - id: aris-providers
+      name: '@aris/providers'
+    - id: aris-reflect
+      name: '@aris/reflect'
+    - id: aris-skills
+      name: '@aris/skills'
+    - id: aris-autonomy
+      name: '@aris/autonomy'
+    - id: aris-routine
+      name: '@aris/routine'
+    - id: aris-checkpoints
+      name: '@aris/checkpoints'
+    - id: aris-acp
+      name: '@aris/acp'
+    # Thống kê đứng trước hàng rào: hook duyệt của hàng rào bọc ngoài, việc hàng rào tự cho không bị tính là có hỏi.
+    - id: aris-stats
+      name: '@aris/stats'
+    - id: aris-guard
+      name: '@aris/guard'
+    - id: aris-backup
+      name: '@aris/backup'
+    # Điều khiển màn hình (GĐ8.3): xếp sau hàng rào để chặn cứng của hàng rào xét trước.
+    - id: aris-computer
+      name: '@aris/computer'
+    # Xếp sau providers (nguồn từng lần gọi) và guard (hook duyệt: thống kê đứng ngoài hàng rào để thấy kết quả).
+    - id: aris-brain
+      name: '@aris/brain'
+    - id: aris-recall
+      name: '@aris/recall'
+    - id: aris-home
+      name: '@aris/home'
+    - id: aris-channels
+      name: '@aris/channels'
+    - id: aris-daemon
+      name: '@aris/daemon'
+
+# Tìm lại phiên cũ (aris-recall, hộp tìm trong mọi phiên, ô tìm ⌘K của dsh) cần chỉ mục
+# toàn văn của dsh. dsh-base mount nó nhưng tắt tìm nội dung (`openAt: never`); lớp aris
+# bật lên, mở khi tìm lần đầu cho khởi động nhẹ, và lưu bền để khỏi dựng lại mỗi lần chạy.
+# Chỉ mục là dữ liệu suy ra từ log phiên: xoá tệp thì dsh dựng lại.
+- id: session-query-sqlite
+  config:
+    path: !!js dshHomePath('session-search.sqlite')
+    openAt: first-search
+
+# /goal: trần số lượt mặc định của aris là 20 (dsh để 256). Giám khảo của aris-autonomy chấm
+# sau mỗi lượt và dừng sớm khi xong, bị chặn hay không tiến triển.
+- id: goal
+  config:
+    defaultMaxGoalRounds: 20

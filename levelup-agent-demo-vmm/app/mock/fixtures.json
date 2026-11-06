@@ -1,0 +1,358 @@
+{
+  "market": {
+    "market": "Philippines",
+    "currency": "PHP",
+    "demand_signal": "synthetic_medium",
+    "source": "MOCK_ONLY",
+    "synthetic": true
+  },
+  "ads": {
+    "platform": "Meta Ads (mock)",
+    "campaign_id": "CMP-LU-PH-001",
+    "status": "DRAFT",
+    "budget_php": 4000,
+    "tracking_ok": true,
+    "synthetic": true
+  },
+  "products": {
+    "items": [
+      {
+        "sku": "LU-PH-001",
+        "name": "Demo bracelet",
+        "selling_price_php": 499,
+        "stock": 50,
+        "synthetic": true
+      },
+      {
+        "sku": "LU-PH-002",
+        "name": "Demo necklace",
+        "selling_price_php": 699,
+        "stock": 30,
+        "synthetic": true
+      },
+      {
+        "sku": "LU-PH-003",
+        "name": "Demo phone strap",
+        "selling_price_php": 299,
+        "stock": 120,
+        "synthetic": true
+      }
+    ],
+    "synthetic": true
+  },
+  "suppliers": {
+    "items": [
+      {
+        "sku": "LU-PH-001",
+        "supplier": "Mock Supplier A",
+        "unit_cost_php": 180,
+        "lead_time_days": 7,
+        "synthetic": true
+      },
+      {
+        "sku": "LU-PH-002",
+        "supplier": "Mock Supplier B",
+        "unit_cost_php": 260,
+        "lead_time_days": 10,
+        "synthetic": true
+      },
+      {
+        "sku": "LU-PH-003",
+        "supplier": "Mock Supplier C",
+        "unit_cost_php": 95,
+        "lead_time_days": 5,
+        "synthetic": true
+      }
+    ],
+    "synthetic": true
+  },
+  "campaigns": {
+    "items": [
+      {
+        "campaign_id": "CMP-LU-PH-001",
+        "status": "DRAFT",
+        "spend_php": 4000,
+        "synthetic": true
+      }
+    ],
+    "synthetic": true
+  },
+  "leads": {
+    "total": 100,
+    "confirmed": 20,
+    "synthetic": true
+  },
+  "orders": {
+    "delivered": 15,
+    "returned": 2,
+    "synthetic": true
+  },
+  "logistics": {
+    "provider": "Mock 3PL",
+    "shipping_php": 75,
+    "delivery_days": 3,
+    "synthetic": true
+  },
+  "conversations": {
+    "synthetic": true,
+    "items": [
+      {
+        "conversation_id": "CONV-001",
+        "channel": "messenger_mock",
+        "language": "en",
+        "sku": "LU-PH-001",
+        "stage": "lead",
+        "intent": "product_question",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Hello, I am Lira. Is the Demo bracelet available for order right now?"
+          },
+          {
+            "from": "agent_draft",
+            "text": "Hi Lira! Yes, the Demo bracelet is currently in stock at PHP 499, with PHP 75 shipping and standard delivery in 3 days."
+          },
+          {
+            "from": "customer",
+            "text": "Thank you! Does it come in a single standard size for everyday wear?"
+          },
+          {
+            "from": "agent_draft",
+            "text": "Draft reply for review: Yes, the Demo bracelet comes in one standard adjustable fit suitable for daily use."
+          }
+        ],
+        "synthetic": true
+      },
+      {
+        "conversation_id": "CONV-002",
+        "channel": "tiktok_mock",
+        "language": "fil",
+        "sku": "LU-PH-002",
+        "stage": "lead",
+        "intent": "price_question",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Magandang araw, ako si Tala. Magkano po ang Demo necklace at magkano ang bayad sa padala?"
+          },
+          {
+            "from": "agent_draft",
+            "text": "Magandang araw po, Tala! Ang presyo ng Demo necklace ay PHP 699 at ang bayad sa pagpapadala ay PHP 75."
+          },
+          {
+            "from": "customer",
+            "text": "Ilang araw po bago dumating kapag nag-order ako ngayon?"
+          },
+          {
+            "from": "agent_draft",
+            "text": "Karaniwang umaabot po ng 3 days ang paghahatid matapos makumpirma ang inyong order."
+          }
+        ],
+        "synthetic": true
+      },
+      {
+        "conversation_id": "CONV-003",
+        "channel": "website_chat_mock",
+        "language": "taglish",
+        "sku": "LU-PH-003",
+        "stage": "lead",
+        "intent": "shipping_question",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Hi po, I am Bituin. How much po ang shipping fee kapag kumuha ako ng Demo phone strap?"
+          },
+          {
+            "from": "agent_draft",
+            "text": "Hello po, Bituin! Ang Demo phone strap ay PHP 299, at PHP 75 po ang shipping fee na may estimated delivery na 3 days."
+          }
+        ],
+        "synthetic": true
+      },
+      {
+        "conversation_id": "CONV-004",
+        "channel": "messenger_mock",
+        "language": "en",
+        "sku": "LU-PH-001",
+        "stage": "confirmed",
+        "intent": "order_status",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Hi, my name is Alon. Can I check the current status of my Demo bracelet order ORD-004?"
+          },
+          {
+            "from": "agent_draft",
+            "text": "Hello Alon! Your order ORD-004 for the Demo bracelet at PHP 499 plus PHP 75 shipping is confirmed and scheduled for delivery within 3 days."
+          }
+        ],
+        "synthetic": true
+      },
+      {
+        "conversation_id": "CONV-005",
+        "channel": "tiktok_mock",
+        "language": "fil",
+        "sku": "LU-PH-002",
+        "stage": "confirmed",
+        "intent": "shipping_question",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Kumusta, ako si Sinag. Nais ko lang itanong kung kailan ihahatid ang aking Demo necklace para sa ORD-005?"
+          },
+          {
+            "from": "agent_draft",
+            "text": "Kumusta po, Sinag! Kumpirmado na po ang ORD-005 para sa Demo necklace na PHP 699 at PHP 75 na padala, at inaasahang darating sa loob ng 3 days."
+          }
+        ],
+        "synthetic": true
+      },
+      {
+        "conversation_id": "CONV-006",
+        "channel": "website_chat_mock",
+        "language": "taglish",
+        "sku": "LU-PH-003",
+        "stage": "confirmed",
+        "intent": "price_question",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Hello po, Amihan here. Pa-confirm lang po ng breakdown for ORD-006 sa Demo phone strap."
+          },
+          {
+            "from": "agent_draft",
+            "text": "Hi po, Amihan! Para sa ORD-006, ang Demo phone strap ay PHP 299 at ang shipping fee ay PHP 75, with standard delivery in 3 days."
+          }
+        ],
+        "synthetic": true
+      },
+      {
+        "conversation_id": "CONV-007",
+        "channel": "messenger_mock",
+        "language": "en",
+        "sku": "LU-PH-001",
+        "stage": "delivered",
+        "intent": "order_status",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Hello, this is Dalisay. My package for ORD-007 just arrived today, can you confirm my order record is marked complete?"
+          },
+          {
+            "from": "agent_draft",
+            "text": "Hello Dalisay! Yes, we see that order ORD-007 for the Demo bracelet at PHP 499 with PHP 75 shipping has been marked as delivered."
+          }
+        ],
+        "synthetic": true
+      },
+      {
+        "conversation_id": "CONV-008",
+        "channel": "tiktok_mock",
+        "language": "fil",
+        "sku": "LU-PH-002",
+        "stage": "delivered",
+        "intent": "complaint",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Magandang hapon, ako si Hiraya. Natanggap ko na ang ORD-008 pero may gasgas ang kahon ng Demo necklace."
+          },
+          {
+            "from": "agent_draft",
+            "text": "Paumanhin po sa abala, Hiraya. Itatala po namin ang ulat tungkol sa ORD-008 para sa Demo necklace na PHP 699 upang masuri agad ng aming support team."
+          },
+          {
+            "from": "customer",
+            "text": "Maraming salamat, maghihintay po ako sa sagot ng inyong grupo."
+          },
+          {
+            "from": "agent_draft",
+            "text": "Maraming salamat po sa inyong pasensya, ipapasa na po namin ang detalye ng ORD-008 sa nakatalagang tagasuri."
+          }
+        ],
+        "synthetic": true
+      },
+      {
+        "conversation_id": "CONV-009",
+        "channel": "website_chat_mock",
+        "language": "taglish",
+        "sku": "LU-PH-003",
+        "stage": "delivered",
+        "intent": "product_question",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Hi, Luntian here. Kakakuha ko lang ng ORD-009 Demo phone strap, paano po ang tamang pag-attach nito sa case?"
+          },
+          {
+            "from": "agent_draft",
+            "text": "Hello po, Luntian! Para sa Demo phone strap sa ORD-009 na PHP 299, ipasok lang po ang loop sa charging cutout ng case bago ilagay ang phone."
+          }
+        ],
+        "synthetic": true
+      },
+      {
+        "conversation_id": "CONV-010",
+        "channel": "messenger_mock",
+        "language": "en",
+        "sku": "LU-PH-001",
+        "stage": "returned",
+        "intent": "return_request",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Hello, I am Malaya. I sent back the Demo bracelet under order ORD-010 because the clasp felt loose."
+          },
+          {
+            "from": "agent_draft",
+            "text": "Hello Malaya. We have logged the returned Demo bracelet for order ORD-010 at PHP 499 and forwarded your case for a human specialist to review."
+          }
+        ],
+        "synthetic": true
+      },
+      {
+        "conversation_id": "CONV-011",
+        "channel": "tiktok_mock",
+        "language": "fil",
+        "sku": "LU-PH-002",
+        "stage": "returned",
+        "intent": "return_request",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Kumusta, ako si Diwa. Ibinalik ko po ang Demo necklace mula sa ORD-011 dahil hindi tugma ang haba nito."
+          },
+          {
+            "from": "agent_draft",
+            "text": "Salamat po sa pagbigay-alam, Diwa. Nakatala na po ang pagbabalik ng Demo necklace sa ORD-011 na PHP 699 at isusumite ito sa aming team para sa pagsusuri."
+          }
+        ],
+        "synthetic": true
+      },
+      {
+        "conversation_id": "CONV-012",
+        "channel": "website_chat_mock",
+        "language": "taglish",
+        "sku": "LU-PH-003",
+        "stage": "returned",
+        "intent": "complaint",
+        "messages": [
+          {
+            "from": "customer",
+            "text": "Hello po, Kalinaw here. Na-return ko na po ang Demo phone strap under ORD-012 kasi may punit ang tali pagdating."
+          },
+          {
+            "from": "agent_draft",
+            "text": "Pasensya na po sa naging karanasan, Kalinaw. Naka-record na po ang returned status ng ORD-012 para sa Demo phone strap na PHP 299 for human review."
+          }
+        ],
+        "synthetic": true
+      }
+    ]
+  },
+  "finance": {
+    "budget_php": 15000,
+    "payment_fee_php": 18,
+    "synthetic": true
+  }
+}

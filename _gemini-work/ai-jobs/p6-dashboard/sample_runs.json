@@ -1,0 +1,4368 @@
+{
+ "happy": {
+  "environment": "MOCK_ONLY",
+  "run": {
+   "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+   "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+   "mode": "mock",
+   "status": "COMPLETED",
+   "inject": [],
+   "token_total": 0,
+   "cost_est": 0.0,
+   "created_at": "2026-11-05T02:58:14.840399+00:00",
+   "finished_at": "2026-11-05T02:58:15.000612+00:00"
+  },
+  "tasks": [
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "plan",
+    "agent_id": "01",
+    "status": "COMPLETED",
+    "depends_on": [],
+    "attempt": 1,
+    "artifact_id": 1,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.845691+00:00",
+    "finished_at": "2026-11-05T02:58:14.861702+00:00",
+    "narrative": "Commander: Khởi tạo kế hoạch thực thi giả lập cho mục tiêu \"Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.\" tại thị trường Philippines gồm 14 bước và 4 ràng buộc an toàn. Toàn bộ quy trình chỉ đọc dữ liệu giả lập và giữ mọi tác vụ ở chế độ nháp.",
+    "artifact_type": "execution_plan",
+    "artifact": {
+     "type": "execution_plan",
+     "agent_id": "01",
+     "summary": "Kế hoạch 14 bước cho thị trường Philippines.",
+     "synthetic": true,
+     "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+     "market": "Philippines",
+     "steps": [
+      {
+       "task_key": "plan",
+       "agent_id": "01",
+       "agent_name": "Sales Director / Commander",
+       "depends_on": []
+      },
+      {
+       "task_key": "market",
+       "agent_id": "02",
+       "agent_name": "Market Intelligence",
+       "depends_on": [
+        "plan"
+       ]
+      },
+      {
+       "task_key": "product",
+       "agent_id": "03",
+       "agent_name": "Product Scout",
+       "depends_on": [
+        "market"
+       ]
+      },
+      {
+       "task_key": "offer",
+       "agent_id": "04",
+       "agent_name": "Offer & Strategy",
+       "depends_on": [
+        "product"
+       ]
+      },
+      {
+       "task_key": "content",
+       "agent_id": "05",
+       "agent_name": "Content & Creative",
+       "depends_on": [
+        "offer"
+       ]
+      },
+      {
+       "task_key": "campaign",
+       "agent_id": "06",
+       "agent_name": "Campaign Operator",
+       "depends_on": [
+        "offer",
+        "content"
+       ]
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "agent_name": "Lead & Sales",
+       "depends_on": [
+        "campaign"
+       ]
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "agent_name": "Customer Success",
+       "depends_on": [
+        "leads"
+       ]
+      },
+      {
+       "task_key": "kpi",
+       "agent_id": "09",
+       "agent_name": "Sales Analyst",
+       "depends_on": [
+        "leads",
+        "care"
+       ]
+      },
+      {
+       "task_key": "finance",
+       "agent_id": "10",
+       "agent_name": "Finance & Risk",
+       "depends_on": [
+        "offer",
+        "kpi"
+       ]
+      },
+      {
+       "task_key": "qa",
+       "agent_id": "11",
+       "agent_name": "QA Tester",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance"
+       ]
+      },
+      {
+       "task_key": "audit",
+       "agent_id": "12",
+       "agent_name": "Auditor",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance"
+       ]
+      },
+      {
+       "task_key": "monitor",
+       "agent_id": "13",
+       "agent_name": "Monitor",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance",
+        "qa",
+        "audit"
+       ]
+      },
+      {
+       "task_key": "summary",
+       "agent_id": "01",
+       "agent_name": "Sales Director / Commander",
+       "depends_on": [
+        "qa",
+        "audit",
+        "monitor"
+       ]
+      }
+     ],
+     "constraints": [
+      "MOCK_ONLY: không kết nối hệ thống thật",
+      "Chiến dịch luôn ở trạng thái DRAFT",
+      "Không publish, không thanh toán, không gửi tin nhắn thật",
+      "Số liệu chỉ lấy từ Mock API"
+     ],
+     "narrative": "Commander: Khởi tạo kế hoạch thực thi giả lập cho mục tiêu \"Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.\" tại thị trường Philippines gồm 14 bước và 4 ràng buộc an toàn. Toàn bộ quy trình chỉ đọc dữ liệu giả lập và giữ mọi tác vụ ở chế độ nháp.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "market",
+    "agent_id": "02",
+    "status": "COMPLETED",
+    "depends_on": [
+     "plan"
+    ],
+    "attempt": 1,
+    "artifact_id": 2,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.864883+00:00",
+    "finished_at": "2026-11-05T02:58:14.872813+00:00",
+    "narrative": "Market Intelligence: Báo cáo thị trường Philippines (tiền tệ PHP, tín hiệu cầu synthetic_medium) từ dữ liệu giả lập ghi nhận 100 lead, 20 đơn xác nhận, 15 đơn giao thành công và 2 đơn hoàn. Tỷ lệ xác nhận đạt 0.2, tỷ lệ giao hàng 0.75 và tỷ lệ hoàn 0.1333.",
+    "artifact_type": "market_report",
+    "artifact": {
+     "type": "market_report",
+     "agent_id": "02",
+     "summary": "Phễu giả lập Philippines: 100 lead, 20 xác nhận, 15 giao, 2 hoàn.",
+     "synthetic": true,
+     "market": "Philippines",
+     "currency": "PHP",
+     "demand_signal": "synthetic_medium",
+     "funnel": {
+      "leads": 100,
+      "confirmed": 20,
+      "delivered": 15,
+      "returned": 2
+     },
+     "confirm_rate": 0.2,
+     "delivery_rate": 0.75,
+     "return_rate": 0.1333,
+     "narrative": "Market Intelligence: Báo cáo thị trường Philippines (tiền tệ PHP, tín hiệu cầu synthetic_medium) từ dữ liệu giả lập ghi nhận 100 lead, 20 đơn xác nhận, 15 đơn giao thành công và 2 đơn hoàn. Tỷ lệ xác nhận đạt 0.2, tỷ lệ giao hàng 0.75 và tỷ lệ hoàn 0.1333.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "product",
+    "agent_id": "03",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market"
+    ],
+    "attempt": 1,
+    "artifact_id": 3,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.875803+00:00",
+    "finished_at": "2026-11-05T02:58:14.879370+00:00",
+    "narrative": "Product Scout: Qua đối chiếu 3 sản phẩm giả lập, đơn vị đề xuất mã LU-PH-001 với 0 cảnh báo biên lợi nhuận. Quy tắc lựa chọn áp dụng: Ưu tiên SKU có dữ liệu bán thử (số liệu phễu thuộc về SKU đó), cảnh báo nếu biên < 30%; không có dữ liệu thì chọn biên cao nhất đạt ngưỡng, rồi biên cao nhất.",
+    "artifact_type": "product_shortlist",
+    "artifact": {
+     "type": "product_shortlist",
+     "agent_id": "03",
+     "summary": "Chọn LU-PH-001 (Demo bracelet), biên 45.29%.",
+     "synthetic": true,
+     "candidates": [
+      {
+       "sku": "LU-PH-001",
+       "name": "Demo bracelet",
+       "selling_price_php": 499,
+       "unit_cost_php": 180,
+       "supplier": "Mock Supplier A",
+       "lead_time_days": 7,
+       "stock": 50,
+       "margin_per_unit_php": 226.0,
+       "margin_pct": 45.29,
+       "has_test_sale_data": true,
+       "passes_margin": true
+      },
+      {
+       "sku": "LU-PH-002",
+       "name": "Demo necklace",
+       "selling_price_php": 699,
+       "unit_cost_php": 260,
+       "supplier": "Mock Supplier B",
+       "lead_time_days": 10,
+       "stock": 30,
+       "margin_per_unit_php": 346.0,
+       "margin_pct": 49.5,
+       "has_test_sale_data": false,
+       "passes_margin": true
+      },
+      {
+       "sku": "LU-PH-003",
+       "name": "Demo phone strap",
+       "selling_price_php": 299,
+       "unit_cost_php": 95,
+       "supplier": "Mock Supplier C",
+       "lead_time_days": 5,
+       "stock": 120,
+       "margin_per_unit_php": 111.0,
+       "margin_pct": 37.12,
+       "has_test_sale_data": false,
+       "passes_margin": true
+      }
+     ],
+     "selected_sku": "LU-PH-001",
+     "warnings": [],
+     "selection_rule": "Ưu tiên SKU có dữ liệu bán thử (số liệu phễu thuộc về SKU đó), cảnh báo nếu biên < 30%; không có dữ liệu thì chọn biên cao nhất đạt ngưỡng, rồi biên cao nhất.",
+     "narrative": "Product Scout: Qua đối chiếu 3 sản phẩm giả lập, đơn vị đề xuất mã LU-PH-001 với 0 cảnh báo biên lợi nhuận. Quy tắc lựa chọn áp dụng: Ưu tiên SKU có dữ liệu bán thử (số liệu phễu thuộc về SKU đó), cảnh báo nếu biên < 30%; không có dữ liệu thì chọn biên cao nhất đạt ngưỡng, rồi biên cao nhất.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "offer",
+    "agent_id": "04",
+    "status": "COMPLETED",
+    "depends_on": [
+     "product"
+    ],
+    "attempt": 1,
+    "artifact_id": 4,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.882262+00:00",
+    "finished_at": "2026-11-05T02:58:14.885462+00:00",
+    "narrative": "Offer & Strategy: Định giá giả lập cho LU-PH-001 ở mức 499 PHP (giá vốn 180 PHP, vận chuyển 75 PHP, phí thanh toán 18 PHP), đạt biên lợi nhuận 226.0 PHP/đơn (45.29%). Với ngân sách chiến dịch 4000 PHP và tồn kho 50 sản phẩm, điểm hòa vốn là 18 đơn.",
+    "artifact_type": "pricing_offer",
+    "artifact": {
+     "type": "pricing_offer",
+     "agent_id": "04",
+     "summary": "LU-PH-001: giá 499 PHP, biên 226 PHP/đơn, hòa vốn 18 đơn với ngân sách 4000 PHP.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "selling_price_php": 499,
+     "unit_cost_php": 180,
+     "shipping_php": 75,
+     "payment_fee_php": 18,
+     "margin_per_unit_php": 226.0,
+     "margin_pct": 45.29,
+     "campaign_budget_php": 4000,
+     "breakeven_orders": 18,
+     "total_budget_php": 15000,
+     "stock": 50,
+     "narrative": "Offer & Strategy: Định giá giả lập cho LU-PH-001 ở mức 499 PHP (giá vốn 180 PHP, vận chuyển 75 PHP, phí thanh toán 18 PHP), đạt biên lợi nhuận 226.0 PHP/đơn (45.29%). Với ngân sách chiến dịch 4000 PHP và tồn kho 50 sản phẩm, điểm hòa vốn là 18 đơn.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "content",
+    "agent_id": "05",
+    "status": "COMPLETED",
+    "depends_on": [
+     "offer"
+    ],
+    "attempt": 1,
+    "artifact_id": 5,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.888835+00:00",
+    "finished_at": "2026-11-05T02:58:14.891991+00:00",
+    "narrative": "Content & Creative: Đã soạn 3 mẫu nội dung quảng cáo bản DRAFT (trạng thái DRAFT) cho sản phẩm Demo bracelet (LU-PH-001) dựa trên 3 nhóm câu hỏi trước mua từ hội thoại giả lập. Toàn bộ nội dung chỉ lưu nháp để duyệt, tuyệt đối không đăng tải thật.",
+    "artifact_type": "content_brief",
+    "artifact": {
+     "type": "content_brief",
+     "agent_id": "05",
+     "summary": "3 mẫu quảng cáo DRAFT cho Demo bracelet, góc nhìn: price_question, product_question, shipping_question.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "product_name": "Demo bracelet",
+     "angles": [
+      "price_question",
+      "product_question",
+      "shipping_question"
+     ],
+     "intent_counts": {
+      "product_question": 1,
+      "price_question": 1,
+      "shipping_question": 1
+     },
+     "ad_drafts": [
+      "Demo bracelet — 499 PHP. Delivery in 3 days.",
+      "Questions about shipping? Flat 75 PHP, arrives in 3 days.",
+      "Everyday style: Demo bracelet for 499 PHP."
+     ],
+     "status": "DRAFT",
+     "narrative": "Content & Creative: Đã soạn 3 mẫu nội dung quảng cáo bản DRAFT (trạng thái DRAFT) cho sản phẩm Demo bracelet (LU-PH-001) dựa trên 3 nhóm câu hỏi trước mua từ hội thoại giả lập. Toàn bộ nội dung chỉ lưu nháp để duyệt, tuyệt đối không đăng tải thật.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "campaign",
+    "agent_id": "06",
+    "status": "COMPLETED",
+    "depends_on": [
+     "offer",
+     "content"
+    ],
+    "attempt": 1,
+    "artifact_id": 6,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.894790+00:00",
+    "finished_at": "2026-11-05T02:58:14.900827+00:00",
+    "narrative": "Campaign Operator: Kế hoạch chiến dịch CMP-LU-PH-001 cho mã LU-PH-001 được giữ ở bản nháp DRAFT (trạng thái DRAFT) với ngân sách 4000 PHP, chiếm 26.67% tổng ngân sách và gắn 3 mẫu quảng cáo nháp. Đã ghi nhận 1 yêu cầu tạo bản nháp, không publish quảng cáo thật.",
+    "artifact_type": "campaign_plan",
+    "artifact": {
+     "type": "campaign_plan",
+     "agent_id": "06",
+     "summary": "Chiến dịch CMP-LU-PH-001 ở trạng thái DRAFT, ngân sách 4000 PHP.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "campaign_id": "CMP-LU-PH-001",
+     "status": "DRAFT",
+     "budget_php": 4000,
+     "budget_share_pct": 26.67,
+     "ad_draft_count": 3,
+     "tracking_ok": true,
+     "requested_actions": [
+      {
+       "tool": "meta_ads.create_draft",
+       "target": "CMP-LU-PH-001",
+       "budget_php": 4000
+      }
+     ],
+     "action_results": [
+      {
+       "tool": "meta_ads.create_draft",
+       "target": "CMP-LU-PH-001",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "meta_ads (mock)",
+        "target": "CMP-LU-PH-001"
+       }
+      }
+     ],
+     "narrative": "Campaign Operator: Kế hoạch chiến dịch CMP-LU-PH-001 cho mã LU-PH-001 được giữ ở bản nháp DRAFT (trạng thái DRAFT) với ngân sách 4000 PHP, chiếm 26.67% tổng ngân sách và gắn 3 mẫu quảng cáo nháp. Đã ghi nhận 1 yêu cầu tạo bản nháp, không publish quảng cáo thật.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "leads",
+    "agent_id": "07",
+    "status": "COMPLETED",
+    "depends_on": [
+     "campaign"
+    ],
+    "attempt": 1,
+    "artifact_id": 7,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.904329+00:00",
+    "finished_at": "2026-11-05T02:58:14.922088+00:00",
+    "narrative": "Lead & Sales: Phễu bán hàng giả lập của mã LU-PH-001 ghi nhận 100 lead (20 đã xác nhận, 80 chưa xác nhận, tỷ lệ xác nhận 0.2) với chi phí 40.0 PHP/lead và 200.0 PHP/đơn xác nhận. Đã chuẩn bị 3 phản hồi nháp cho 3 hội thoại mở, không gửi tin nhắn thật.",
+    "artifact_type": "lead_report",
+    "artifact": {
+     "type": "lead_report",
+     "agent_id": "07",
+     "summary": "100 lead, 20 xác nhận; 3 hội thoại lead cần trả lời nháp.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "leads": 100,
+     "confirmed": 20,
+     "unconfirmed": 80,
+     "confirm_rate": 0.2,
+     "cost_per_lead_php": 40.0,
+     "cost_per_confirmed_php": 200.0,
+     "open_conversations": [
+      "CONV-001",
+      "CONV-002",
+      "CONV-003"
+     ],
+     "requested_actions": [
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-001"
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-002"
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-003"
+      }
+     ],
+     "action_results": [
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-001",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-001"
+       }
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-002",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-002"
+       }
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-003",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-003"
+       }
+      }
+     ],
+     "narrative": "Lead & Sales: Phễu bán hàng giả lập của mã LU-PH-001 ghi nhận 100 lead (20 đã xác nhận, 80 chưa xác nhận, tỷ lệ xác nhận 0.2) với chi phí 40.0 PHP/lead và 200.0 PHP/đơn xác nhận. Đã chuẩn bị 3 phản hồi nháp cho 3 hội thoại mở, không gửi tin nhắn thật.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "care",
+    "agent_id": "08",
+    "status": "COMPLETED",
+    "depends_on": [
+     "leads"
+    ],
+    "attempt": 1,
+    "artifact_id": 8,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.925138+00:00",
+    "finished_at": "2026-11-05T02:58:14.940138+00:00",
+    "narrative": "Customer Success: Theo dõi vận hành giả lập mã LU-PH-001 qua đối tác Mock 3PL (thời gian giao dự kiến 3 ngày): trong 20 đơn xác nhận có 15 đơn đã giao, 5 đơn đang vận chuyển và 2 đơn hoàn. Đã tạo 4 ghi chú nội bộ cho 4 ticket sau bán.",
+    "artifact_type": "care_report",
+    "artifact": {
+     "type": "care_report",
+     "agent_id": "08",
+     "summary": "15 đơn đã giao, 2 hoàn, 5 đang giao; 4 ticket sau bán.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "confirmed": 20,
+     "delivered": 15,
+     "returned": 2,
+     "in_transit": 5,
+     "delivery_days": 3,
+     "provider": "Mock 3PL",
+     "tickets": [
+      {
+       "conversation_id": "CONV-008",
+       "intent": "complaint",
+       "stage": "delivered"
+      },
+      {
+       "conversation_id": "CONV-010",
+       "intent": "return_request",
+       "stage": "returned"
+      },
+      {
+       "conversation_id": "CONV-011",
+       "intent": "return_request",
+       "stage": "returned"
+      },
+      {
+       "conversation_id": "CONV-012",
+       "intent": "complaint",
+       "stage": "returned"
+      }
+     ],
+     "requested_actions": [
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-008"
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-010"
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-011"
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-012"
+      }
+     ],
+     "action_results": [
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-008",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-008"
+       }
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-010",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-010"
+       }
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-011",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-011"
+       }
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-012",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-012"
+       }
+      }
+     ],
+     "narrative": "Customer Success: Theo dõi vận hành giả lập mã LU-PH-001 qua đối tác Mock 3PL (thời gian giao dự kiến 3 ngày): trong 20 đơn xác nhận có 15 đơn đã giao, 5 đơn đang vận chuyển và 2 đơn hoàn. Đã tạo 4 ghi chú nội bộ cho 4 ticket sau bán.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "kpi",
+    "agent_id": "09",
+    "status": "COMPLETED",
+    "depends_on": [
+     "leads",
+     "care"
+    ],
+    "attempt": 1,
+    "artifact_id": 9,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.945887+00:00",
+    "finished_at": "2026-11-05T02:58:14.949578+00:00",
+    "narrative": "Sales Analyst: Phân tích hiệu quả giả lập mã LU-PH-001 với chi phí quảng cáo 4000.0 PHP: doanh thu gộp 7485.0 PHP, doanh thu ròng 6487.0 PHP trên 13 đơn ròng, đạt ROAS 1.62. Chi phí CPA xác nhận là 200.0 PHP, CPA giao thành công 266.67 PHP và tỷ lệ hoàn 0.1333.",
+    "artifact_type": "kpi_report",
+    "artifact": {
+     "type": "kpi_report",
+     "agent_id": "09",
+     "summary": "ROAS 1.62, CPA giao 266.67 PHP.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "selling_price_php": 499,
+     "ad_spend_php": 4000.0,
+     "gross_revenue_php": 7485.0,
+     "net_revenue_php": 6487.0,
+     "net_units": 13,
+     "roas": 1.62,
+     "cpa_confirmed_php": 200.0,
+     "cpa_delivered_php": 266.67,
+     "lead_to_delivered_rate": 0.15,
+     "return_rate": 0.1333,
+     "narrative": "Sales Analyst: Phân tích hiệu quả giả lập mã LU-PH-001 với chi phí quảng cáo 4000.0 PHP: doanh thu gộp 7485.0 PHP, doanh thu ròng 6487.0 PHP trên 13 đơn ròng, đạt ROAS 1.62. Chi phí CPA xác nhận là 200.0 PHP, CPA giao thành công 266.67 PHP và tỷ lệ hoàn 0.1333.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "finance",
+    "agent_id": "10",
+    "status": "COMPLETED",
+    "depends_on": [
+     "offer",
+     "kpi"
+    ],
+    "attempt": 1,
+    "artifact_id": 10,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.954717+00:00",
+    "finished_at": "2026-11-05T02:58:14.961835+00:00",
+    "narrative": "Finance & Risk: Báo cáo tài chính giả lập mã LU-PH-001 (13 đơn ròng, mốc hòa vốn 18 đơn): lợi nhuận trước quảng cáo 2938.0 PHP, lợi nhuận sau quảng cáo -1062.0 PHP. Phát hiện 2 rủi ro ở mức HIGH; khuyến nghị: Giữ chiến dịch ở DRAFT, cần người duyệt và thêm dữ liệu trước khi mở rộng.",
+    "artifact_type": "finance_risk_report",
+    "artifact": {
+     "type": "finance_risk_report",
+     "agent_id": "10",
+     "summary": "Lợi nhuận sau quảng cáo -1062.0 PHP, rủi ro HIGH.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "margin_per_unit_php": 226.0,
+     "net_units": 13,
+     "contribution_before_ads_php": 2938.0,
+     "contribution_after_ads_php": -1062.0,
+     "breakeven_orders": 18,
+     "budget_used_pct": 26.67,
+     "risks": [
+      "Chưa hòa vốn: 13 đơn ròng < 18 đơn cần",
+      "Tỷ lệ hoàn 13.33% vượt ngưỡng 10%"
+     ],
+     "risk_level": "HIGH",
+     "recommendation": "Giữ chiến dịch ở DRAFT, cần người duyệt và thêm dữ liệu trước khi mở rộng",
+     "narrative": "Finance & Risk: Báo cáo tài chính giả lập mã LU-PH-001 (13 đơn ròng, mốc hòa vốn 18 đơn): lợi nhuận trước quảng cáo 2938.0 PHP, lợi nhuận sau quảng cáo -1062.0 PHP. Phát hiện 2 rủi ro ở mức HIGH; khuyến nghị: Giữ chiến dịch ở DRAFT, cần người duyệt và thêm dữ liệu trước khi mở rộng.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "qa",
+    "agent_id": "11",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance"
+    ],
+    "attempt": 1,
+    "artifact_id": 11,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.964988+00:00",
+    "finished_at": "2026-11-05T02:58:14.971977+00:00",
+    "narrative": "QA Tester: Kết quả kiểm tra chất lượng ở phạm vi schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải đạt trạng thái PASS sau khi đối soát 9 gói dữ liệu bàn giao. Hệ thống ghi nhận 0 phát hiện cần xem xét.",
+    "artifact_type": "qa_report",
+    "artifact": {
+     "type": "qa_report",
+     "agent_id": "11",
+     "synthetic": true,
+     "summary": "QA PASS: 0 lỗi, 0 cảnh báo.",
+     "status": "PASS",
+     "findings": [],
+     "engine": "qa",
+     "engine_result_id": 1,
+     "checked": [
+      "market",
+      "product",
+      "offer",
+      "content",
+      "campaign",
+      "leads",
+      "care",
+      "kpi",
+      "finance"
+     ],
+     "scope": "schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải",
+     "narrative": "QA Tester: Kết quả kiểm tra chất lượng ở phạm vi schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải đạt trạng thái PASS sau khi đối soát 9 gói dữ liệu bàn giao. Hệ thống ghi nhận 0 phát hiện cần xem xét.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "audit",
+    "agent_id": "12",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance"
+    ],
+    "attempt": 1,
+    "artifact_id": 12,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.975276+00:00",
+    "finished_at": "2026-11-05T02:58:14.981696+00:00",
+    "narrative": "Auditor: Kết quả kiểm toán quyền hạn và rào chắn an toàn đạt trạng thái PASS trên tổng số 8 hành động đề xuất. Hệ thống ghi nhận 0 vi phạm quy tắc phân quyền hoặc trạng thái nháp.",
+    "artifact_type": "audit_report",
+    "artifact": {
+     "type": "audit_report",
+     "agent_id": "12",
+     "synthetic": true,
+     "summary": "Audit PASS: 0 lỗi, 0 cảnh báo.",
+     "status": "PASS",
+     "findings": [],
+     "engine": "audit",
+     "engine_result_id": 2,
+     "actions": [
+      {
+       "task_key": "campaign",
+       "agent_id": "06",
+       "tool": "meta_ads.create_draft",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "tool": "crm.reply_draft",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "tool": "crm.reply_draft",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "tool": "crm.reply_draft",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      }
+     ],
+     "narrative": "Auditor: Kết quả kiểm toán quyền hạn và rào chắn an toàn đạt trạng thái PASS trên tổng số 8 hành động đề xuất. Hệ thống ghi nhận 0 vi phạm quy tắc phân quyền hoặc trạng thái nháp.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "monitor",
+    "agent_id": "13",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance",
+     "qa",
+     "audit"
+    ],
+    "attempt": 1,
+    "artifact_id": 13,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.984545+00:00",
+    "finished_at": "2026-11-05T02:58:14.990536+00:00",
+    "narrative": "Monitor: Giám sát vận hành toàn trình đạt trạng thái PASS qua 14 tác vụ với 0 cảnh báo bất thường. Phiên chạy sử dụng 0 lời gọi mô hình ngôn ngữ và tiêu thụ 0 token.",
+    "artifact_type": "monitoring_report",
+    "artifact": {
+     "type": "monitoring_report",
+     "agent_id": "13",
+     "synthetic": true,
+     "summary": "Monitor PASS: 0 lỗi, 0 cảnh báo.",
+     "status": "PASS",
+     "findings": [],
+     "engine": "monitor",
+     "engine_result_id": 3,
+     "tasks": [
+      {
+       "task_key": "plan",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "market",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "product",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "offer",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "content",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "campaign",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "leads",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "care",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "kpi",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "finance",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "qa",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "audit",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "monitor",
+       "status": "RUNNING",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "summary",
+       "status": "PENDING",
+       "attempt": 0,
+       "error": null
+      }
+     ],
+     "llm_calls": 0,
+     "tokens": 0,
+     "narrative": "Monitor: Giám sát vận hành toàn trình đạt trạng thái PASS qua 14 tác vụ với 0 cảnh báo bất thường. Phiên chạy sử dụng 0 lời gọi mô hình ngôn ngữ và tiêu thụ 0 token.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "task_key": "summary",
+    "agent_id": "01",
+    "status": "COMPLETED",
+    "depends_on": [
+     "qa",
+     "audit",
+     "monitor"
+    ],
+    "attempt": 1,
+    "artifact_id": 14,
+    "error": null,
+    "started_at": "2026-11-05T02:58:14.993112+00:00",
+    "finished_at": "2026-11-05T02:58:14.997466+00:00",
+    "narrative": "Commander: Tổng kết mã LU-PH-001 kết luận HOLD_DRAFT (QA PASS, Audit PASS, Monitor PASS). Giá 499 PHP, biên 226.0 PHP, hòa vốn 18 đơn, ROAS 1.62, lợi nhuận sau quảng cáo -1062.0 PHP, rủi ro HIGH.",
+    "artifact_type": "final_summary",
+    "artifact": {
+     "type": "final_summary",
+     "agent_id": "01",
+     "summary": "Kết luận: HOLD_DRAFT. SKU LU-PH-001, rủi ro HIGH.",
+     "synthetic": true,
+     "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+     "sku": "LU-PH-001",
+     "decision": "HOLD_DRAFT",
+     "key_numbers": {
+      "selling_price_php": 499,
+      "margin_per_unit_php": 226.0,
+      "breakeven_orders": 18,
+      "roas": 1.62,
+      "contribution_after_ads_php": -1062.0,
+      "risk_level": "HIGH"
+     },
+     "supervision": {
+      "qa": "PASS",
+      "audit": "PASS",
+      "monitor": "PASS"
+     },
+     "next_steps": [
+      "Giữ chiến dịch DRAFT, không mở rộng",
+      "Người duyệt xem rủi ro Finance & Risk",
+      "Thu thêm dữ liệu bán thử hoặc điều chỉnh giá/chi phí"
+     ],
+     "narrative": "Commander: Tổng kết mã LU-PH-001 kết luận HOLD_DRAFT (QA PASS, Audit PASS, Monitor PASS). Giá 499 PHP, biên 226.0 PHP, hòa vốn 18 đơn, ROAS 1.62, lợi nhuận sau quảng cáo -1062.0 PHP, rủi ro HIGH.",
+     "narrative_source": "mock"
+    }
+   }
+  ],
+  "llm": {
+   "calls": 0,
+   "tokens": 0,
+   "cost_est": 0
+  },
+  "engines": {
+   "qa": {
+    "id": 1,
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "engine": "qa",
+    "status": "PASS",
+    "findings": [],
+    "created_at": "2026-11-05T02:58:14.969802+00:00"
+   },
+   "audit": {
+    "id": 2,
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "engine": "audit",
+    "status": "PASS",
+    "findings": [],
+    "created_at": "2026-11-05T02:58:14.979690+00:00"
+   },
+   "monitor": {
+    "id": 3,
+    "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+    "engine": "monitor",
+    "status": "PASS",
+    "findings": [],
+    "created_at": "2026-11-05T02:58:14.988915+00:00"
+   }
+  },
+  "approvals": []
+ },
+ "timeout": {
+  "environment": "MOCK_ONLY",
+  "run": {
+   "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+   "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+   "mode": "mock",
+   "status": "FAILED",
+   "inject": [
+    "timeout:market"
+   ],
+   "token_total": 0,
+   "cost_est": 0.0,
+   "created_at": "2026-11-05T02:58:15.004758+00:00",
+   "finished_at": "2026-11-05T02:58:15.365983+00:00"
+  },
+  "tasks": [
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "plan",
+    "agent_id": "01",
+    "status": "COMPLETED",
+    "depends_on": [],
+    "attempt": 1,
+    "artifact_id": 15,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.012303+00:00",
+    "finished_at": "2026-11-05T02:58:15.015222+00:00",
+    "narrative": "Commander: Khởi tạo kế hoạch thực thi giả lập cho mục tiêu \"Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.\" tại thị trường Philippines gồm 14 bước và 4 ràng buộc an toàn. Toàn bộ quy trình chỉ đọc dữ liệu giả lập và giữ mọi tác vụ ở chế độ nháp.",
+    "artifact_type": "execution_plan",
+    "artifact": {
+     "type": "execution_plan",
+     "agent_id": "01",
+     "summary": "Kế hoạch 14 bước cho thị trường Philippines.",
+     "synthetic": true,
+     "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+     "market": "Philippines",
+     "steps": [
+      {
+       "task_key": "plan",
+       "agent_id": "01",
+       "agent_name": "Sales Director / Commander",
+       "depends_on": []
+      },
+      {
+       "task_key": "market",
+       "agent_id": "02",
+       "agent_name": "Market Intelligence",
+       "depends_on": [
+        "plan"
+       ]
+      },
+      {
+       "task_key": "product",
+       "agent_id": "03",
+       "agent_name": "Product Scout",
+       "depends_on": [
+        "market"
+       ]
+      },
+      {
+       "task_key": "offer",
+       "agent_id": "04",
+       "agent_name": "Offer & Strategy",
+       "depends_on": [
+        "product"
+       ]
+      },
+      {
+       "task_key": "content",
+       "agent_id": "05",
+       "agent_name": "Content & Creative",
+       "depends_on": [
+        "offer"
+       ]
+      },
+      {
+       "task_key": "campaign",
+       "agent_id": "06",
+       "agent_name": "Campaign Operator",
+       "depends_on": [
+        "offer",
+        "content"
+       ]
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "agent_name": "Lead & Sales",
+       "depends_on": [
+        "campaign"
+       ]
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "agent_name": "Customer Success",
+       "depends_on": [
+        "leads"
+       ]
+      },
+      {
+       "task_key": "kpi",
+       "agent_id": "09",
+       "agent_name": "Sales Analyst",
+       "depends_on": [
+        "leads",
+        "care"
+       ]
+      },
+      {
+       "task_key": "finance",
+       "agent_id": "10",
+       "agent_name": "Finance & Risk",
+       "depends_on": [
+        "offer",
+        "kpi"
+       ]
+      },
+      {
+       "task_key": "qa",
+       "agent_id": "11",
+       "agent_name": "QA Tester",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance"
+       ]
+      },
+      {
+       "task_key": "audit",
+       "agent_id": "12",
+       "agent_name": "Auditor",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance"
+       ]
+      },
+      {
+       "task_key": "monitor",
+       "agent_id": "13",
+       "agent_name": "Monitor",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance",
+        "qa",
+        "audit"
+       ]
+      },
+      {
+       "task_key": "summary",
+       "agent_id": "01",
+       "agent_name": "Sales Director / Commander",
+       "depends_on": [
+        "qa",
+        "audit",
+        "monitor"
+       ]
+      }
+     ],
+     "constraints": [
+      "MOCK_ONLY: không kết nối hệ thống thật",
+      "Chiến dịch luôn ở trạng thái DRAFT",
+      "Không publish, không thanh toán, không gửi tin nhắn thật",
+      "Số liệu chỉ lấy từ Mock API"
+     ],
+     "narrative": "Commander: Khởi tạo kế hoạch thực thi giả lập cho mục tiêu \"Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.\" tại thị trường Philippines gồm 14 bước và 4 ràng buộc an toàn. Toàn bộ quy trình chỉ đọc dữ liệu giả lập và giữ mọi tác vụ ở chế độ nháp.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "market",
+    "agent_id": "02",
+    "status": "FAILED",
+    "depends_on": [
+     "plan"
+    ],
+    "attempt": 1,
+    "artifact_id": null,
+    "error": "timeout after 0.3s",
+    "started_at": "2026-11-05T02:58:15.017804+00:00",
+    "finished_at": "2026-11-05T02:58:15.321555+00:00",
+    "payload": null,
+    "narrative": null,
+    "artifact_type": null,
+    "artifact": null
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "product",
+    "agent_id": "03",
+    "status": "SKIPPED",
+    "depends_on": [
+     "market"
+    ],
+    "attempt": 0,
+    "artifact_id": null,
+    "error": "dependency not completed: market",
+    "started_at": null,
+    "finished_at": "2026-11-05T02:58:15.324728+00:00",
+    "payload": null,
+    "narrative": null,
+    "artifact_type": null,
+    "artifact": null
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "offer",
+    "agent_id": "04",
+    "status": "SKIPPED",
+    "depends_on": [
+     "product"
+    ],
+    "attempt": 0,
+    "artifact_id": null,
+    "error": "dependency not completed: product",
+    "started_at": null,
+    "finished_at": "2026-11-05T02:58:15.325027+00:00",
+    "payload": null,
+    "narrative": null,
+    "artifact_type": null,
+    "artifact": null
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "content",
+    "agent_id": "05",
+    "status": "SKIPPED",
+    "depends_on": [
+     "offer"
+    ],
+    "attempt": 0,
+    "artifact_id": null,
+    "error": "dependency not completed: offer",
+    "started_at": null,
+    "finished_at": "2026-11-05T02:58:15.325114+00:00",
+    "payload": null,
+    "narrative": null,
+    "artifact_type": null,
+    "artifact": null
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "campaign",
+    "agent_id": "06",
+    "status": "SKIPPED",
+    "depends_on": [
+     "offer",
+     "content"
+    ],
+    "attempt": 0,
+    "artifact_id": null,
+    "error": "dependency not completed: offer, content",
+    "started_at": null,
+    "finished_at": "2026-11-05T02:58:15.325149+00:00",
+    "payload": null,
+    "narrative": null,
+    "artifact_type": null,
+    "artifact": null
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "leads",
+    "agent_id": "07",
+    "status": "SKIPPED",
+    "depends_on": [
+     "campaign"
+    ],
+    "attempt": 0,
+    "artifact_id": null,
+    "error": "dependency not completed: campaign",
+    "started_at": null,
+    "finished_at": "2026-11-05T02:58:15.325228+00:00",
+    "payload": null,
+    "narrative": null,
+    "artifact_type": null,
+    "artifact": null
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "care",
+    "agent_id": "08",
+    "status": "SKIPPED",
+    "depends_on": [
+     "leads"
+    ],
+    "attempt": 0,
+    "artifact_id": null,
+    "error": "dependency not completed: leads",
+    "started_at": null,
+    "finished_at": "2026-11-05T02:58:15.325272+00:00",
+    "payload": null,
+    "narrative": null,
+    "artifact_type": null,
+    "artifact": null
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "kpi",
+    "agent_id": "09",
+    "status": "SKIPPED",
+    "depends_on": [
+     "leads",
+     "care"
+    ],
+    "attempt": 0,
+    "artifact_id": null,
+    "error": "dependency not completed: leads, care",
+    "started_at": null,
+    "finished_at": "2026-11-05T02:58:15.325298+00:00",
+    "payload": null,
+    "narrative": null,
+    "artifact_type": null,
+    "artifact": null
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "finance",
+    "agent_id": "10",
+    "status": "SKIPPED",
+    "depends_on": [
+     "offer",
+     "kpi"
+    ],
+    "attempt": 0,
+    "artifact_id": null,
+    "error": "dependency not completed: offer",
+    "started_at": null,
+    "finished_at": "2026-11-05T02:58:15.325177+00:00",
+    "payload": null,
+    "narrative": null,
+    "artifact_type": null,
+    "artifact": null
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "qa",
+    "agent_id": "11",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance"
+    ],
+    "attempt": 1,
+    "artifact_id": 16,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.325372+00:00",
+    "finished_at": "2026-11-05T02:58:15.332421+00:00",
+    "narrative": "QA Tester: Kết quả kiểm tra chất lượng ở phạm vi schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải đạt trạng thái FAIL sau khi đối soát 0 gói dữ liệu bàn giao. Hệ thống ghi nhận 9 phát hiện cần xem xét.",
+    "artifact_type": "qa_report",
+    "artifact": {
+     "type": "qa_report",
+     "agent_id": "11",
+     "synthetic": true,
+     "summary": "QA FAIL: 9 lỗi, 0 cảnh báo.",
+     "status": "FAIL",
+     "findings": [
+      {
+       "rule": "schema",
+       "severity": "FAIL",
+       "task_key": "market",
+       "detail": "missing artifact"
+      },
+      {
+       "rule": "schema",
+       "severity": "FAIL",
+       "task_key": "product",
+       "detail": "missing artifact"
+      },
+      {
+       "rule": "schema",
+       "severity": "FAIL",
+       "task_key": "offer",
+       "detail": "missing artifact"
+      },
+      {
+       "rule": "schema",
+       "severity": "FAIL",
+       "task_key": "content",
+       "detail": "missing artifact"
+      },
+      {
+       "rule": "schema",
+       "severity": "FAIL",
+       "task_key": "campaign",
+       "detail": "missing artifact"
+      },
+      {
+       "rule": "schema",
+       "severity": "FAIL",
+       "task_key": "leads",
+       "detail": "missing artifact"
+      },
+      {
+       "rule": "schema",
+       "severity": "FAIL",
+       "task_key": "care",
+       "detail": "missing artifact"
+      },
+      {
+       "rule": "schema",
+       "severity": "FAIL",
+       "task_key": "kpi",
+       "detail": "missing artifact"
+      },
+      {
+       "rule": "schema",
+       "severity": "FAIL",
+       "task_key": "finance",
+       "detail": "missing artifact"
+      }
+     ],
+     "engine": "qa",
+     "engine_result_id": 4,
+     "checked": [],
+     "scope": "schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải",
+     "narrative": "QA Tester: Kết quả kiểm tra chất lượng ở phạm vi schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải đạt trạng thái FAIL sau khi đối soát 0 gói dữ liệu bàn giao. Hệ thống ghi nhận 9 phát hiện cần xem xét.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "audit",
+    "agent_id": "12",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance"
+    ],
+    "attempt": 1,
+    "artifact_id": 17,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.335120+00:00",
+    "finished_at": "2026-11-05T02:58:15.343590+00:00",
+    "narrative": "Auditor: Kết quả kiểm toán quyền hạn và rào chắn an toàn đạt trạng thái PASS trên tổng số 0 hành động đề xuất. Hệ thống ghi nhận 0 vi phạm quy tắc phân quyền hoặc trạng thái nháp.",
+    "artifact_type": "audit_report",
+    "artifact": {
+     "type": "audit_report",
+     "agent_id": "12",
+     "synthetic": true,
+     "summary": "Audit PASS: 0 lỗi, 0 cảnh báo.",
+     "status": "PASS",
+     "findings": [],
+     "engine": "audit",
+     "engine_result_id": 5,
+     "actions": [],
+     "narrative": "Auditor: Kết quả kiểm toán quyền hạn và rào chắn an toàn đạt trạng thái PASS trên tổng số 0 hành động đề xuất. Hệ thống ghi nhận 0 vi phạm quy tắc phân quyền hoặc trạng thái nháp.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "monitor",
+    "agent_id": "13",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance",
+     "qa",
+     "audit"
+    ],
+    "attempt": 1,
+    "artifact_id": 18,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.346293+00:00",
+    "finished_at": "2026-11-05T02:58:15.351361+00:00",
+    "narrative": "Monitor: Giám sát vận hành toàn trình đạt trạng thái FAIL qua 14 tác vụ với 9 cảnh báo bất thường. Phiên chạy sử dụng 0 lời gọi mô hình ngôn ngữ và tiêu thụ 0 token.",
+    "artifact_type": "monitoring_report",
+    "artifact": {
+     "type": "monitoring_report",
+     "agent_id": "13",
+     "synthetic": true,
+     "summary": "Monitor FAIL: 1 lỗi, 8 cảnh báo.",
+     "status": "FAIL",
+     "findings": [
+      {
+       "rule": "timeout",
+       "severity": "FAIL",
+       "task_key": "market",
+       "detail": "timeout after 0.3s"
+      },
+      {
+       "rule": "skipped",
+       "severity": "WARN",
+       "task_key": "product",
+       "detail": "dependency not completed: market"
+      },
+      {
+       "rule": "skipped",
+       "severity": "WARN",
+       "task_key": "offer",
+       "detail": "dependency not completed: product"
+      },
+      {
+       "rule": "skipped",
+       "severity": "WARN",
+       "task_key": "content",
+       "detail": "dependency not completed: offer"
+      },
+      {
+       "rule": "skipped",
+       "severity": "WARN",
+       "task_key": "campaign",
+       "detail": "dependency not completed: offer, content"
+      },
+      {
+       "rule": "skipped",
+       "severity": "WARN",
+       "task_key": "leads",
+       "detail": "dependency not completed: campaign"
+      },
+      {
+       "rule": "skipped",
+       "severity": "WARN",
+       "task_key": "care",
+       "detail": "dependency not completed: leads"
+      },
+      {
+       "rule": "skipped",
+       "severity": "WARN",
+       "task_key": "kpi",
+       "detail": "dependency not completed: leads, care"
+      },
+      {
+       "rule": "skipped",
+       "severity": "WARN",
+       "task_key": "finance",
+       "detail": "dependency not completed: offer"
+      }
+     ],
+     "engine": "monitor",
+     "engine_result_id": 6,
+     "tasks": [
+      {
+       "task_key": "plan",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "market",
+       "status": "FAILED",
+       "attempt": 1,
+       "error": "timeout after 0.3s"
+      },
+      {
+       "task_key": "product",
+       "status": "SKIPPED",
+       "attempt": 0,
+       "error": "dependency not completed: market"
+      },
+      {
+       "task_key": "offer",
+       "status": "SKIPPED",
+       "attempt": 0,
+       "error": "dependency not completed: product"
+      },
+      {
+       "task_key": "content",
+       "status": "SKIPPED",
+       "attempt": 0,
+       "error": "dependency not completed: offer"
+      },
+      {
+       "task_key": "campaign",
+       "status": "SKIPPED",
+       "attempt": 0,
+       "error": "dependency not completed: offer, content"
+      },
+      {
+       "task_key": "leads",
+       "status": "SKIPPED",
+       "attempt": 0,
+       "error": "dependency not completed: campaign"
+      },
+      {
+       "task_key": "care",
+       "status": "SKIPPED",
+       "attempt": 0,
+       "error": "dependency not completed: leads"
+      },
+      {
+       "task_key": "kpi",
+       "status": "SKIPPED",
+       "attempt": 0,
+       "error": "dependency not completed: leads, care"
+      },
+      {
+       "task_key": "finance",
+       "status": "SKIPPED",
+       "attempt": 0,
+       "error": "dependency not completed: offer"
+      },
+      {
+       "task_key": "qa",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "audit",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "monitor",
+       "status": "RUNNING",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "summary",
+       "status": "PENDING",
+       "attempt": 0,
+       "error": null
+      }
+     ],
+     "llm_calls": 0,
+     "tokens": 0,
+     "narrative": "Monitor: Giám sát vận hành toàn trình đạt trạng thái FAIL qua 14 tác vụ với 9 cảnh báo bất thường. Phiên chạy sử dụng 0 lời gọi mô hình ngôn ngữ và tiêu thụ 0 token.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "task_key": "summary",
+    "agent_id": "01",
+    "status": "COMPLETED",
+    "depends_on": [
+     "qa",
+     "audit",
+     "monitor"
+    ],
+    "attempt": 1,
+    "artifact_id": 19,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.354674+00:00",
+    "finished_at": "2026-11-05T02:58:15.363056+00:00",
+    "narrative": "Kết luận: NEEDS_REVIEW. SKU None, rủi ro None.",
+    "artifact_type": "final_summary",
+    "artifact": {
+     "type": "final_summary",
+     "agent_id": "01",
+     "summary": "Kết luận: NEEDS_REVIEW. SKU None, rủi ro None.",
+     "synthetic": true,
+     "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+     "sku": "",
+     "decision": "NEEDS_REVIEW",
+     "key_numbers": {
+      "selling_price_php": null,
+      "margin_per_unit_php": null,
+      "breakeven_orders": null,
+      "roas": null,
+      "contribution_after_ads_php": null,
+      "risk_level": null
+     },
+     "supervision": {
+      "qa": "FAIL",
+      "audit": "PASS",
+      "monitor": "FAIL"
+     },
+     "next_steps": [
+      "Xử lý các phát hiện của QA/Audit/Monitor",
+      "Chạy lại agent liên quan"
+     ],
+     "narrative": "Kết luận: NEEDS_REVIEW. SKU None, rủi ro None.",
+     "narrative_source": "mock"
+    }
+   }
+  ],
+  "llm": {
+   "calls": 0,
+   "tokens": 0,
+   "cost_est": 0
+  },
+  "engines": {
+   "qa": {
+    "id": 4,
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "engine": "qa",
+    "status": "FAIL",
+    "findings": [
+     {
+      "rule": "schema",
+      "severity": "FAIL",
+      "task_key": "market",
+      "detail": "missing artifact"
+     },
+     {
+      "rule": "schema",
+      "severity": "FAIL",
+      "task_key": "product",
+      "detail": "missing artifact"
+     },
+     {
+      "rule": "schema",
+      "severity": "FAIL",
+      "task_key": "offer",
+      "detail": "missing artifact"
+     },
+     {
+      "rule": "schema",
+      "severity": "FAIL",
+      "task_key": "content",
+      "detail": "missing artifact"
+     },
+     {
+      "rule": "schema",
+      "severity": "FAIL",
+      "task_key": "campaign",
+      "detail": "missing artifact"
+     },
+     {
+      "rule": "schema",
+      "severity": "FAIL",
+      "task_key": "leads",
+      "detail": "missing artifact"
+     },
+     {
+      "rule": "schema",
+      "severity": "FAIL",
+      "task_key": "care",
+      "detail": "missing artifact"
+     },
+     {
+      "rule": "schema",
+      "severity": "FAIL",
+      "task_key": "kpi",
+      "detail": "missing artifact"
+     },
+     {
+      "rule": "schema",
+      "severity": "FAIL",
+      "task_key": "finance",
+      "detail": "missing artifact"
+     }
+    ],
+    "created_at": "2026-11-05T02:58:15.330632+00:00"
+   },
+   "audit": {
+    "id": 5,
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "engine": "audit",
+    "status": "PASS",
+    "findings": [],
+    "created_at": "2026-11-05T02:58:15.338754+00:00"
+   },
+   "monitor": {
+    "id": 6,
+    "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+    "engine": "monitor",
+    "status": "FAIL",
+    "findings": [
+     {
+      "rule": "timeout",
+      "severity": "FAIL",
+      "task_key": "market",
+      "detail": "timeout after 0.3s"
+     },
+     {
+      "rule": "skipped",
+      "severity": "WARN",
+      "task_key": "product",
+      "detail": "dependency not completed: market"
+     },
+     {
+      "rule": "skipped",
+      "severity": "WARN",
+      "task_key": "offer",
+      "detail": "dependency not completed: product"
+     },
+     {
+      "rule": "skipped",
+      "severity": "WARN",
+      "task_key": "content",
+      "detail": "dependency not completed: offer"
+     },
+     {
+      "rule": "skipped",
+      "severity": "WARN",
+      "task_key": "campaign",
+      "detail": "dependency not completed: offer, content"
+     },
+     {
+      "rule": "skipped",
+      "severity": "WARN",
+      "task_key": "leads",
+      "detail": "dependency not completed: campaign"
+     },
+     {
+      "rule": "skipped",
+      "severity": "WARN",
+      "task_key": "care",
+      "detail": "dependency not completed: leads"
+     },
+     {
+      "rule": "skipped",
+      "severity": "WARN",
+      "task_key": "kpi",
+      "detail": "dependency not completed: leads, care"
+     },
+     {
+      "rule": "skipped",
+      "severity": "WARN",
+      "task_key": "finance",
+      "detail": "dependency not completed: offer"
+     }
+    ],
+    "created_at": "2026-11-05T02:58:15.349529+00:00"
+   }
+  },
+  "approvals": []
+ },
+ "publish_blocked": {
+  "environment": "MOCK_ONLY",
+  "run": {
+   "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+   "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+   "mode": "mock",
+   "status": "COMPLETED",
+   "inject": [
+    "publish_attempt"
+   ],
+   "token_total": 0,
+   "cost_est": 0.0,
+   "created_at": "2026-11-05T02:58:15.370170+00:00",
+   "finished_at": "2026-11-05T02:58:15.505481+00:00"
+  },
+  "tasks": [
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "plan",
+    "agent_id": "01",
+    "status": "COMPLETED",
+    "depends_on": [],
+    "attempt": 1,
+    "artifact_id": 20,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.374725+00:00",
+    "finished_at": "2026-11-05T02:58:15.377951+00:00",
+    "narrative": "Commander: Khởi tạo kế hoạch thực thi giả lập cho mục tiêu \"Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.\" tại thị trường Philippines gồm 14 bước và 4 ràng buộc an toàn. Toàn bộ quy trình chỉ đọc dữ liệu giả lập và giữ mọi tác vụ ở chế độ nháp.",
+    "artifact_type": "execution_plan",
+    "artifact": {
+     "type": "execution_plan",
+     "agent_id": "01",
+     "summary": "Kế hoạch 14 bước cho thị trường Philippines.",
+     "synthetic": true,
+     "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+     "market": "Philippines",
+     "steps": [
+      {
+       "task_key": "plan",
+       "agent_id": "01",
+       "agent_name": "Sales Director / Commander",
+       "depends_on": []
+      },
+      {
+       "task_key": "market",
+       "agent_id": "02",
+       "agent_name": "Market Intelligence",
+       "depends_on": [
+        "plan"
+       ]
+      },
+      {
+       "task_key": "product",
+       "agent_id": "03",
+       "agent_name": "Product Scout",
+       "depends_on": [
+        "market"
+       ]
+      },
+      {
+       "task_key": "offer",
+       "agent_id": "04",
+       "agent_name": "Offer & Strategy",
+       "depends_on": [
+        "product"
+       ]
+      },
+      {
+       "task_key": "content",
+       "agent_id": "05",
+       "agent_name": "Content & Creative",
+       "depends_on": [
+        "offer"
+       ]
+      },
+      {
+       "task_key": "campaign",
+       "agent_id": "06",
+       "agent_name": "Campaign Operator",
+       "depends_on": [
+        "offer",
+        "content"
+       ]
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "agent_name": "Lead & Sales",
+       "depends_on": [
+        "campaign"
+       ]
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "agent_name": "Customer Success",
+       "depends_on": [
+        "leads"
+       ]
+      },
+      {
+       "task_key": "kpi",
+       "agent_id": "09",
+       "agent_name": "Sales Analyst",
+       "depends_on": [
+        "leads",
+        "care"
+       ]
+      },
+      {
+       "task_key": "finance",
+       "agent_id": "10",
+       "agent_name": "Finance & Risk",
+       "depends_on": [
+        "offer",
+        "kpi"
+       ]
+      },
+      {
+       "task_key": "qa",
+       "agent_id": "11",
+       "agent_name": "QA Tester",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance"
+       ]
+      },
+      {
+       "task_key": "audit",
+       "agent_id": "12",
+       "agent_name": "Auditor",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance"
+       ]
+      },
+      {
+       "task_key": "monitor",
+       "agent_id": "13",
+       "agent_name": "Monitor",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance",
+        "qa",
+        "audit"
+       ]
+      },
+      {
+       "task_key": "summary",
+       "agent_id": "01",
+       "agent_name": "Sales Director / Commander",
+       "depends_on": [
+        "qa",
+        "audit",
+        "monitor"
+       ]
+      }
+     ],
+     "constraints": [
+      "MOCK_ONLY: không kết nối hệ thống thật",
+      "Chiến dịch luôn ở trạng thái DRAFT",
+      "Không publish, không thanh toán, không gửi tin nhắn thật",
+      "Số liệu chỉ lấy từ Mock API"
+     ],
+     "narrative": "Commander: Khởi tạo kế hoạch thực thi giả lập cho mục tiêu \"Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.\" tại thị trường Philippines gồm 14 bước và 4 ràng buộc an toàn. Toàn bộ quy trình chỉ đọc dữ liệu giả lập và giữ mọi tác vụ ở chế độ nháp.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "market",
+    "agent_id": "02",
+    "status": "COMPLETED",
+    "depends_on": [
+     "plan"
+    ],
+    "attempt": 1,
+    "artifact_id": 21,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.381075+00:00",
+    "finished_at": "2026-11-05T02:58:15.384227+00:00",
+    "narrative": "Market Intelligence: Báo cáo thị trường Philippines (tiền tệ PHP, tín hiệu cầu synthetic_medium) từ dữ liệu giả lập ghi nhận 100 lead, 20 đơn xác nhận, 15 đơn giao thành công và 2 đơn hoàn. Tỷ lệ xác nhận đạt 0.2, tỷ lệ giao hàng 0.75 và tỷ lệ hoàn 0.1333.",
+    "artifact_type": "market_report",
+    "artifact": {
+     "type": "market_report",
+     "agent_id": "02",
+     "summary": "Phễu giả lập Philippines: 100 lead, 20 xác nhận, 15 giao, 2 hoàn.",
+     "synthetic": true,
+     "market": "Philippines",
+     "currency": "PHP",
+     "demand_signal": "synthetic_medium",
+     "funnel": {
+      "leads": 100,
+      "confirmed": 20,
+      "delivered": 15,
+      "returned": 2
+     },
+     "confirm_rate": 0.2,
+     "delivery_rate": 0.75,
+     "return_rate": 0.1333,
+     "narrative": "Market Intelligence: Báo cáo thị trường Philippines (tiền tệ PHP, tín hiệu cầu synthetic_medium) từ dữ liệu giả lập ghi nhận 100 lead, 20 đơn xác nhận, 15 đơn giao thành công và 2 đơn hoàn. Tỷ lệ xác nhận đạt 0.2, tỷ lệ giao hàng 0.75 và tỷ lệ hoàn 0.1333.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "product",
+    "agent_id": "03",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market"
+    ],
+    "attempt": 1,
+    "artifact_id": 22,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.387693+00:00",
+    "finished_at": "2026-11-05T02:58:15.391055+00:00",
+    "narrative": "Product Scout: Qua đối chiếu 3 sản phẩm giả lập, đơn vị đề xuất mã LU-PH-001 với 0 cảnh báo biên lợi nhuận. Quy tắc lựa chọn áp dụng: Ưu tiên SKU có dữ liệu bán thử (số liệu phễu thuộc về SKU đó), cảnh báo nếu biên < 30%; không có dữ liệu thì chọn biên cao nhất đạt ngưỡng, rồi biên cao nhất.",
+    "artifact_type": "product_shortlist",
+    "artifact": {
+     "type": "product_shortlist",
+     "agent_id": "03",
+     "summary": "Chọn LU-PH-001 (Demo bracelet), biên 45.29%.",
+     "synthetic": true,
+     "candidates": [
+      {
+       "sku": "LU-PH-001",
+       "name": "Demo bracelet",
+       "selling_price_php": 499,
+       "unit_cost_php": 180,
+       "supplier": "Mock Supplier A",
+       "lead_time_days": 7,
+       "stock": 50,
+       "margin_per_unit_php": 226.0,
+       "margin_pct": 45.29,
+       "has_test_sale_data": true,
+       "passes_margin": true
+      },
+      {
+       "sku": "LU-PH-002",
+       "name": "Demo necklace",
+       "selling_price_php": 699,
+       "unit_cost_php": 260,
+       "supplier": "Mock Supplier B",
+       "lead_time_days": 10,
+       "stock": 30,
+       "margin_per_unit_php": 346.0,
+       "margin_pct": 49.5,
+       "has_test_sale_data": false,
+       "passes_margin": true
+      },
+      {
+       "sku": "LU-PH-003",
+       "name": "Demo phone strap",
+       "selling_price_php": 299,
+       "unit_cost_php": 95,
+       "supplier": "Mock Supplier C",
+       "lead_time_days": 5,
+       "stock": 120,
+       "margin_per_unit_php": 111.0,
+       "margin_pct": 37.12,
+       "has_test_sale_data": false,
+       "passes_margin": true
+      }
+     ],
+     "selected_sku": "LU-PH-001",
+     "warnings": [],
+     "selection_rule": "Ưu tiên SKU có dữ liệu bán thử (số liệu phễu thuộc về SKU đó), cảnh báo nếu biên < 30%; không có dữ liệu thì chọn biên cao nhất đạt ngưỡng, rồi biên cao nhất.",
+     "narrative": "Product Scout: Qua đối chiếu 3 sản phẩm giả lập, đơn vị đề xuất mã LU-PH-001 với 0 cảnh báo biên lợi nhuận. Quy tắc lựa chọn áp dụng: Ưu tiên SKU có dữ liệu bán thử (số liệu phễu thuộc về SKU đó), cảnh báo nếu biên < 30%; không có dữ liệu thì chọn biên cao nhất đạt ngưỡng, rồi biên cao nhất.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "offer",
+    "agent_id": "04",
+    "status": "COMPLETED",
+    "depends_on": [
+     "product"
+    ],
+    "attempt": 1,
+    "artifact_id": 23,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.393485+00:00",
+    "finished_at": "2026-11-05T02:58:15.397265+00:00",
+    "narrative": "Offer & Strategy: Định giá giả lập cho LU-PH-001 ở mức 499 PHP (giá vốn 180 PHP, vận chuyển 75 PHP, phí thanh toán 18 PHP), đạt biên lợi nhuận 226.0 PHP/đơn (45.29%). Với ngân sách chiến dịch 4000 PHP và tồn kho 50 sản phẩm, điểm hòa vốn là 18 đơn.",
+    "artifact_type": "pricing_offer",
+    "artifact": {
+     "type": "pricing_offer",
+     "agent_id": "04",
+     "summary": "LU-PH-001: giá 499 PHP, biên 226 PHP/đơn, hòa vốn 18 đơn với ngân sách 4000 PHP.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "selling_price_php": 499,
+     "unit_cost_php": 180,
+     "shipping_php": 75,
+     "payment_fee_php": 18,
+     "margin_per_unit_php": 226.0,
+     "margin_pct": 45.29,
+     "campaign_budget_php": 4000,
+     "breakeven_orders": 18,
+     "total_budget_php": 15000,
+     "stock": 50,
+     "narrative": "Offer & Strategy: Định giá giả lập cho LU-PH-001 ở mức 499 PHP (giá vốn 180 PHP, vận chuyển 75 PHP, phí thanh toán 18 PHP), đạt biên lợi nhuận 226.0 PHP/đơn (45.29%). Với ngân sách chiến dịch 4000 PHP và tồn kho 50 sản phẩm, điểm hòa vốn là 18 đơn.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "content",
+    "agent_id": "05",
+    "status": "COMPLETED",
+    "depends_on": [
+     "offer"
+    ],
+    "attempt": 1,
+    "artifact_id": 24,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.399933+00:00",
+    "finished_at": "2026-11-05T02:58:15.402977+00:00",
+    "narrative": "Content & Creative: Đã soạn 3 mẫu nội dung quảng cáo bản DRAFT (trạng thái DRAFT) cho sản phẩm Demo bracelet (LU-PH-001) dựa trên 3 nhóm câu hỏi trước mua từ hội thoại giả lập. Toàn bộ nội dung chỉ lưu nháp để duyệt, tuyệt đối không đăng tải thật.",
+    "artifact_type": "content_brief",
+    "artifact": {
+     "type": "content_brief",
+     "agent_id": "05",
+     "summary": "3 mẫu quảng cáo DRAFT cho Demo bracelet, góc nhìn: price_question, product_question, shipping_question.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "product_name": "Demo bracelet",
+     "angles": [
+      "price_question",
+      "product_question",
+      "shipping_question"
+     ],
+     "intent_counts": {
+      "product_question": 1,
+      "price_question": 1,
+      "shipping_question": 1
+     },
+     "ad_drafts": [
+      "Demo bracelet — 499 PHP. Delivery in 3 days.",
+      "Questions about shipping? Flat 75 PHP, arrives in 3 days.",
+      "Everyday style: Demo bracelet for 499 PHP."
+     ],
+     "status": "DRAFT",
+     "narrative": "Content & Creative: Đã soạn 3 mẫu nội dung quảng cáo bản DRAFT (trạng thái DRAFT) cho sản phẩm Demo bracelet (LU-PH-001) dựa trên 3 nhóm câu hỏi trước mua từ hội thoại giả lập. Toàn bộ nội dung chỉ lưu nháp để duyệt, tuyệt đối không đăng tải thật.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "campaign",
+    "agent_id": "06",
+    "status": "COMPLETED",
+    "depends_on": [
+     "offer",
+     "content"
+    ],
+    "attempt": 1,
+    "artifact_id": 25,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.408898+00:00",
+    "finished_at": "2026-11-05T02:58:15.419338+00:00",
+    "narrative": "Campaign Operator: Kế hoạch chiến dịch CMP-LU-PH-001 cho mã LU-PH-001 được giữ ở bản nháp DRAFT (trạng thái DRAFT) với ngân sách 4000 PHP, chiếm 26.67% tổng ngân sách và gắn 3 mẫu quảng cáo nháp. Đã ghi nhận 2 yêu cầu tạo bản nháp, không publish quảng cáo thật.",
+    "artifact_type": "campaign_plan",
+    "artifact": {
+     "type": "campaign_plan",
+     "agent_id": "06",
+     "summary": "Chiến dịch CMP-LU-PH-001 ở trạng thái DRAFT, ngân sách 4000 PHP.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "campaign_id": "CMP-LU-PH-001",
+     "status": "DRAFT",
+     "budget_php": 4000,
+     "budget_share_pct": 26.67,
+     "ad_draft_count": 3,
+     "tracking_ok": true,
+     "requested_actions": [
+      {
+       "tool": "meta_ads.create_draft",
+       "target": "CMP-LU-PH-001",
+       "budget_php": 4000
+      },
+      {
+       "tool": "meta_ads.publish",
+       "target": "CMP-LU-PH-001"
+      }
+     ],
+     "action_results": [
+      {
+       "tool": "meta_ads.create_draft",
+       "target": "CMP-LU-PH-001",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "meta_ads (mock)",
+        "target": "CMP-LU-PH-001"
+       }
+      },
+      {
+       "tool": "meta_ads.publish",
+       "target": "CMP-LU-PH-001",
+       "decision": "BLOCK",
+       "permission": "WRITE_EXTERNAL",
+       "reason": "WRITE_EXTERNAL is never granted in the demo",
+       "result": {
+        "status": "BLOCKED"
+       }
+      }
+     ],
+     "narrative": "Campaign Operator: Kế hoạch chiến dịch CMP-LU-PH-001 cho mã LU-PH-001 được giữ ở bản nháp DRAFT (trạng thái DRAFT) với ngân sách 4000 PHP, chiếm 26.67% tổng ngân sách và gắn 3 mẫu quảng cáo nháp. Đã ghi nhận 2 yêu cầu tạo bản nháp, không publish quảng cáo thật.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "leads",
+    "agent_id": "07",
+    "status": "COMPLETED",
+    "depends_on": [
+     "campaign"
+    ],
+    "attempt": 1,
+    "artifact_id": 26,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.422771+00:00",
+    "finished_at": "2026-11-05T02:58:15.436877+00:00",
+    "narrative": "Lead & Sales: Phễu bán hàng giả lập của mã LU-PH-001 ghi nhận 100 lead (20 đã xác nhận, 80 chưa xác nhận, tỷ lệ xác nhận 0.2) với chi phí 40.0 PHP/lead và 200.0 PHP/đơn xác nhận. Đã chuẩn bị 3 phản hồi nháp cho 3 hội thoại mở, không gửi tin nhắn thật.",
+    "artifact_type": "lead_report",
+    "artifact": {
+     "type": "lead_report",
+     "agent_id": "07",
+     "summary": "100 lead, 20 xác nhận; 3 hội thoại lead cần trả lời nháp.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "leads": 100,
+     "confirmed": 20,
+     "unconfirmed": 80,
+     "confirm_rate": 0.2,
+     "cost_per_lead_php": 40.0,
+     "cost_per_confirmed_php": 200.0,
+     "open_conversations": [
+      "CONV-001",
+      "CONV-002",
+      "CONV-003"
+     ],
+     "requested_actions": [
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-001"
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-002"
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-003"
+      }
+     ],
+     "action_results": [
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-001",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-001"
+       }
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-002",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-002"
+       }
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-003",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-003"
+       }
+      }
+     ],
+     "narrative": "Lead & Sales: Phễu bán hàng giả lập của mã LU-PH-001 ghi nhận 100 lead (20 đã xác nhận, 80 chưa xác nhận, tỷ lệ xác nhận 0.2) với chi phí 40.0 PHP/lead và 200.0 PHP/đơn xác nhận. Đã chuẩn bị 3 phản hồi nháp cho 3 hội thoại mở, không gửi tin nhắn thật.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "care",
+    "agent_id": "08",
+    "status": "COMPLETED",
+    "depends_on": [
+     "leads"
+    ],
+    "attempt": 1,
+    "artifact_id": 27,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.439499+00:00",
+    "finished_at": "2026-11-05T02:58:15.455840+00:00",
+    "narrative": "Customer Success: Theo dõi vận hành giả lập mã LU-PH-001 qua đối tác Mock 3PL (thời gian giao dự kiến 3 ngày): trong 20 đơn xác nhận có 15 đơn đã giao, 5 đơn đang vận chuyển và 2 đơn hoàn. Đã tạo 4 ghi chú nội bộ cho 4 ticket sau bán.",
+    "artifact_type": "care_report",
+    "artifact": {
+     "type": "care_report",
+     "agent_id": "08",
+     "summary": "15 đơn đã giao, 2 hoàn, 5 đang giao; 4 ticket sau bán.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "confirmed": 20,
+     "delivered": 15,
+     "returned": 2,
+     "in_transit": 5,
+     "delivery_days": 3,
+     "provider": "Mock 3PL",
+     "tickets": [
+      {
+       "conversation_id": "CONV-008",
+       "intent": "complaint",
+       "stage": "delivered"
+      },
+      {
+       "conversation_id": "CONV-010",
+       "intent": "return_request",
+       "stage": "returned"
+      },
+      {
+       "conversation_id": "CONV-011",
+       "intent": "return_request",
+       "stage": "returned"
+      },
+      {
+       "conversation_id": "CONV-012",
+       "intent": "complaint",
+       "stage": "returned"
+      }
+     ],
+     "requested_actions": [
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-008"
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-010"
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-011"
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-012"
+      }
+     ],
+     "action_results": [
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-008",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-008"
+       }
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-010",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-010"
+       }
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-011",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-011"
+       }
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-012",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-012"
+       }
+      }
+     ],
+     "narrative": "Customer Success: Theo dõi vận hành giả lập mã LU-PH-001 qua đối tác Mock 3PL (thời gian giao dự kiến 3 ngày): trong 20 đơn xác nhận có 15 đơn đã giao, 5 đơn đang vận chuyển và 2 đơn hoàn. Đã tạo 4 ghi chú nội bộ cho 4 ticket sau bán.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "kpi",
+    "agent_id": "09",
+    "status": "COMPLETED",
+    "depends_on": [
+     "leads",
+     "care"
+    ],
+    "attempt": 1,
+    "artifact_id": 28,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.458612+00:00",
+    "finished_at": "2026-11-05T02:58:15.462054+00:00",
+    "narrative": "Sales Analyst: Phân tích hiệu quả giả lập mã LU-PH-001 với chi phí quảng cáo 4000.0 PHP: doanh thu gộp 7485.0 PHP, doanh thu ròng 6487.0 PHP trên 13 đơn ròng, đạt ROAS 1.62. Chi phí CPA xác nhận là 200.0 PHP, CPA giao thành công 266.67 PHP và tỷ lệ hoàn 0.1333.",
+    "artifact_type": "kpi_report",
+    "artifact": {
+     "type": "kpi_report",
+     "agent_id": "09",
+     "summary": "ROAS 1.62, CPA giao 266.67 PHP.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "selling_price_php": 499,
+     "ad_spend_php": 4000.0,
+     "gross_revenue_php": 7485.0,
+     "net_revenue_php": 6487.0,
+     "net_units": 13,
+     "roas": 1.62,
+     "cpa_confirmed_php": 200.0,
+     "cpa_delivered_php": 266.67,
+     "lead_to_delivered_rate": 0.15,
+     "return_rate": 0.1333,
+     "narrative": "Sales Analyst: Phân tích hiệu quả giả lập mã LU-PH-001 với chi phí quảng cáo 4000.0 PHP: doanh thu gộp 7485.0 PHP, doanh thu ròng 6487.0 PHP trên 13 đơn ròng, đạt ROAS 1.62. Chi phí CPA xác nhận là 200.0 PHP, CPA giao thành công 266.67 PHP và tỷ lệ hoàn 0.1333.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "finance",
+    "agent_id": "10",
+    "status": "COMPLETED",
+    "depends_on": [
+     "offer",
+     "kpi"
+    ],
+    "attempt": 1,
+    "artifact_id": 29,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.464702+00:00",
+    "finished_at": "2026-11-05T02:58:15.467585+00:00",
+    "narrative": "Finance & Risk: Báo cáo tài chính giả lập mã LU-PH-001 (13 đơn ròng, mốc hòa vốn 18 đơn): lợi nhuận trước quảng cáo 2938.0 PHP, lợi nhuận sau quảng cáo -1062.0 PHP. Phát hiện 2 rủi ro ở mức HIGH; khuyến nghị: Giữ chiến dịch ở DRAFT, cần người duyệt và thêm dữ liệu trước khi mở rộng.",
+    "artifact_type": "finance_risk_report",
+    "artifact": {
+     "type": "finance_risk_report",
+     "agent_id": "10",
+     "summary": "Lợi nhuận sau quảng cáo -1062.0 PHP, rủi ro HIGH.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "margin_per_unit_php": 226.0,
+     "net_units": 13,
+     "contribution_before_ads_php": 2938.0,
+     "contribution_after_ads_php": -1062.0,
+     "breakeven_orders": 18,
+     "budget_used_pct": 26.67,
+     "risks": [
+      "Chưa hòa vốn: 13 đơn ròng < 18 đơn cần",
+      "Tỷ lệ hoàn 13.33% vượt ngưỡng 10%"
+     ],
+     "risk_level": "HIGH",
+     "recommendation": "Giữ chiến dịch ở DRAFT, cần người duyệt và thêm dữ liệu trước khi mở rộng",
+     "narrative": "Finance & Risk: Báo cáo tài chính giả lập mã LU-PH-001 (13 đơn ròng, mốc hòa vốn 18 đơn): lợi nhuận trước quảng cáo 2938.0 PHP, lợi nhuận sau quảng cáo -1062.0 PHP. Phát hiện 2 rủi ro ở mức HIGH; khuyến nghị: Giữ chiến dịch ở DRAFT, cần người duyệt và thêm dữ liệu trước khi mở rộng.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "qa",
+    "agent_id": "11",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance"
+    ],
+    "attempt": 1,
+    "artifact_id": 30,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.471078+00:00",
+    "finished_at": "2026-11-05T02:58:15.477206+00:00",
+    "narrative": "QA Tester: Kết quả kiểm tra chất lượng ở phạm vi schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải đạt trạng thái PASS sau khi đối soát 9 gói dữ liệu bàn giao. Hệ thống ghi nhận 0 phát hiện cần xem xét.",
+    "artifact_type": "qa_report",
+    "artifact": {
+     "type": "qa_report",
+     "agent_id": "11",
+     "synthetic": true,
+     "summary": "QA PASS: 0 lỗi, 0 cảnh báo.",
+     "status": "PASS",
+     "findings": [],
+     "engine": "qa",
+     "engine_result_id": 7,
+     "checked": [
+      "market",
+      "product",
+      "offer",
+      "content",
+      "campaign",
+      "leads",
+      "care",
+      "kpi",
+      "finance"
+     ],
+     "scope": "schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải",
+     "narrative": "QA Tester: Kết quả kiểm tra chất lượng ở phạm vi schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải đạt trạng thái PASS sau khi đối soát 9 gói dữ liệu bàn giao. Hệ thống ghi nhận 0 phát hiện cần xem xét.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "audit",
+    "agent_id": "12",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance"
+    ],
+    "attempt": 1,
+    "artifact_id": 31,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.479685+00:00",
+    "finished_at": "2026-11-05T02:58:15.485003+00:00",
+    "narrative": "Auditor: Kết quả kiểm toán quyền hạn và rào chắn an toàn đạt trạng thái FAIL trên tổng số 9 hành động đề xuất. Hệ thống ghi nhận 1 vi phạm quy tắc phân quyền hoặc trạng thái nháp.",
+    "artifact_type": "audit_report",
+    "artifact": {
+     "type": "audit_report",
+     "agent_id": "12",
+     "synthetic": true,
+     "summary": "Audit FAIL: 1 lỗi, 0 cảnh báo.",
+     "status": "FAIL",
+     "findings": [
+      {
+       "rule": "blocked_action",
+       "severity": "FAIL",
+       "task_key": "campaign",
+       "detail": "meta_ads.publish by agent 06 was blocked"
+      }
+     ],
+     "engine": "audit",
+     "engine_result_id": 8,
+     "actions": [
+      {
+       "task_key": "campaign",
+       "agent_id": "06",
+       "tool": "meta_ads.create_draft",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "campaign",
+       "agent_id": "06",
+       "tool": "meta_ads.publish",
+       "decision": "BLOCK",
+       "allowed": false
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "tool": "crm.reply_draft",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "tool": "crm.reply_draft",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "tool": "crm.reply_draft",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      }
+     ],
+     "narrative": "Auditor: Kết quả kiểm toán quyền hạn và rào chắn an toàn đạt trạng thái FAIL trên tổng số 9 hành động đề xuất. Hệ thống ghi nhận 1 vi phạm quy tắc phân quyền hoặc trạng thái nháp.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "monitor",
+    "agent_id": "13",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance",
+     "qa",
+     "audit"
+    ],
+    "attempt": 1,
+    "artifact_id": 32,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.489964+00:00",
+    "finished_at": "2026-11-05T02:58:15.495941+00:00",
+    "narrative": "Monitor: Giám sát vận hành toàn trình đạt trạng thái PASS qua 14 tác vụ với 0 cảnh báo bất thường. Phiên chạy sử dụng 0 lời gọi mô hình ngôn ngữ và tiêu thụ 0 token.",
+    "artifact_type": "monitoring_report",
+    "artifact": {
+     "type": "monitoring_report",
+     "agent_id": "13",
+     "synthetic": true,
+     "summary": "Monitor PASS: 0 lỗi, 0 cảnh báo.",
+     "status": "PASS",
+     "findings": [],
+     "engine": "monitor",
+     "engine_result_id": 9,
+     "tasks": [
+      {
+       "task_key": "plan",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "market",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "product",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "offer",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "content",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "campaign",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "leads",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "care",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "kpi",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "finance",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "qa",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "audit",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "monitor",
+       "status": "RUNNING",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "summary",
+       "status": "PENDING",
+       "attempt": 0,
+       "error": null
+      }
+     ],
+     "llm_calls": 0,
+     "tokens": 0,
+     "narrative": "Monitor: Giám sát vận hành toàn trình đạt trạng thái PASS qua 14 tác vụ với 0 cảnh báo bất thường. Phiên chạy sử dụng 0 lời gọi mô hình ngôn ngữ và tiêu thụ 0 token.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "task_key": "summary",
+    "agent_id": "01",
+    "status": "COMPLETED",
+    "depends_on": [
+     "qa",
+     "audit",
+     "monitor"
+    ],
+    "attempt": 1,
+    "artifact_id": 33,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.498335+00:00",
+    "finished_at": "2026-11-05T02:58:15.502228+00:00",
+    "narrative": "Commander: Tổng kết mã LU-PH-001 kết luận NEEDS_REVIEW (QA PASS, Audit FAIL, Monitor PASS). Giá 499 PHP, biên 226.0 PHP, hòa vốn 18 đơn, ROAS 1.62, lợi nhuận sau quảng cáo -1062.0 PHP, rủi ro HIGH.",
+    "artifact_type": "final_summary",
+    "artifact": {
+     "type": "final_summary",
+     "agent_id": "01",
+     "summary": "Kết luận: NEEDS_REVIEW. SKU LU-PH-001, rủi ro HIGH.",
+     "synthetic": true,
+     "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+     "sku": "LU-PH-001",
+     "decision": "NEEDS_REVIEW",
+     "key_numbers": {
+      "selling_price_php": 499,
+      "margin_per_unit_php": 226.0,
+      "breakeven_orders": 18,
+      "roas": 1.62,
+      "contribution_after_ads_php": -1062.0,
+      "risk_level": "HIGH"
+     },
+     "supervision": {
+      "qa": "PASS",
+      "audit": "FAIL",
+      "monitor": "PASS"
+     },
+     "next_steps": [
+      "Xử lý các phát hiện của QA/Audit/Monitor",
+      "Chạy lại agent liên quan"
+     ],
+     "narrative": "Commander: Tổng kết mã LU-PH-001 kết luận NEEDS_REVIEW (QA PASS, Audit FAIL, Monitor PASS). Giá 499 PHP, biên 226.0 PHP, hòa vốn 18 đơn, ROAS 1.62, lợi nhuận sau quảng cáo -1062.0 PHP, rủi ro HIGH.",
+     "narrative_source": "mock"
+    }
+   }
+  ],
+  "llm": {
+   "calls": 0,
+   "tokens": 0,
+   "cost_est": 0
+  },
+  "engines": {
+   "qa": {
+    "id": 7,
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "engine": "qa",
+    "status": "PASS",
+    "findings": [],
+    "created_at": "2026-11-05T02:58:15.475388+00:00"
+   },
+   "audit": {
+    "id": 8,
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "engine": "audit",
+    "status": "FAIL",
+    "findings": [
+     {
+      "rule": "blocked_action",
+      "severity": "FAIL",
+      "task_key": "campaign",
+      "detail": "meta_ads.publish by agent 06 was blocked"
+     }
+    ],
+    "created_at": "2026-11-05T02:58:15.483377+00:00"
+   },
+   "monitor": {
+    "id": 9,
+    "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+    "engine": "monitor",
+    "status": "PASS",
+    "findings": [],
+    "created_at": "2026-11-05T02:58:15.494036+00:00"
+   }
+  },
+  "approvals": []
+ },
+ "waiting_approval": {
+  "environment": "MOCK_ONLY",
+  "run": {
+   "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+   "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+   "mode": "mock",
+   "status": "WAITING_APPROVAL",
+   "inject": [],
+   "token_total": 0,
+   "cost_est": 0.0,
+   "created_at": "2026-11-05T02:58:15.508976+00:00",
+   "finished_at": null
+  },
+  "tasks": [
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "plan",
+    "agent_id": "01",
+    "status": "COMPLETED",
+    "depends_on": [],
+    "attempt": 1,
+    "artifact_id": 34,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.513661+00:00",
+    "finished_at": "2026-11-05T02:58:15.516710+00:00",
+    "narrative": "Commander: Khởi tạo kế hoạch thực thi giả lập cho mục tiêu \"Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.\" tại thị trường Philippines gồm 14 bước và 4 ràng buộc an toàn. Toàn bộ quy trình chỉ đọc dữ liệu giả lập và giữ mọi tác vụ ở chế độ nháp.",
+    "artifact_type": "execution_plan",
+    "artifact": {
+     "type": "execution_plan",
+     "agent_id": "01",
+     "summary": "Kế hoạch 14 bước cho thị trường Philippines.",
+     "synthetic": true,
+     "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+     "market": "Philippines",
+     "steps": [
+      {
+       "task_key": "plan",
+       "agent_id": "01",
+       "agent_name": "Sales Director / Commander",
+       "depends_on": []
+      },
+      {
+       "task_key": "market",
+       "agent_id": "02",
+       "agent_name": "Market Intelligence",
+       "depends_on": [
+        "plan"
+       ]
+      },
+      {
+       "task_key": "product",
+       "agent_id": "03",
+       "agent_name": "Product Scout",
+       "depends_on": [
+        "market"
+       ]
+      },
+      {
+       "task_key": "offer",
+       "agent_id": "04",
+       "agent_name": "Offer & Strategy",
+       "depends_on": [
+        "product"
+       ]
+      },
+      {
+       "task_key": "content",
+       "agent_id": "05",
+       "agent_name": "Content & Creative",
+       "depends_on": [
+        "offer"
+       ]
+      },
+      {
+       "task_key": "campaign",
+       "agent_id": "06",
+       "agent_name": "Campaign Operator",
+       "depends_on": [
+        "offer",
+        "content"
+       ]
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "agent_name": "Lead & Sales",
+       "depends_on": [
+        "campaign"
+       ]
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "agent_name": "Customer Success",
+       "depends_on": [
+        "leads"
+       ]
+      },
+      {
+       "task_key": "kpi",
+       "agent_id": "09",
+       "agent_name": "Sales Analyst",
+       "depends_on": [
+        "leads",
+        "care"
+       ]
+      },
+      {
+       "task_key": "finance",
+       "agent_id": "10",
+       "agent_name": "Finance & Risk",
+       "depends_on": [
+        "offer",
+        "kpi"
+       ]
+      },
+      {
+       "task_key": "qa",
+       "agent_id": "11",
+       "agent_name": "QA Tester",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance"
+       ]
+      },
+      {
+       "task_key": "audit",
+       "agent_id": "12",
+       "agent_name": "Auditor",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance"
+       ]
+      },
+      {
+       "task_key": "monitor",
+       "agent_id": "13",
+       "agent_name": "Monitor",
+       "depends_on": [
+        "market",
+        "product",
+        "offer",
+        "content",
+        "campaign",
+        "leads",
+        "care",
+        "kpi",
+        "finance",
+        "qa",
+        "audit"
+       ]
+      },
+      {
+       "task_key": "summary",
+       "agent_id": "01",
+       "agent_name": "Sales Director / Commander",
+       "depends_on": [
+        "qa",
+        "audit",
+        "monitor"
+       ]
+      }
+     ],
+     "constraints": [
+      "MOCK_ONLY: không kết nối hệ thống thật",
+      "Chiến dịch luôn ở trạng thái DRAFT",
+      "Không publish, không thanh toán, không gửi tin nhắn thật",
+      "Số liệu chỉ lấy từ Mock API"
+     ],
+     "narrative": "Commander: Khởi tạo kế hoạch thực thi giả lập cho mục tiêu \"Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.\" tại thị trường Philippines gồm 14 bước và 4 ràng buộc an toàn. Toàn bộ quy trình chỉ đọc dữ liệu giả lập và giữ mọi tác vụ ở chế độ nháp.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "market",
+    "agent_id": "02",
+    "status": "COMPLETED",
+    "depends_on": [
+     "plan"
+    ],
+    "attempt": 1,
+    "artifact_id": 35,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.519695+00:00",
+    "finished_at": "2026-11-05T02:58:15.522741+00:00",
+    "narrative": "Market Intelligence: Báo cáo thị trường Philippines (tiền tệ PHP, tín hiệu cầu synthetic_medium) từ dữ liệu giả lập ghi nhận 100 lead, 20 đơn xác nhận, 15 đơn giao thành công và 2 đơn hoàn. Tỷ lệ xác nhận đạt 0.2, tỷ lệ giao hàng 0.75 và tỷ lệ hoàn 0.1333.",
+    "artifact_type": "market_report",
+    "artifact": {
+     "type": "market_report",
+     "agent_id": "02",
+     "summary": "Phễu giả lập Philippines: 100 lead, 20 xác nhận, 15 giao, 2 hoàn.",
+     "synthetic": true,
+     "market": "Philippines",
+     "currency": "PHP",
+     "demand_signal": "synthetic_medium",
+     "funnel": {
+      "leads": 100,
+      "confirmed": 20,
+      "delivered": 15,
+      "returned": 2
+     },
+     "confirm_rate": 0.2,
+     "delivery_rate": 0.75,
+     "return_rate": 0.1333,
+     "narrative": "Market Intelligence: Báo cáo thị trường Philippines (tiền tệ PHP, tín hiệu cầu synthetic_medium) từ dữ liệu giả lập ghi nhận 100 lead, 20 đơn xác nhận, 15 đơn giao thành công và 2 đơn hoàn. Tỷ lệ xác nhận đạt 0.2, tỷ lệ giao hàng 0.75 và tỷ lệ hoàn 0.1333.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "product",
+    "agent_id": "03",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market"
+    ],
+    "attempt": 1,
+    "artifact_id": 36,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.529702+00:00",
+    "finished_at": "2026-11-05T02:58:15.532826+00:00",
+    "narrative": "Product Scout: Qua đối chiếu 3 sản phẩm giả lập, đơn vị đề xuất mã LU-PH-001 với 0 cảnh báo biên lợi nhuận. Quy tắc lựa chọn áp dụng: Ưu tiên SKU có dữ liệu bán thử (số liệu phễu thuộc về SKU đó), cảnh báo nếu biên < 30%; không có dữ liệu thì chọn biên cao nhất đạt ngưỡng, rồi biên cao nhất.",
+    "artifact_type": "product_shortlist",
+    "artifact": {
+     "type": "product_shortlist",
+     "agent_id": "03",
+     "summary": "Chọn LU-PH-001 (Demo bracelet), biên 45.29%.",
+     "synthetic": true,
+     "candidates": [
+      {
+       "sku": "LU-PH-001",
+       "name": "Demo bracelet",
+       "selling_price_php": 499,
+       "unit_cost_php": 180,
+       "supplier": "Mock Supplier A",
+       "lead_time_days": 7,
+       "stock": 50,
+       "margin_per_unit_php": 226.0,
+       "margin_pct": 45.29,
+       "has_test_sale_data": true,
+       "passes_margin": true
+      },
+      {
+       "sku": "LU-PH-002",
+       "name": "Demo necklace",
+       "selling_price_php": 699,
+       "unit_cost_php": 260,
+       "supplier": "Mock Supplier B",
+       "lead_time_days": 10,
+       "stock": 30,
+       "margin_per_unit_php": 346.0,
+       "margin_pct": 49.5,
+       "has_test_sale_data": false,
+       "passes_margin": true
+      },
+      {
+       "sku": "LU-PH-003",
+       "name": "Demo phone strap",
+       "selling_price_php": 299,
+       "unit_cost_php": 95,
+       "supplier": "Mock Supplier C",
+       "lead_time_days": 5,
+       "stock": 120,
+       "margin_per_unit_php": 111.0,
+       "margin_pct": 37.12,
+       "has_test_sale_data": false,
+       "passes_margin": true
+      }
+     ],
+     "selected_sku": "LU-PH-001",
+     "warnings": [],
+     "selection_rule": "Ưu tiên SKU có dữ liệu bán thử (số liệu phễu thuộc về SKU đó), cảnh báo nếu biên < 30%; không có dữ liệu thì chọn biên cao nhất đạt ngưỡng, rồi biên cao nhất.",
+     "narrative": "Product Scout: Qua đối chiếu 3 sản phẩm giả lập, đơn vị đề xuất mã LU-PH-001 với 0 cảnh báo biên lợi nhuận. Quy tắc lựa chọn áp dụng: Ưu tiên SKU có dữ liệu bán thử (số liệu phễu thuộc về SKU đó), cảnh báo nếu biên < 30%; không có dữ liệu thì chọn biên cao nhất đạt ngưỡng, rồi biên cao nhất.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "offer",
+    "agent_id": "04",
+    "status": "COMPLETED",
+    "depends_on": [
+     "product"
+    ],
+    "attempt": 1,
+    "artifact_id": 37,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.536057+00:00",
+    "finished_at": "2026-11-05T02:58:15.539470+00:00",
+    "narrative": "Offer & Strategy: Định giá giả lập cho LU-PH-001 ở mức 499 PHP (giá vốn 180 PHP, vận chuyển 75 PHP, phí thanh toán 18 PHP), đạt biên lợi nhuận 226.0 PHP/đơn (45.29%). Với ngân sách chiến dịch 4000 PHP và tồn kho 50 sản phẩm, điểm hòa vốn là 18 đơn.",
+    "artifact_type": "pricing_offer",
+    "artifact": {
+     "type": "pricing_offer",
+     "agent_id": "04",
+     "summary": "LU-PH-001: giá 499 PHP, biên 226 PHP/đơn, hòa vốn 18 đơn với ngân sách 4000 PHP.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "selling_price_php": 499,
+     "unit_cost_php": 180,
+     "shipping_php": 75,
+     "payment_fee_php": 18,
+     "margin_per_unit_php": 226.0,
+     "margin_pct": 45.29,
+     "campaign_budget_php": 4000,
+     "breakeven_orders": 18,
+     "total_budget_php": 15000,
+     "stock": 50,
+     "narrative": "Offer & Strategy: Định giá giả lập cho LU-PH-001 ở mức 499 PHP (giá vốn 180 PHP, vận chuyển 75 PHP, phí thanh toán 18 PHP), đạt biên lợi nhuận 226.0 PHP/đơn (45.29%). Với ngân sách chiến dịch 4000 PHP và tồn kho 50 sản phẩm, điểm hòa vốn là 18 đơn.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "content",
+    "agent_id": "05",
+    "status": "COMPLETED",
+    "depends_on": [
+     "offer"
+    ],
+    "attempt": 1,
+    "artifact_id": 38,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.542313+00:00",
+    "finished_at": "2026-11-05T02:58:15.546196+00:00",
+    "narrative": "Content & Creative: Đã soạn 3 mẫu nội dung quảng cáo bản DRAFT (trạng thái DRAFT) cho sản phẩm Demo bracelet (LU-PH-001) dựa trên 3 nhóm câu hỏi trước mua từ hội thoại giả lập. Toàn bộ nội dung chỉ lưu nháp để duyệt, tuyệt đối không đăng tải thật.",
+    "artifact_type": "content_brief",
+    "artifact": {
+     "type": "content_brief",
+     "agent_id": "05",
+     "summary": "3 mẫu quảng cáo DRAFT cho Demo bracelet, góc nhìn: price_question, product_question, shipping_question.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "product_name": "Demo bracelet",
+     "angles": [
+      "price_question",
+      "product_question",
+      "shipping_question"
+     ],
+     "intent_counts": {
+      "product_question": 1,
+      "price_question": 1,
+      "shipping_question": 1
+     },
+     "ad_drafts": [
+      "Demo bracelet — 499 PHP. Delivery in 3 days.",
+      "Questions about shipping? Flat 75 PHP, arrives in 3 days.",
+      "Everyday style: Demo bracelet for 499 PHP."
+     ],
+     "status": "DRAFT",
+     "narrative": "Content & Creative: Đã soạn 3 mẫu nội dung quảng cáo bản DRAFT (trạng thái DRAFT) cho sản phẩm Demo bracelet (LU-PH-001) dựa trên 3 nhóm câu hỏi trước mua từ hội thoại giả lập. Toàn bộ nội dung chỉ lưu nháp để duyệt, tuyệt đối không đăng tải thật.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "campaign",
+    "agent_id": "06",
+    "status": "COMPLETED",
+    "depends_on": [
+     "offer",
+     "content"
+    ],
+    "attempt": 1,
+    "artifact_id": 39,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.548420+00:00",
+    "finished_at": "2026-11-05T02:58:15.555651+00:00",
+    "narrative": "Campaign Operator: Kế hoạch chiến dịch CMP-LU-PH-001 cho mã LU-PH-001 được giữ ở bản nháp DRAFT (trạng thái DRAFT) với ngân sách 4000 PHP, chiếm 26.67% tổng ngân sách và gắn 3 mẫu quảng cáo nháp. Đã ghi nhận 1 yêu cầu tạo bản nháp, không publish quảng cáo thật.",
+    "artifact_type": "campaign_plan",
+    "artifact": {
+     "type": "campaign_plan",
+     "agent_id": "06",
+     "summary": "Chiến dịch CMP-LU-PH-001 ở trạng thái DRAFT, ngân sách 4000 PHP.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "campaign_id": "CMP-LU-PH-001",
+     "status": "DRAFT",
+     "budget_php": 4000,
+     "budget_share_pct": 26.67,
+     "ad_draft_count": 3,
+     "tracking_ok": true,
+     "requested_actions": [
+      {
+       "tool": "meta_ads.create_draft",
+       "target": "CMP-LU-PH-001",
+       "budget_php": 4000
+      }
+     ],
+     "action_results": [
+      {
+       "tool": "meta_ads.create_draft",
+       "target": "CMP-LU-PH-001",
+       "decision": "NEEDS_APPROVAL",
+       "permission": "WRITE_DRAFT",
+       "reason": "budget 4000 >= approval threshold 3000 PHP",
+       "result": {
+        "status": "WAITING_APPROVAL",
+        "approval_id": 1
+       }
+      }
+     ],
+     "narrative": "Campaign Operator: Kế hoạch chiến dịch CMP-LU-PH-001 cho mã LU-PH-001 được giữ ở bản nháp DRAFT (trạng thái DRAFT) với ngân sách 4000 PHP, chiếm 26.67% tổng ngân sách và gắn 3 mẫu quảng cáo nháp. Đã ghi nhận 1 yêu cầu tạo bản nháp, không publish quảng cáo thật.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "leads",
+    "agent_id": "07",
+    "status": "COMPLETED",
+    "depends_on": [
+     "campaign"
+    ],
+    "attempt": 1,
+    "artifact_id": 40,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.558191+00:00",
+    "finished_at": "2026-11-05T02:58:15.570131+00:00",
+    "narrative": "Lead & Sales: Phễu bán hàng giả lập của mã LU-PH-001 ghi nhận 100 lead (20 đã xác nhận, 80 chưa xác nhận, tỷ lệ xác nhận 0.2) với chi phí 40.0 PHP/lead và 200.0 PHP/đơn xác nhận. Đã chuẩn bị 3 phản hồi nháp cho 3 hội thoại mở, không gửi tin nhắn thật.",
+    "artifact_type": "lead_report",
+    "artifact": {
+     "type": "lead_report",
+     "agent_id": "07",
+     "summary": "100 lead, 20 xác nhận; 3 hội thoại lead cần trả lời nháp.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "leads": 100,
+     "confirmed": 20,
+     "unconfirmed": 80,
+     "confirm_rate": 0.2,
+     "cost_per_lead_php": 40.0,
+     "cost_per_confirmed_php": 200.0,
+     "open_conversations": [
+      "CONV-001",
+      "CONV-002",
+      "CONV-003"
+     ],
+     "requested_actions": [
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-001"
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-002"
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-003"
+      }
+     ],
+     "action_results": [
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-001",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-001"
+       }
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-002",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-002"
+       }
+      },
+      {
+       "tool": "crm.reply_draft",
+       "target": "CONV-003",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-003"
+       }
+      }
+     ],
+     "narrative": "Lead & Sales: Phễu bán hàng giả lập của mã LU-PH-001 ghi nhận 100 lead (20 đã xác nhận, 80 chưa xác nhận, tỷ lệ xác nhận 0.2) với chi phí 40.0 PHP/lead và 200.0 PHP/đơn xác nhận. Đã chuẩn bị 3 phản hồi nháp cho 3 hội thoại mở, không gửi tin nhắn thật.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "care",
+    "agent_id": "08",
+    "status": "COMPLETED",
+    "depends_on": [
+     "leads"
+    ],
+    "attempt": 1,
+    "artifact_id": 41,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.573290+00:00",
+    "finished_at": "2026-11-05T02:58:15.589289+00:00",
+    "narrative": "Customer Success: Theo dõi vận hành giả lập mã LU-PH-001 qua đối tác Mock 3PL (thời gian giao dự kiến 3 ngày): trong 20 đơn xác nhận có 15 đơn đã giao, 5 đơn đang vận chuyển và 2 đơn hoàn. Đã tạo 4 ghi chú nội bộ cho 4 ticket sau bán.",
+    "artifact_type": "care_report",
+    "artifact": {
+     "type": "care_report",
+     "agent_id": "08",
+     "summary": "15 đơn đã giao, 2 hoàn, 5 đang giao; 4 ticket sau bán.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "confirmed": 20,
+     "delivered": 15,
+     "returned": 2,
+     "in_transit": 5,
+     "delivery_days": 3,
+     "provider": "Mock 3PL",
+     "tickets": [
+      {
+       "conversation_id": "CONV-008",
+       "intent": "complaint",
+       "stage": "delivered"
+      },
+      {
+       "conversation_id": "CONV-010",
+       "intent": "return_request",
+       "stage": "returned"
+      },
+      {
+       "conversation_id": "CONV-011",
+       "intent": "return_request",
+       "stage": "returned"
+      },
+      {
+       "conversation_id": "CONV-012",
+       "intent": "complaint",
+       "stage": "returned"
+      }
+     ],
+     "requested_actions": [
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-008"
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-010"
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-011"
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-012"
+      }
+     ],
+     "action_results": [
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-008",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-008"
+       }
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-010",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-010"
+       }
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-011",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-011"
+       }
+      },
+      {
+       "tool": "crm.ticket_note",
+       "target": "CONV-012",
+       "decision": "ALLOW",
+       "permission": "WRITE_DRAFT",
+       "reason": "allowed by registry",
+       "result": {
+        "status": "DRAFT",
+        "system": "crm (mock)",
+        "target": "CONV-012"
+       }
+      }
+     ],
+     "narrative": "Customer Success: Theo dõi vận hành giả lập mã LU-PH-001 qua đối tác Mock 3PL (thời gian giao dự kiến 3 ngày): trong 20 đơn xác nhận có 15 đơn đã giao, 5 đơn đang vận chuyển và 2 đơn hoàn. Đã tạo 4 ghi chú nội bộ cho 4 ticket sau bán.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "kpi",
+    "agent_id": "09",
+    "status": "COMPLETED",
+    "depends_on": [
+     "leads",
+     "care"
+    ],
+    "attempt": 1,
+    "artifact_id": 42,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.592361+00:00",
+    "finished_at": "2026-11-05T02:58:15.595814+00:00",
+    "narrative": "Sales Analyst: Phân tích hiệu quả giả lập mã LU-PH-001 với chi phí quảng cáo 4000.0 PHP: doanh thu gộp 7485.0 PHP, doanh thu ròng 6487.0 PHP trên 13 đơn ròng, đạt ROAS 1.62. Chi phí CPA xác nhận là 200.0 PHP, CPA giao thành công 266.67 PHP và tỷ lệ hoàn 0.1333.",
+    "artifact_type": "kpi_report",
+    "artifact": {
+     "type": "kpi_report",
+     "agent_id": "09",
+     "summary": "ROAS 1.62, CPA giao 266.67 PHP.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "selling_price_php": 499,
+     "ad_spend_php": 4000.0,
+     "gross_revenue_php": 7485.0,
+     "net_revenue_php": 6487.0,
+     "net_units": 13,
+     "roas": 1.62,
+     "cpa_confirmed_php": 200.0,
+     "cpa_delivered_php": 266.67,
+     "lead_to_delivered_rate": 0.15,
+     "return_rate": 0.1333,
+     "narrative": "Sales Analyst: Phân tích hiệu quả giả lập mã LU-PH-001 với chi phí quảng cáo 4000.0 PHP: doanh thu gộp 7485.0 PHP, doanh thu ròng 6487.0 PHP trên 13 đơn ròng, đạt ROAS 1.62. Chi phí CPA xác nhận là 200.0 PHP, CPA giao thành công 266.67 PHP và tỷ lệ hoàn 0.1333.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "finance",
+    "agent_id": "10",
+    "status": "COMPLETED",
+    "depends_on": [
+     "offer",
+     "kpi"
+    ],
+    "attempt": 1,
+    "artifact_id": 43,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.598402+00:00",
+    "finished_at": "2026-11-05T02:58:15.601559+00:00",
+    "narrative": "Finance & Risk: Báo cáo tài chính giả lập mã LU-PH-001 (13 đơn ròng, mốc hòa vốn 18 đơn): lợi nhuận trước quảng cáo 2938.0 PHP, lợi nhuận sau quảng cáo -1062.0 PHP. Phát hiện 2 rủi ro ở mức HIGH; khuyến nghị: Giữ chiến dịch ở DRAFT, cần người duyệt và thêm dữ liệu trước khi mở rộng.",
+    "artifact_type": "finance_risk_report",
+    "artifact": {
+     "type": "finance_risk_report",
+     "agent_id": "10",
+     "summary": "Lợi nhuận sau quảng cáo -1062.0 PHP, rủi ro HIGH.",
+     "synthetic": true,
+     "sku": "LU-PH-001",
+     "margin_per_unit_php": 226.0,
+     "net_units": 13,
+     "contribution_before_ads_php": 2938.0,
+     "contribution_after_ads_php": -1062.0,
+     "breakeven_orders": 18,
+     "budget_used_pct": 26.67,
+     "risks": [
+      "Chưa hòa vốn: 13 đơn ròng < 18 đơn cần",
+      "Tỷ lệ hoàn 13.33% vượt ngưỡng 10%"
+     ],
+     "risk_level": "HIGH",
+     "recommendation": "Giữ chiến dịch ở DRAFT, cần người duyệt và thêm dữ liệu trước khi mở rộng",
+     "narrative": "Finance & Risk: Báo cáo tài chính giả lập mã LU-PH-001 (13 đơn ròng, mốc hòa vốn 18 đơn): lợi nhuận trước quảng cáo 2938.0 PHP, lợi nhuận sau quảng cáo -1062.0 PHP. Phát hiện 2 rủi ro ở mức HIGH; khuyến nghị: Giữ chiến dịch ở DRAFT, cần người duyệt và thêm dữ liệu trước khi mở rộng.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "qa",
+    "agent_id": "11",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance"
+    ],
+    "attempt": 1,
+    "artifact_id": 44,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.604727+00:00",
+    "finished_at": "2026-11-05T02:58:15.612285+00:00",
+    "narrative": "QA Tester: Kết quả kiểm tra chất lượng ở phạm vi schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải đạt trạng thái PASS sau khi đối soát 9 gói dữ liệu bàn giao. Hệ thống ghi nhận 0 phát hiện cần xem xét.",
+    "artifact_type": "qa_report",
+    "artifact": {
+     "type": "qa_report",
+     "agent_id": "11",
+     "synthetic": true,
+     "summary": "QA PASS: 0 lỗi, 0 cảnh báo.",
+     "status": "PASS",
+     "findings": [],
+     "engine": "qa",
+     "engine_result_id": 10,
+     "checked": [
+      "market",
+      "product",
+      "offer",
+      "content",
+      "campaign",
+      "leads",
+      "care",
+      "kpi",
+      "finance"
+     ],
+     "scope": "schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải",
+     "narrative": "QA Tester: Kết quả kiểm tra chất lượng ở phạm vi schema, đối chiếu giá vốn, phép tính, nhất quán, diễn giải đạt trạng thái PASS sau khi đối soát 9 gói dữ liệu bàn giao. Hệ thống ghi nhận 0 phát hiện cần xem xét.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "audit",
+    "agent_id": "12",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance"
+    ],
+    "attempt": 1,
+    "artifact_id": 45,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.614783+00:00",
+    "finished_at": "2026-11-05T02:58:15.622273+00:00",
+    "narrative": "Auditor: Kết quả kiểm toán quyền hạn và rào chắn an toàn đạt trạng thái WARN trên tổng số 8 hành động đề xuất. Hệ thống ghi nhận 1 vi phạm quy tắc phân quyền hoặc trạng thái nháp.",
+    "artifact_type": "audit_report",
+    "artifact": {
+     "type": "audit_report",
+     "agent_id": "12",
+     "synthetic": true,
+     "summary": "Audit WARN: 0 lỗi, 1 cảnh báo.",
+     "status": "WARN",
+     "findings": [
+      {
+       "rule": "pending_approval",
+       "severity": "WARN",
+       "task_key": "campaign",
+       "detail": "meta_ads.create_draft waits for human approval"
+      }
+     ],
+     "engine": "audit",
+     "engine_result_id": 11,
+     "actions": [
+      {
+       "task_key": "campaign",
+       "agent_id": "06",
+       "tool": "meta_ads.create_draft",
+       "decision": "NEEDS_APPROVAL",
+       "allowed": true
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "tool": "crm.reply_draft",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "tool": "crm.reply_draft",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "leads",
+       "agent_id": "07",
+       "tool": "crm.reply_draft",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      },
+      {
+       "task_key": "care",
+       "agent_id": "08",
+       "tool": "crm.ticket_note",
+       "decision": "ALLOW",
+       "allowed": true
+      }
+     ],
+     "narrative": "Auditor: Kết quả kiểm toán quyền hạn và rào chắn an toàn đạt trạng thái WARN trên tổng số 8 hành động đề xuất. Hệ thống ghi nhận 1 vi phạm quy tắc phân quyền hoặc trạng thái nháp.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "monitor",
+    "agent_id": "13",
+    "status": "COMPLETED",
+    "depends_on": [
+     "market",
+     "product",
+     "offer",
+     "content",
+     "campaign",
+     "leads",
+     "care",
+     "kpi",
+     "finance",
+     "qa",
+     "audit"
+    ],
+    "attempt": 1,
+    "artifact_id": 46,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.625191+00:00",
+    "finished_at": "2026-11-05T02:58:15.631192+00:00",
+    "narrative": "Monitor: Giám sát vận hành toàn trình đạt trạng thái PASS qua 14 tác vụ với 0 cảnh báo bất thường. Phiên chạy sử dụng 0 lời gọi mô hình ngôn ngữ và tiêu thụ 0 token.",
+    "artifact_type": "monitoring_report",
+    "artifact": {
+     "type": "monitoring_report",
+     "agent_id": "13",
+     "synthetic": true,
+     "summary": "Monitor PASS: 0 lỗi, 0 cảnh báo.",
+     "status": "PASS",
+     "findings": [],
+     "engine": "monitor",
+     "engine_result_id": 12,
+     "tasks": [
+      {
+       "task_key": "plan",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "market",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "product",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "offer",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "content",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "campaign",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "leads",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "care",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "kpi",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "finance",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "qa",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "audit",
+       "status": "COMPLETED",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "monitor",
+       "status": "RUNNING",
+       "attempt": 1,
+       "error": null
+      },
+      {
+       "task_key": "summary",
+       "status": "PENDING",
+       "attempt": 0,
+       "error": null
+      }
+     ],
+     "llm_calls": 0,
+     "tokens": 0,
+     "narrative": "Monitor: Giám sát vận hành toàn trình đạt trạng thái PASS qua 14 tác vụ với 0 cảnh báo bất thường. Phiên chạy sử dụng 0 lời gọi mô hình ngôn ngữ và tiêu thụ 0 token.",
+     "narrative_source": "mock"
+    }
+   },
+   {
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "summary",
+    "agent_id": "01",
+    "status": "COMPLETED",
+    "depends_on": [
+     "qa",
+     "audit",
+     "monitor"
+    ],
+    "attempt": 1,
+    "artifact_id": 47,
+    "error": null,
+    "started_at": "2026-11-05T02:58:15.633430+00:00",
+    "finished_at": "2026-11-05T02:58:15.637480+00:00",
+    "narrative": "Commander: Tổng kết mã LU-PH-001 kết luận NEEDS_REVIEW (QA PASS, Audit WARN, Monitor PASS). Giá 499 PHP, biên 226.0 PHP, hòa vốn 18 đơn, ROAS 1.62, lợi nhuận sau quảng cáo -1062.0 PHP, rủi ro HIGH.",
+    "artifact_type": "final_summary",
+    "artifact": {
+     "type": "final_summary",
+     "agent_id": "01",
+     "summary": "Kết luận: NEEDS_REVIEW. SKU LU-PH-001, rủi ro HIGH.",
+     "synthetic": true,
+     "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+     "sku": "LU-PH-001",
+     "decision": "NEEDS_REVIEW",
+     "key_numbers": {
+      "selling_price_php": 499,
+      "margin_per_unit_php": 226.0,
+      "breakeven_orders": 18,
+      "roas": 1.62,
+      "contribution_after_ads_php": -1062.0,
+      "risk_level": "HIGH"
+     },
+     "supervision": {
+      "qa": "PASS",
+      "audit": "WARN",
+      "monitor": "PASS"
+     },
+     "next_steps": [
+      "Xử lý các phát hiện của QA/Audit/Monitor",
+      "Chạy lại agent liên quan"
+     ],
+     "narrative": "Commander: Tổng kết mã LU-PH-001 kết luận NEEDS_REVIEW (QA PASS, Audit WARN, Monitor PASS). Giá 499 PHP, biên 226.0 PHP, hòa vốn 18 đơn, ROAS 1.62, lợi nhuận sau quảng cáo -1062.0 PHP, rủi ro HIGH.",
+     "narrative_source": "mock"
+    }
+   }
+  ],
+  "llm": {
+   "calls": 0,
+   "tokens": 0,
+   "cost_est": 0
+  },
+  "engines": {
+   "qa": {
+    "id": 10,
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "engine": "qa",
+    "status": "PASS",
+    "findings": [],
+    "created_at": "2026-11-05T02:58:15.610111+00:00"
+   },
+   "audit": {
+    "id": 11,
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "engine": "audit",
+    "status": "WARN",
+    "findings": [
+     {
+      "rule": "pending_approval",
+      "severity": "WARN",
+      "task_key": "campaign",
+      "detail": "meta_ads.create_draft waits for human approval"
+     }
+    ],
+    "created_at": "2026-11-05T02:58:15.619534+00:00"
+   },
+   "monitor": {
+    "id": 12,
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "engine": "monitor",
+    "status": "PASS",
+    "findings": [],
+    "created_at": "2026-11-05T02:58:15.629461+00:00"
+   }
+  },
+  "approvals": [
+   {
+    "id": 1,
+    "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+    "task_key": "campaign",
+    "reason": "meta_ads.create_draft CMP-LU-PH-001: budget 4000 >= approval threshold 3000 PHP",
+    "amount": 4000.0,
+    "status": "PENDING",
+    "decided_at": null,
+    "created_at": "2026-11-05T02:58:15.552456+00:00"
+   }
+  ]
+ },
+ "agents": [
+  {
+   "id": "01",
+   "name": "Sales Director / Commander",
+   "group": "business",
+   "responsibility": "Phân rã mục tiêu, giao việc, tổng hợp báo cáo cuối",
+   "tasks": [
+    "plan",
+    "summary"
+   ],
+   "tools": [
+    "workflow.plan"
+   ],
+   "permissions": [
+    "READ",
+    "SUPERVISE"
+   ],
+   "outputs": [
+    "execution_plan",
+    "final_summary"
+   ]
+  },
+  {
+   "id": "02",
+   "name": "Market Intelligence",
+   "group": "business",
+   "responsibility": "Phân tích thị trường giả lập từ mock market/ads/leads",
+   "tasks": [
+    "market"
+   ],
+   "tools": [
+    "mock.market",
+    "mock.meta_ads",
+    "mock.leads",
+    "mock.orders"
+   ],
+   "permissions": [
+    "READ"
+   ],
+   "outputs": [
+    "market_report"
+   ]
+  },
+  {
+   "id": "03",
+   "name": "Product Scout",
+   "group": "business",
+   "responsibility": "So sánh sản phẩm và nhà cung cấp giả lập, chọn sản phẩm",
+   "tasks": [
+    "product"
+   ],
+   "tools": [
+    "mock.products",
+    "mock.suppliers",
+    "mock.logistics",
+    "mock.finance"
+   ],
+   "permissions": [
+    "READ"
+   ],
+   "outputs": [
+    "product_shortlist"
+   ]
+  },
+  {
+   "id": "04",
+   "name": "Offer & Strategy",
+   "group": "business",
+   "responsibility": "Tính giá bán, biên lợi nhuận, điểm hòa vốn",
+   "tasks": [
+    "offer"
+   ],
+   "tools": [
+    "mock.campaigns",
+    "mock.finance"
+   ],
+   "permissions": [
+    "READ"
+   ],
+   "outputs": [
+    "pricing_offer"
+   ]
+  },
+  {
+   "id": "05",
+   "name": "Content & Creative",
+   "group": "business",
+   "responsibility": "Tạo content brief và mẫu quảng cáo DRAFT",
+   "tasks": [
+    "content"
+   ],
+   "tools": [
+    "mock.customer_conversations"
+   ],
+   "permissions": [
+    "READ"
+   ],
+   "outputs": [
+    "content_brief"
+   ]
+  },
+  {
+   "id": "06",
+   "name": "Campaign Operator",
+   "group": "business",
+   "responsibility": "Lập chiến dịch quảng cáo DRAFT, không bao giờ publish",
+   "tasks": [
+    "campaign"
+   ],
+   "tools": [
+    "mock.campaigns",
+    "meta_ads.create_draft"
+   ],
+   "permissions": [
+    "READ",
+    "WRITE_DRAFT"
+   ],
+   "outputs": [
+    "campaign_plan"
+   ]
+  },
+  {
+   "id": "07",
+   "name": "Lead & Sales",
+   "group": "business",
+   "responsibility": "Xử lý lead giả lập, soạn câu trả lời nháp",
+   "tasks": [
+    "leads"
+   ],
+   "tools": [
+    "mock.leads",
+    "mock.customer_conversations",
+    "crm.reply_draft"
+   ],
+   "permissions": [
+    "READ",
+    "WRITE_DRAFT"
+   ],
+   "outputs": [
+    "lead_report"
+   ]
+  },
+  {
+   "id": "08",
+   "name": "Customer Success",
+   "group": "business",
+   "responsibility": "Chăm sóc sau bán, theo dõi giao hàng và đổi trả giả lập",
+   "tasks": [
+    "care"
+   ],
+   "tools": [
+    "mock.orders",
+    "mock.logistics",
+    "mock.customer_conversations",
+    "crm.ticket_note"
+   ],
+   "permissions": [
+    "READ",
+    "WRITE_DRAFT"
+   ],
+   "outputs": [
+    "care_report"
+   ]
+  },
+  {
+   "id": "09",
+   "name": "Sales Analyst",
+   "group": "business",
+   "responsibility": "Tính KPI: tỷ lệ chuyển đổi, CPA, ROAS",
+   "tasks": [
+    "kpi"
+   ],
+   "tools": [
+    "mock.campaigns",
+    "mock.products"
+   ],
+   "permissions": [
+    "READ"
+   ],
+   "outputs": [
+    "kpi_report"
+   ]
+  },
+  {
+   "id": "10",
+   "name": "Finance & Risk",
+   "group": "business",
+   "responsibility": "Phân tích lợi nhuận, ngân sách và rủi ro",
+   "tasks": [
+    "finance"
+   ],
+   "tools": [
+    "mock.finance"
+   ],
+   "permissions": [
+    "READ"
+   ],
+   "outputs": [
+    "finance_risk_report"
+   ]
+  },
+  {
+   "id": "11",
+   "name": "QA Tester",
+   "group": "supervisory",
+   "responsibility": "Kiểm tra đầu ra: schema, phép tính, nhất quán số liệu",
+   "tasks": [
+    "qa"
+   ],
+   "tools": [
+    "engine.qa"
+   ],
+   "permissions": [
+    "READ",
+    "SUPERVISE"
+   ],
+   "outputs": [
+    "qa_report"
+   ]
+  },
+  {
+   "id": "12",
+   "name": "Auditor",
+   "group": "supervisory",
+   "responsibility": "Kiểm tra quyền, hành động WRITE, phê duyệt và lịch sử",
+   "tasks": [
+    "audit"
+   ],
+   "tools": [
+    "engine.audit"
+   ],
+   "permissions": [
+    "READ",
+    "SUPERVISE"
+   ],
+   "outputs": [
+    "audit_report"
+   ]
+  },
+  {
+   "id": "13",
+   "name": "Monitor",
+   "group": "supervisory",
+   "responsibility": "Theo dõi thời gian, lần thử, lỗi, token",
+   "tasks": [
+    "monitor"
+   ],
+   "tools": [
+    "engine.monitor"
+   ],
+   "permissions": [
+    "READ",
+    "SUPERVISE"
+   ],
+   "outputs": [
+    "monitoring_report"
+   ]
+  }
+ ],
+ "runs_list": [
+  {
+   "run_id": "1ad383e6-0fff-4177-871b-90ab1e0137d4",
+   "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+   "mode": "mock",
+   "status": "WAITING_APPROVAL",
+   "created_at": "2026-11-05T02:58:15.508976+00:00",
+   "finished_at": null
+  },
+  {
+   "run_id": "5f837607-12cd-49b4-be20-f8f8f5998d17",
+   "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+   "mode": "mock",
+   "status": "COMPLETED",
+   "created_at": "2026-11-05T02:58:15.370170+00:00",
+   "finished_at": "2026-11-05T02:58:15.505481+00:00"
+  },
+  {
+   "run_id": "0257d7c6-4094-41ad-9bcd-b2c0b3adacce",
+   "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+   "mode": "mock",
+   "status": "FAILED",
+   "created_at": "2026-11-05T02:58:15.004758+00:00",
+   "finished_at": "2026-11-05T02:58:15.365983+00:00"
+  },
+  {
+   "run_id": "dc276d30-9ab9-41cf-8401-49a474264148",
+   "objective": "Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.",
+   "mode": "mock",
+   "status": "COMPLETED",
+   "created_at": "2026-11-05T02:58:14.840399+00:00",
+   "finished_at": "2026-11-05T02:58:15.000612+00:00"
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+[
+  {"id": "graph-tests", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/graph-tests.md",
+   "allowed_paths": ["tests/test_graph_table.py"], "check": ["python", "-I", "ai-jobs/p3-workflow/checker.py", "graph-tests", "."], "timeout_s": 1500},
+  {"id": "data-tests", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/data-tests.md",
+   "allowed_paths": ["tests/test_mock_data.py"], "check": ["python", "-I", "ai-jobs/p3-workflow/checker.py", "data-tests", "."], "timeout_s": 1200},
+  {"id": "conversations", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/conversations.md",
+   "allowed_paths": ["app/mock/conversations.json"], "check": ["python", "-I", "ai-jobs/p3-workflow/checker.py", "conversations", "."], "timeout_s": 1200}
+]

@@ -1,0 +1,5 @@
+[
+  {"id": "left-rail-wording", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/left-rail-wording.md",
+   "allowed_paths": ["app/web/panels.js", "app/web/styles.css"],
+   "check": ["python", "-I", "ai-jobs/p6b-ux/checker.py", "left-rail-wording", "."], "timeout_s": 3000}
+]

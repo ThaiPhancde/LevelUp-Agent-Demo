@@ -1,0 +1,8 @@
+[
+  {"id": "panels-ui", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/panels-ui.md",
+   "allowed_paths": ["app/web/dashboard.html", "app/web/styles.css", "app/web/panels.js"],
+   "check": ["python", "-I", "ai-jobs/p6-dashboard/checker.py", "panels-ui", "."], "timeout_s": 2700},
+  {"id": "office-props", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/office-props.md",
+   "allowed_paths": ["app/web/office-props.js"],
+   "check": ["python", "-I", "ai-jobs/p6-dashboard/checker.py", "office-props", "."], "timeout_s": 1500}
+]

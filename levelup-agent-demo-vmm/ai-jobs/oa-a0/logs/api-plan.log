@@ -1,0 +1,5 @@
+Đã cập nhật [DEMO_API.md](file:///D:/LevelUp-Agent-Demo/_gemini-work/docs/DEMO_API.md#L60-L87) cho Phase A0 theo mục 8.1 của [DEMO_PLAN_OPTION_A.md](file:///D:/LevelUp-Agent-Demo/_gemini-work/docs/DEMO_PLAN_OPTION_A.md#L772-L791):
+
+- Giữ nguyên toàn bộ nội dung tài liệu API hiện có (dòng 1–58).
+- Bổ sung mục **Phương án A — Endpoint dự kiến** ở cuối file với bảng gồm `Method`, `Đường dẫn`, `Mục đích`, `Phase` cho tất cả các endpoint mới và phần mở rộng của Phương án A (A1–A8b), đánh dấu rõ trạng thái `KẾ HOẠCH, CHƯA TRIỂN KHAI` (`KE HOACH, CHUA TRIEN KHAI`).
+- Không chỉnh sửa file nào khác và không chạy lệnh hay test.

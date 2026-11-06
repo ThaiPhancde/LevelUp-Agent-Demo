@@ -1,0 +1,325 @@
+- generic [active] [ref=f6e1]:
+  - generic:
+    - banner [ref=f6e2]:
+      - generic [ref=f6e3]:
+        - heading "Văn phòng Level Up" [level=1] [ref=f6e4]
+        - generic [ref=f6e5]: MOCK ONLY — dữ liệu giả lập
+        - generic [ref=f6e6]: 13 agent
+        - generic [ref=f6e7]: Bước 0/14
+        - generic [ref=f6e8]: PENDING
+      - toolbar "Thanh công cụ điều khiển" [ref=f6e9]:
+        - button "Dừng xoay (Tự xoay)" [pressed] [ref=f6e10] [cursor=pointer]
+        - button "Tên" [pressed] [ref=f6e11] [cursor=pointer]
+        - button "Bong bóng" [pressed] [ref=f6e12] [cursor=pointer]
+        - button "Toàn cảnh" [ref=f6e13] [cursor=pointer]
+        - button "Tổng quan (3D)" [pressed] [ref=f6e14] [cursor=pointer]
+        - button "Start Demo ▶" [ref=f6e15] [cursor=pointer]
+    - generic:
+      - region "Cấu hình chạy kịch bản Demo" [ref=f6e16]:
+        - generic [ref=f6e17]:
+          - heading "Khởi chạy kịch bản Demo" [level=2] [ref=f6e18]
+          - button "Thu gọn ▾" [expanded] [ref=f6e19] [cursor=pointer]
+        - generic [ref=f6e20]:
+          - generic [ref=f6e21]:
+            - generic [ref=f6e22]: Mục tiêu kinh doanh (Objective)
+            - textbox "Mục tiêu chiến dịch (Objective)" [ref=f6e23]: Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.
+          - generic [ref=f6e24]:
+            - generic [ref=f6e25]: Chế độ suy luận (Mode)
+            - generic [ref=f6e26]:
+              - generic [ref=f6e27] [cursor=pointer]:
+                - radio "Mock (mặc định)" [checked] [ref=f6e28]
+                - text: Mock (mặc định)
+              - generic [ref=f6e29] [cursor=pointer]:
+                - radio "DeepSeek" [ref=f6e30]
+                - text: DeepSeek
+          - generic [ref=f6e31]:
+            - generic [ref=f6e32]: Tiêm lỗi giả lập (Phase 5 Error Injection)
+            - generic [ref=f6e33]:
+              - generic [ref=f6e34] [cursor=pointer]:
+                - checkbox "bad_cost — Sai lệch giá vốn" [ref=f6e35]
+                - code [ref=f6e36]: bad_cost
+                - text: — Sai lệch giá vốn
+              - generic [ref=f6e37] [cursor=pointer]:
+                - checkbox "publish_attempt — Cố publish quảng cáo thật" [ref=f6e38]
+                - code [ref=f6e39]: publish_attempt
+                - text: — Cố publish quảng cáo thật
+              - generic [ref=f6e40]:
+                - generic [ref=f6e41] [cursor=pointer]:
+                  - checkbox "timeout:" [ref=f6e42]
+                  - code [ref=f6e43]: "timeout:"
+                - combobox "Chọn task cho timeout:" [ref=f6e44]:
+                  - option "plan — 01 Sales Director / Commander"
+                  - option "market — 02 Market Intelligence" [selected]
+                  - option "product — 03 Product Scout"
+                  - option "offer — 04 Offer & Strategy"
+                  - option "content — 05 Content & Creative"
+                  - option "campaign — 06 Campaign Operator"
+                  - option "leads — 07 Lead & Sales"
+                  - option "care — 08 Customer Success"
+                  - option "kpi — 09 Sales Analyst"
+                  - option "finance — 10 Finance & Risk"
+                  - option "qa — 11 QA Tester"
+                  - option "audit — 12 Auditor"
+                  - option "monitor — 13 Monitor"
+                  - option "summary — 01 Sales Director / Commander"
+              - generic [ref=f6e45]:
+                - generic [ref=f6e46] [cursor=pointer]:
+                  - checkbox "missing_field:" [ref=f6e47]
+                  - code [ref=f6e48]: "missing_field:"
+                - combobox "Chọn task cho missing_field:" [ref=f6e49]:
+                  - option "plan — 01 Sales Director / Commander"
+                  - option "market — 02 Market Intelligence"
+                  - option "product — 03 Product Scout"
+                  - option "offer — 04 Offer & Strategy" [selected]
+                  - option "content — 05 Content & Creative"
+                  - option "campaign — 06 Campaign Operator"
+                  - option "leads — 07 Lead & Sales"
+                  - option "care — 08 Customer Success"
+                  - option "kpi — 09 Sales Analyst"
+                  - option "finance — 10 Finance & Risk"
+                  - option "qa — 11 QA Tester"
+                  - option "audit — 12 Auditor"
+                  - option "monitor — 13 Monitor"
+                  - option "summary — 01 Sales Director / Commander"
+              - generic [ref=f6e50]:
+                - generic [ref=f6e51] [cursor=pointer]:
+                  - checkbox "empty_response:" [ref=f6e52]
+                  - code [ref=f6e53]: "empty_response:"
+                - combobox "Chọn task cho empty_response:" [ref=f6e54]:
+                  - option "plan — 01 Sales Director / Commander"
+                  - option "market — 02 Market Intelligence"
+                  - option "product — 03 Product Scout"
+                  - option "offer — 04 Offer & Strategy"
+                  - option "content — 05 Content & Creative" [selected]
+                  - option "campaign — 06 Campaign Operator"
+                  - option "leads — 07 Lead & Sales"
+                  - option "care — 08 Customer Success"
+                  - option "kpi — 09 Sales Analyst"
+                  - option "finance — 10 Finance & Risk"
+                  - option "qa — 11 QA Tester"
+                  - option "audit — 12 Auditor"
+                  - option "monitor — 13 Monitor"
+                  - option "summary — 01 Sales Director / Commander"
+              - generic [ref=f6e55]: "inject: []"
+          - generic [ref=f6e56]:
+            - button "Start Demo ▶" [ref=f6e57] [cursor=pointer]
+            - button "Xóa lỗi tiêm" [ref=f6e58] [cursor=pointer]
+      - region "Chế độ Tổng quan 2D" [ref=f6e59]:
+        - generic [ref=f6e60]:
+          - heading "Tổng quan 2D — Đồ thị phụ thuộc 14 bước & Bảng trạng thái" [level=2] [ref=f6e61]
+          - generic [ref=f6e62]: Bấm vào nút bất kỳ trên đồ thị hoặc dòng trong bảng để mở ngăn kéo chi tiết (Input / Output / Retry).
+        - img "Đồ thị phụ thuộc 14 tác vụ" [ref=f6e64]:
+          - generic [ref=f6e109]:
+            - button "Bước plan - PENDING" [ref=f6e110] [cursor=pointer]:
+              - generic [ref=f6e113]: ⏸ plan
+              - generic [ref=f6e114]: "#01 · PENDING"
+            - button "Bước market - PENDING" [ref=f6e115] [cursor=pointer]:
+              - generic [ref=f6e118]: ⏸ market
+              - generic [ref=f6e119]: "#02 · PENDING"
+            - button "Bước product - PENDING" [ref=f6e120] [cursor=pointer]:
+              - generic [ref=f6e123]: ⏸ product
+              - generic [ref=f6e124]: "#03 · PENDING"
+            - button "Bước offer - PENDING" [ref=f6e125] [cursor=pointer]:
+              - generic [ref=f6e128]: ⏸ offer
+              - generic [ref=f6e129]: "#04 · PENDING"
+            - button "Bước content - PENDING" [ref=f6e130] [cursor=pointer]:
+              - generic [ref=f6e133]: ⏸ content
+              - generic [ref=f6e134]: "#05 · PENDING"
+            - button "Bước campaign - PENDING" [ref=f6e135] [cursor=pointer]:
+              - generic [ref=f6e138]: ⏸ campaign
+              - generic [ref=f6e139]: "#06 · PENDING"
+            - button "Bước leads - PENDING" [ref=f6e140] [cursor=pointer]:
+              - generic [ref=f6e143]: ⏸ leads
+              - generic [ref=f6e144]: "#07 · PENDING"
+            - button "Bước care - PENDING" [ref=f6e145] [cursor=pointer]:
+              - generic [ref=f6e148]: ⏸ care
+              - generic [ref=f6e149]: "#08 · PENDING"
+            - button "Bước kpi - PENDING" [ref=f6e150] [cursor=pointer]:
+              - generic [ref=f6e153]: ⏸ kpi
+              - generic [ref=f6e154]: "#09 · PENDING"
+            - button "Bước finance - PENDING" [ref=f6e155] [cursor=pointer]:
+              - generic [ref=f6e158]: ⏸ finance
+              - generic [ref=f6e159]: "#10 · PENDING"
+            - button "Bước qa - PENDING" [ref=f6e160] [cursor=pointer]:
+              - generic [ref=f6e163]: ⏸ qa
+              - generic [ref=f6e164]: "#11 · PENDING"
+            - button "Bước audit - PENDING" [ref=f6e165] [cursor=pointer]:
+              - generic [ref=f6e168]: ⏸ audit
+              - generic [ref=f6e169]: "#12 · PENDING"
+            - button "Bước monitor - PENDING" [ref=f6e170] [cursor=pointer]:
+              - generic [ref=f6e173]: ⏸ monitor
+              - generic [ref=f6e174]: "#13 · PENDING"
+            - button "Bước summary - PENDING" [ref=f6e175] [cursor=pointer]:
+              - generic [ref=f6e178]: ⏸ summary
+              - generic [ref=f6e179]: "#01 · PENDING"
+        - table [ref=f6e180]:
+          - rowgroup [ref=f6e181]:
+            - row [ref=f6e182]:
+              - columnheader "#" [ref=f6e183]
+              - columnheader "Task" [ref=f6e184]
+              - columnheader "Agent" [ref=f6e185]
+              - columnheader "Khu vực" [ref=f6e186]
+              - columnheader "Phụ thuộc (depends_on)" [ref=f6e187]
+              - columnheader "Trạng thái" [ref=f6e188]
+              - columnheader "Lần thử" [ref=f6e189]
+              - columnheader "Tóm tắt / Lỗi" [ref=f6e190]
+          - rowgroup [ref=f6e191]:
+            - row [ref=f6e192] [cursor=pointer]:
+              - cell "1" [ref=f6e193]
+              - cell [ref=f6e194]:
+                - code [ref=f6e195]: plan
+              - cell "01 — Sales Director / Commander" [ref=f6e196]
+              - cell "Phòng Chỉ huy" [ref=f6e197]
+              - cell "—" [ref=f6e198]
+              - cell "⏸ PENDING" [ref=f6e199]
+              - cell "0" [ref=f6e201]
+              - cell "—" [ref=f6e202]
+            - row [ref=f6e203] [cursor=pointer]:
+              - cell "2" [ref=f6e204]
+              - cell [ref=f6e205]:
+                - code [ref=f6e206]: market
+              - cell "02 — Market Intelligence" [ref=f6e207]
+              - cell "Thị trường & Sản phẩm" [ref=f6e208]
+              - cell "plan" [ref=f6e209]
+              - cell "⏸ PENDING" [ref=f6e210]
+              - cell "0" [ref=f6e212]
+              - cell "—" [ref=f6e213]
+            - row [ref=f6e214] [cursor=pointer]:
+              - cell "3" [ref=f6e215]
+              - cell [ref=f6e216]:
+                - code [ref=f6e217]: product
+              - cell "03 — Product Scout" [ref=f6e218]
+              - cell "Thị trường & Sản phẩm" [ref=f6e219]
+              - cell "market" [ref=f6e220]
+              - cell "⏸ PENDING" [ref=f6e221]
+              - cell "0" [ref=f6e223]
+              - cell "—" [ref=f6e224]
+            - row [ref=f6e225] [cursor=pointer]:
+              - cell "4" [ref=f6e226]
+              - cell [ref=f6e227]:
+                - code [ref=f6e228]: offer
+              - cell "04 — Offer & Strategy" [ref=f6e229]
+              - cell "Chiến lược & Sáng tạo" [ref=f6e230]
+              - cell "product" [ref=f6e231]
+              - cell "⏸ PENDING" [ref=f6e232]
+              - cell "0" [ref=f6e234]
+              - cell "—" [ref=f6e235]
+            - row [ref=f6e236] [cursor=pointer]:
+              - cell "5" [ref=f6e237]
+              - cell [ref=f6e238]:
+                - code [ref=f6e239]: content
+              - cell "05 — Content & Creative" [ref=f6e240]
+              - cell "Chiến lược & Sáng tạo" [ref=f6e241]
+              - cell "offer" [ref=f6e242]
+              - cell "⏸ PENDING" [ref=f6e243]
+              - cell "0" [ref=f6e245]
+              - cell "—" [ref=f6e246]
+            - row [ref=f6e247] [cursor=pointer]:
+              - cell "6" [ref=f6e248]
+              - cell [ref=f6e249]:
+                - code [ref=f6e250]: campaign
+              - cell "06 — Campaign Operator" [ref=f6e251]
+              - cell "Quảng cáo" [ref=f6e252]
+              - cell "offer, content" [ref=f6e253]
+              - cell "⏸ PENDING" [ref=f6e254]
+              - cell "0" [ref=f6e256]
+              - cell "—" [ref=f6e257]
+            - row [ref=f6e258] [cursor=pointer]:
+              - cell "7" [ref=f6e259]
+              - cell [ref=f6e260]:
+                - code [ref=f6e261]: leads
+              - cell "07 — Lead & Sales" [ref=f6e262]
+              - cell "Bán hàng & CSKH" [ref=f6e263]
+              - cell "campaign" [ref=f6e264]
+              - cell "⏸ PENDING" [ref=f6e265]
+              - cell "0" [ref=f6e267]
+              - cell "—" [ref=f6e268]
+            - row [ref=f6e269] [cursor=pointer]:
+              - cell "8" [ref=f6e270]
+              - cell [ref=f6e271]:
+                - code [ref=f6e272]: care
+              - cell "08 — Customer Success" [ref=f6e273]
+              - cell "Bán hàng & CSKH" [ref=f6e274]
+              - cell "leads" [ref=f6e275]
+              - cell "⏸ PENDING" [ref=f6e276]
+              - cell "0" [ref=f6e278]
+              - cell "—" [ref=f6e279]
+            - row [ref=f6e280] [cursor=pointer]:
+              - cell "9" [ref=f6e281]
+              - cell [ref=f6e282]:
+                - code [ref=f6e283]: kpi
+              - cell "09 — Sales Analyst" [ref=f6e284]
+              - cell "Phân tích & Tài chính" [ref=f6e285]
+              - cell "leads, care" [ref=f6e286]
+              - cell "⏸ PENDING" [ref=f6e287]
+              - cell "0" [ref=f6e289]
+              - cell "—" [ref=f6e290]
+            - row [ref=f6e291] [cursor=pointer]:
+              - cell "10" [ref=f6e292]
+              - cell [ref=f6e293]:
+                - code [ref=f6e294]: finance
+              - cell "10 — Finance & Risk" [ref=f6e295]
+              - cell "Phân tích & Tài chính" [ref=f6e296]
+              - cell "offer, kpi" [ref=f6e297]
+              - cell "⏸ PENDING" [ref=f6e298]
+              - cell "0" [ref=f6e300]
+              - cell "—" [ref=f6e301]
+            - row [ref=f6e302] [cursor=pointer]:
+              - cell "11" [ref=f6e303]
+              - cell [ref=f6e304]:
+                - code [ref=f6e305]: qa
+              - cell "11 — QA Tester" [ref=f6e306]
+              - cell "Phòng Giám sát" [ref=f6e307]
+              - cell "market, product, offer, content, campaign, leads, care, kpi, finance" [ref=f6e308]
+              - cell "⏸ PENDING" [ref=f6e309]
+              - cell "0" [ref=f6e311]
+              - cell "—" [ref=f6e312]
+            - row [ref=f6e313] [cursor=pointer]:
+              - cell "12" [ref=f6e314]
+              - cell [ref=f6e315]:
+                - code [ref=f6e316]: audit
+              - cell "12 — Auditor" [ref=f6e317]
+              - cell "Phòng Giám sát" [ref=f6e318]
+              - cell "market, product, offer, content, campaign, leads, care, kpi, finance" [ref=f6e319]
+              - cell "⏸ PENDING" [ref=f6e320]
+              - cell "0" [ref=f6e322]
+              - cell "—" [ref=f6e323]
+            - row [ref=f6e324] [cursor=pointer]:
+              - cell "13" [ref=f6e325]
+              - cell [ref=f6e326]:
+                - code [ref=f6e327]: monitor
+              - cell "13 — Monitor" [ref=f6e328]
+              - cell "Phòng Giám sát" [ref=f6e329]
+              - cell "market, product, offer, content, campaign, leads, care, kpi, finance, qa, audit" [ref=f6e330]
+              - cell "⏸ PENDING" [ref=f6e331]
+              - cell "0" [ref=f6e333]
+              - cell "—" [ref=f6e334]
+            - row [ref=f6e335] [cursor=pointer]:
+              - cell "14" [ref=f6e336]
+              - cell [ref=f6e337]:
+                - code [ref=f6e338]: summary
+              - cell "01 — Sales Director / Commander" [ref=f6e339]
+              - cell "Phòng Chỉ huy" [ref=f6e340]
+              - cell "qa, audit, monitor" [ref=f6e341]
+              - cell "⏸ PENDING" [ref=f6e342]
+              - cell "0" [ref=f6e344]
+              - cell "—" [ref=f6e345]
+    - contentinfo [ref=f6e346]:
+      - generic [ref=f6e347]:
+        - tablist [ref=f6e348]:
+          - tab "Kết quả cuối" [selected] [ref=f6e349] [cursor=pointer]
+          - tab "QA / Audit / Monitor" [ref=f6e350] [cursor=pointer]
+          - tab "Token & chi phí" [ref=f6e351] [cursor=pointer]
+          - tab "Nhật ký" [ref=f6e352] [cursor=pointer]
+          - tab "Lịch sử" [ref=f6e353] [cursor=pointer]
+        - generic "Chú thích các khu vực phòng ban" [ref=f6e355]:
+          - generic [ref=f6e356]: Phòng Chỉ huy
+          - generic [ref=f6e358]: Thị trường & Sản phẩm
+          - generic [ref=f6e360]: Chiến lược & Sáng tạo
+          - generic [ref=f6e362]: Quảng cáo
+          - generic [ref=f6e364]: Bán hàng & CSKH
+          - generic [ref=f6e366]: Phân tích & Tài chính
+          - generic [ref=f6e368]: Phòng Giám sát
+          - generic [ref=f6e370]: Cổng Mock
+      - tabpanel [ref=f6e372]:
+        - paragraph [ref=f6e373]: Bước tổng kết (summary) đang ở trạng thái PENDING.

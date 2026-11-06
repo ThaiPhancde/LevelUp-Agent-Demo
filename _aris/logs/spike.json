@@ -1,0 +1,207 @@
+{
+ "mode": "aris",
+ "node": "v22.23.4",
+ "platform": "linux",
+ "outcome": [
+  {
+   "id": "task-1",
+   "subject": "Phân tích thị trường PH",
+   "owner": "market",
+   "status": "completed"
+  },
+  {
+   "id": "task-2",
+   "subject": "Chọn sản phẩm",
+   "owner": "product",
+   "status": "completed"
+  },
+  {
+   "id": "task-3",
+   "subject": "Tính giá và hòa vốn",
+   "owner": "offer",
+   "status": "completed"
+  },
+  {
+   "id": "task-4",
+   "subject": "Kiểm tra QA",
+   "owner": "qa",
+   "status": "completed"
+  }
+ ],
+ "trace": [
+  {
+   "t": "2026-11-05T04:00:41.658Z",
+   "event": "aris_loaded",
+   "exports": [
+    "DispatchError",
+    "MAX_BUSY",
+    "MAX_PER_CALL",
+    "briefFor",
+    "dispatch",
+    "parseSummary",
+    "planCards",
+    "summarize"
+   ]
+  },
+  {
+   "t": "2026-11-05T04:00:41.718Z",
+   "event": "aris_plan_cards",
+   "cards": [
+    {
+     "id": "task-1",
+     "title": "Phân tích thị trường PH",
+     "after": []
+    },
+    {
+     "id": "task-2",
+     "title": "Chọn sản phẩm",
+     "after": [
+      "task-1"
+     ]
+    },
+    {
+     "id": "task-3",
+     "title": "Tính giá và hòa vốn",
+     "after": [
+      "task-2"
+     ]
+    },
+    {
+     "id": "task-4",
+     "title": "Kiểm tra QA",
+     "after": [
+      "task-3"
+     ]
+    }
+   ]
+  },
+  {
+   "t": "2026-11-05T04:00:41.718Z",
+   "event": "aris_guard_premature",
+   "ok": false,
+   "error": "Thẻ task-2 đang chờ thẻ khác xong.",
+   "members_spawned": 0
+  },
+  {
+   "t": "2026-11-05T04:00:41.719Z",
+   "event": "aris_dispatch_record",
+   "bot": "market",
+   "title": "Phân tích thị trường PH",
+   "taskId": "task-1"
+  },
+  {
+   "t": "2026-11-05T04:00:41.719Z",
+   "event": "aris_dispatch",
+   "round": 1,
+   "results": [
+    {
+     "handle": "market",
+     "ok": true,
+     "taskId": "task-1"
+    }
+   ]
+  },
+  {
+   "t": "2026-11-05T04:00:41.736Z",
+   "event": "bot_worked",
+   "bot": "market",
+   "agent_id": "02",
+   "tools": [
+    "mock.market",
+    "mock.meta_ads",
+    "mock.leads",
+    "mock.orders"
+   ],
+   "brief_chars": 274
+  },
+  {
+   "t": "2026-11-05T04:00:41.736Z",
+   "event": "aris_dispatch_record",
+   "bot": "product",
+   "title": "Chọn sản phẩm",
+   "taskId": "task-2"
+  },
+  {
+   "t": "2026-11-05T04:00:41.736Z",
+   "event": "aris_dispatch",
+   "round": 2,
+   "results": [
+    {
+     "handle": "product",
+     "ok": true,
+     "taskId": "task-2"
+    }
+   ]
+  },
+  {
+   "t": "2026-11-05T04:00:41.749Z",
+   "event": "bot_worked",
+   "bot": "product",
+   "agent_id": "03",
+   "tools": [
+    "mock.products",
+    "mock.suppliers",
+    "mock.logistics",
+    "mock.finance"
+   ],
+   "brief_chars": 266
+  },
+  {
+   "t": "2026-11-05T04:00:41.750Z",
+   "event": "aris_dispatch_record",
+   "bot": "offer",
+   "title": "Tính giá và hòa vốn",
+   "taskId": "task-3"
+  },
+  {
+   "t": "2026-11-05T04:00:41.750Z",
+   "event": "aris_dispatch",
+   "round": 3,
+   "results": [
+    {
+     "handle": "offer",
+     "ok": true,
+     "taskId": "task-3"
+    }
+   ]
+  },
+  {
+   "t": "2026-11-05T04:00:41.756Z",
+   "event": "bot_worked",
+   "bot": "offer",
+   "agent_id": "04",
+   "tools": [
+    "mock.campaigns",
+    "mock.finance"
+   ],
+   "brief_chars": 268
+  },
+  {
+   "t": "2026-11-05T04:00:41.756Z",
+   "event": "aris_dispatch_record",
+   "bot": "qa",
+   "title": "Kiểm tra QA",
+   "taskId": "task-4"
+  },
+  {
+   "t": "2026-11-05T04:00:41.756Z",
+   "event": "aris_dispatch",
+   "round": 4,
+   "results": [
+    {
+     "handle": "qa",
+     "ok": true,
+     "taskId": "task-4"
+    }
+   ]
+  },
+  {
+   "t": "2026-11-05T04:00:41.756Z",
+   "event": "bot_worked",
+   "bot": "qa",
+   "agent_id": "11",
+   "tools": [],
+   "brief_chars": 254
+  }
+ ]
+}

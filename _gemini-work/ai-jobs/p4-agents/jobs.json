@@ -1,0 +1,8 @@
+[
+  {"id": "mock-texts", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/mock-texts.md",
+   "allowed_paths": ["app/llm/mock_texts.json"], "check": ["python", "-I", "ai-jobs/p4-agents/checker.py", "mock-texts", "."], "timeout_s": 1200},
+  {"id": "compute-tests", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/compute-tests.md",
+   "allowed_paths": ["tests/test_agents_table.py"], "check": ["python", "-I", "ai-jobs/p4-agents/checker.py", "compute-tests", "."], "timeout_s": 1800},
+  {"id": "supervisor-tests", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/supervisor-tests.md",
+   "allowed_paths": ["tests/test_supervisors_table.py"], "check": ["python", "-I", "ai-jobs/p4-agents/checker.py", "supervisor-tests", "."], "timeout_s": 1500}
+]
