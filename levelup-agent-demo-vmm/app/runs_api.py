@@ -111,14 +111,43 @@ def llm_calls(run_id: str):
 
 class ResetRequest(BaseModel):
     confirm: bool = False
+    include_memory: bool = False
 
 
 @router.post('/admin/reset-demo', tags=['admin'])
 def reset_demo(req: ResetRequest):
-    """Delete all demo runs, tasks, artifacts and logs (schema kept). Body must be {"confirm": true}."""
+    """Delete all demo runs, tasks, artifacts and logs (schema kept). Body must be {"confirm": true}.
+
+    include_memory=true also deletes memory_items/learning_proposals — intended for a test database only.
+    """
     if not req.confirm:
         raise HTTPException(400, 'Send {"confirm": true} to delete all demo runs. This cannot be undone.')
     try:
-        return {'deleted': wf.reset_demo()}
+        return {'deleted': wf.reset_demo(include_memory=req.include_memory)}
     except wf.WorkflowError as exc:
         raise _http(exc)
+
+
+class StopRequest(BaseModel):
+    reason: str | None = None
+
+
+@router.get('/admin/stop', tags=['admin'])
+def get_stop():
+    """Current emergency-stop state (A2: storage only — A3 enforces who may call this and blocks dispatch)."""
+    from app import db
+    return db.get_stop_state()
+
+
+@router.post('/admin/stop', tags=['admin'])
+def post_stop(req: StopRequest):
+    """Set the emergency stop (A2: storage only, no auth/dispatch-blocking yet — that is A3's scope)."""
+    from app import db
+    return db.set_stop(True, actor='user', reason=req.reason)
+
+
+@router.post('/admin/resume', tags=['admin'])
+def post_resume(req: StopRequest):
+    """Clear the emergency stop (A2: storage only — A3 restricts this to Jarvis)."""
+    from app import db
+    return db.set_stop(False, actor='user', reason=req.reason)

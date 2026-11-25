@@ -1,0 +1,62 @@
+{
+ "schema_before": [
+  2
+ ],
+ "schema_after": [
+  3
+ ],
+ "tables": {
+  "runs": {
+   "rows": 22,
+   "same": true
+  },
+  "tasks": {
+   "rows": 308,
+   "same": true
+  },
+  "events": {
+   "rows": 1227,
+   "same": true
+  },
+  "artifacts": {
+   "rows": 310,
+   "same": true
+  },
+  "decision_log": {
+   "rows": 613,
+   "same": true
+  },
+  "approvals": {
+   "rows": 0,
+   "same": true
+  },
+  "llm_calls": {
+   "rows": 22,
+   "same": true
+  },
+  "engine_results": {
+   "rows": 69,
+   "same": true
+  }
+ },
+ "run_new_cols_default": [
+  0,
+  0,
+  0,
+  "[]"
+ ],
+ "stop_state": {
+  "stopped": false,
+  "reason": null,
+  "actor": null,
+  "updated_at": null
+ },
+ "restored_schema": [
+  2
+ ],
+ "restored_control_run": [
+  "4748c724-a986-4ea3-9827-a1e4848fe507",
+  "COMPLETED"
+ ],
+ "ok": true
+}

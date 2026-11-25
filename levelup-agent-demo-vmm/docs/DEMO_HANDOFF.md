@@ -2,6 +2,26 @@
 
 Trạng thái từng phase: `DEMO_PHASE_STATUS.md` (nguồn duy nhất). Checkpoint bên dưới là mốc lịch sử, mới nhất ở trên. Phiên sau bắt đầu bằng prompt ở `DEMO_PLAN.md` mục 9.
 
+## Checkpoint 25/11/2026 — A2 đã nghiệm thu: DB v3, chốt dừng khẩn (chỉ lưu trữ)
+
+- Jarvis duyệt phiếu phạm vi A2 (gồm cả bảng `system_stop`/`system_stop_log` làm ngay trong A2) và cho commit/push A1 lên GitHub trước khi bắt đầu. Nhánh `phase-a2-db-v3` tách từ `phase-a1-dispatch` (`25ee168`). Jarvis nghiệm thu A2 ngày 25/11/2026, đã commit/push nhánh `phase-a2-db-v3`; A3 chưa mở.
+- `app/db.py`: `SCHEMA_VERSION=3`; `_migrate_alter()` kiểm `PRAGMA table_info` trước mỗi `ALTER` nên chạy lại trên volume v2 không lỗi và không mất run cũ (M-06). Thêm bảng khung cho A4/A5 (`rework_requests`, `rooms`, `room_messages`), A6/A7 (`memory_items` với chỉ mục duy nhất một phần `key WHERE status='ACTIVE'`, `learning_proposals`, `learning_runs`, `learning_meta`), A8a/A8b (`channel_inbox`, `channel_outbox`, `brain_inbox`). Thêm `system_stop`/`system_stop_log` (mới, ngoài `DEMO_PLAN_OPTION_A.md` gốc) kèm `get_stop_state()`/`set_stop()` có logic thật ngay, để A3 dùng sẵn.
+- `app/core/workflow.py`: `RESET_TABLES` mở rộng, xóa bảng con trước. `reset_demo(include_memory=False)` (mặc định) giữ `memory_items`/`learning_proposals` đã quyết, chuyển đề xuất đang mở sang `EXPIRED`; `include_memory=True` xóa thêm hai bảng đó (chỉ dùng trên DB thử, test có kiểm). `learning_meta`/`system_stop*` không bao giờ bị reset đụng tới.
+- `app/runs_api.py`: `ResetRequest.include_memory`; `GET/POST /admin/stop`, `POST /admin/resume` — chỉ lưu/đọc trạng thái, **chưa chặn dispatch mới và chưa kiểm ai được phép bấm** (để A3).
+- Test mới `tests/test_db_migrate.py` (6 ca, xem `DEMO_TEST_REPORT.md` mục "A2"). Đo 3 lượt: `pytest` local 456 passed; `pytest` trong container 456 passed/7 skipped; `python tools/e2e/run_e2e.py` API 7/7 + restart OK + trình duyệt 9/9. 0 lời gọi DeepSeek thật. Không đụng `lalahoa-db`/`aiops-demo-n8n-1`/`openmausbot-computer`.
+- Log: `latest_logs/a2-db-v3-20261125/`. Cập nhật `DEMO_TEST_REPORT.md`, `DEMO_PHASE_STATUS.md` (A2 → DONE), file này.
+- Phát hiện ngoài phạm vi (đã sửa khi thấy, không phải lỗi do lượt này gây ra): các file log của A1 ở `latest_logs/a1-dispatch-20261124/` bị xóa khỏi working tree trước khi lượt A2 bắt đầu sửa gì — đã `git checkout --` khôi phục lại từ commit `25ee168`, chưa rõ nguyên nhân xóa.
+- **Bước tiếp theo:** chờ Jarvis nghiệm thu A2 rồi mở A3 (gateway chạy lại an toàn: `attempt`/`action_hash`, chặn dispatch mới khi `system_stop.stopped=1`, kiểm danh sách tối đa 3 người được ủy quyền).
+
+## Checkpoint 24/11/2026 — A1 Jarvis nghiệm thu: nhật ký điều phối có lý do
+
+- Jarvis duyệt phiếu phạm vi A1, triển khai trên nhánh `phase-a1-dispatch`; nghiệm thu xong cùng ngày, commit `25ee168` (đã push lên GitHub ở lượt mở A2).
+- `app/core/graph.py` thêm hàm thuần `dispatch_reason()` + `DISPATCH_REASON`, không sửa `TRANSITIONS`. `app/core/workflow.py` ghi `dispatch`/`dispatch_result` vào `decision_log` (không đổi schema DB, dùng cột `detail` JSON có sẵn). `app/mock/data.py` trả `input_sources` (`fixture`/`extracted`/`default`, default → `needs_review`) và `currency_note` khi thị trường khác Philippines. `app/web/panels.js` tab Nhật ký hiện lý do/nguồn.
+- Test mới `tests/test_dispatch.py` (9 ca). Đo 3 lượt: pytest 450 passed/7 skipped trong container; E2E 3 lần liên tiếp đều API 7/7, restart OK, trình duyệt 9/9. 0 lời gọi DeepSeek thật.
+- Lùi theo phiếu đã duyệt: màn hình "bấm lùi từ quyết định cuối về dữ liệu đầu vào" đầy đủ và bong bóng "Giao việc → agent" trong văn phòng 3D sang A9; A1 chỉ bảo đảm API trả đủ liên kết.
+- Log: `latest_logs/a1-dispatch-20261124/`.
+- **Bước tiếp theo:** A2 — nâng DB v3 (xem checkpoint 25/11/2026 ở trên).
+
 ## Checkpoint 23/11/2026 — A0 DONE: baseline mới, tag baseline-v2
 
 - Người dùng duyệt tiếp A0. Đo lại hoàn toàn, không dùng số cũ; không mở A1, không commit/push.

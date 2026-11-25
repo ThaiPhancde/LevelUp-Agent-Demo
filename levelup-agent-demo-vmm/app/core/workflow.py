@@ -441,14 +441,35 @@ def table(run_id: str, name: str) -> list:
         return [dict(r) for r in c.execute(f'SELECT * FROM {name} WHERE run_id=? ORDER BY id', (run_id,))]
 
 
-RESET_TABLES = ('decision_log', 'llm_calls', 'approvals', 'engine_results', 'artifacts', 'tasks', 'runs', 'events')
+# Child-before-parent so `PRAGMA foreign_keys = ON` doesn't block the delete.
+RESET_TABLES = (
+    'room_messages', 'rooms', 'rework_requests', 'learning_runs',
+    'channel_outbox', 'channel_inbox', 'brain_inbox',
+    'decision_log', 'llm_calls', 'approvals', 'engine_results', 'artifacts', 'tasks', 'runs', 'events',
+)
+# Never deleted by reset_demo, in either mode: learning_meta counters, and the emergency stop + its log.
+RESET_EXCLUDE_ALWAYS = ('learning_meta', 'system_stop', 'system_stop_log')
+# Only deleted when include_memory=True, and only intended for a test database (see AGENTS.md M-06 / A2 ticket).
+MEMORY_TABLES = ('memory_items', 'learning_proposals')
 
 
-def reset_demo() -> dict:
-    """Delete every run and its records; keep the schema. Refused while a run is active (409)."""
+def reset_demo(include_memory: bool = False) -> dict:
+    """Delete every run and its records; keep the schema. Refused while a run is active (409).
+
+    include_memory=False (default) keeps memory_items and decided learning_proposals (OA-D05);
+    any proposal still open (PROPOSED/REPLAYED_*) is expired since its source run is gone.
+    include_memory=True also deletes memory_items and learning_proposals outright — a test-DB-only path.
+    learning_meta and system_stop/system_stop_log are never touched by either mode.
+    """
     with db.tx() as c:
         active = c.execute("SELECT COUNT(*) FROM runs WHERE status IN ('PENDING','RUNNING')").fetchone()[0]
         if active:
             raise WorkflowError(409, f'{active} run(s) still active; cancel them first')
         counts = {t: c.execute(f'DELETE FROM {t}').rowcount for t in RESET_TABLES}
+        if include_memory:
+            counts.update({t: c.execute(f'DELETE FROM {t}').rowcount for t in MEMORY_TABLES})
+        else:
+            counts['learning_proposals_expired'] = c.execute(
+                "UPDATE learning_proposals SET status='EXPIRED', decided_at=? "
+                "WHERE status IN ('PROPOSED','REPLAYED_PASS','REPLAYED_FAIL')", (db.now(),)).rowcount
     return counts

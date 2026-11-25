@@ -212,3 +212,38 @@ Lệnh cuối: `docker compose run --rm -T demo pytest -p no:cacheprovider -q` �
 **Bằng chứng:** `latest_logs/a0-baseline-20261123/` (log lần đo 16:26 PARTIAL) và `latest_logs/a0-baseline-20261123/rerun2/run1.log`, `run2.log`, `run3.log` (3 lần đạt 9/9 sau khi sửa).
 
 **A0: DONE.**
+
+## A1 — Nhật ký điều phối có lý do (24/11/2026, ĐẠT, Jarvis nghiệm thu)
+
+`app/core/graph.py`: hàm thuần `dispatch_reason()` + bảng `DISPATCH_REASON`, không sửa `TRANSITIONS`. `app/core/workflow.py` ghi `dispatch`/`dispatch_result` vào `decision_log` (không đổi schema). `app/mock/data.py` trả `input_sources` (`fixture`/`extracted`/`default`), `needs_review` khi không hiểu, `currency_note` khi thị trường khác Philippines. `app/web/panels.js` tab Nhật ký hiện lý do/nguồn.
+
+`tests/test_dispatch.py` (9 ca, mới) + `pytest` trong container: **450 passed, 7 skipped**. `python tools/e2e/run_e2e.py` chạy 3 lần liên tiếp: API 7/7, restart OK, trình duyệt 9/9 — cả 3 lần, 0 lời gọi DeepSeek thật.
+
+**Bằng chứng:** `latest_logs/a1-dispatch-20261124/`.
+
+**A1: DONE.**
+
+## A2 — Nâng DB v3 và bảo toàn dữ liệu (25/11/2026, chờ Jarvis nghiệm thu)
+
+Theo phiếu phạm vi đã duyệt (`docs/DEMO_PLAN_OPTION_A.md` mục 6.3). Nhánh `phase-a2-db-v3` từ `phase-a1-dispatch` (commit `25ee168`).
+
+- `app/db.py`: `SCHEMA_VERSION = 3`. `_migrate_alter()` kiểm `PRAGMA table_info` trước mỗi `ALTER` (`runs.max_rework/rooms/use_memory/memory_ids`, `approvals.tool/decided_by`) — chạy lại không lỗi, không đổi cột cũ. Thêm `CREATE TABLE IF NOT EXISTS` cho `rework_requests`, `rooms`, `room_messages`, `memory_items` (chỉ mục duy nhất một phần `ON memory_items(key) WHERE status='ACTIVE'`), `learning_proposals` (chỉ mục duy nhất một phần tương tự cho các trạng thái mở), `learning_runs`, `learning_meta`, `channel_inbox`, `channel_outbox`, `brain_inbox`. Thêm mới `system_stop` + `system_stop_log` (không có trong `DEMO_PLAN_OPTION_A.md` gốc — phục vụ quyết định "chốt dừng khẩn" mục 2 kế hoạch 4 mốc) cùng `get_stop_state()`/`set_stop()`.
+- `app/core/workflow.py`: `RESET_TABLES` mở rộng (xóa bảng con trước do `foreign_keys=ON`). `reset_demo(include_memory=False)`: giữ `memory_items` + `learning_proposals` đã quyết, chuyển `PROPOSED`/`REPLAYED_*` → `EXPIRED`. `include_memory=True`: xóa thêm hai bảng đó (chỉ dùng trên DB thử). `learning_meta`, `system_stop`, `system_stop_log` không bao giờ bị xóa bởi reset.
+- `app/runs_api.py`: `ResetRequest.include_memory` (mặc định `false`). Thêm `GET/POST /admin/stop`, `POST /admin/resume` — **chỉ lưu trữ trạng thái**, chưa chặn dispatch và chưa kiểm người bấm (để A3 làm).
+- Không đổi `app/core/graph.py`, `app/mock/data.py`, `app/web/*` — A2 không có phạm vi UI/giao diện.
+
+**Test mới** `tests/test_db_migrate.py` (6 ca): migrate DB v2 giả (có run/event/artifact/approval cũ) lên v3 → đọc đúng lịch sử, cột mới có mặc định đúng; migrate 2 lần liên tiếp không lỗi; 2 `memory_items` cùng `key` đều `ACTIVE` → bị chặn bởi chỉ mục; `reset_demo(include_memory=False)` giữ ký ức + hết hạn đề xuất mở + giữ `learning_meta`; `reset_demo(include_memory=True)` xóa ký ức trên DB thử; `set_stop()` giữ qua reset và qua việc mở lại connection (mô phỏng restart), có nhật ký `stop`/`resume`.
+
+**Kết quả đo:**
+- `pytest` local (host, 456 test): **456 passed** — `latest_logs/a2-db-v3-20261125/pytest-local.log`.
+- `docker compose run --rm -T demo pytest -p no:cacheprovider -q`: **456 passed, 7 skipped** (450 cũ của A1 + 6 mới của A2; 7 skipped là bộ E2E-qua-HTTP không đổi) — `latest_logs/a2-db-v3-20261125/pytest-container.log`.
+- `python tools/e2e/run_e2e.py`: API 7/7, restart OK (COMPLETED), trình duyệt 9/9 — `latest_logs/a2-db-v3-20261125/e2e-run1.log`. Container E2E tự dọn sau khi chạy; `lalahoa-db`, `aiops-demo-n8n-1`, `openmausbot-computer` không bị đụng tới (không cần dừng, đủ tài nguyên).
+- Kiểm lại bởi MausBot 25/11 14:10–14:20 (sau khi log A2 bị xóa khỏi `latest_logs/`, chạy lại từ đầu): pytest container 456 passed/7 skipped, E2E API 7/7 + restart OK + trình duyệt 9/9.
+- Nâng cấp trên **bản sao DB thật** (`latest_logs/a2-pre-migrate/demo.sqlite.bak`, chụp bằng sqlite backup từ volume `demo_data` lúc 14:17, bản 2): sau 2 lần migrate → bản 3, 8 bảng cũ giữ nguyên từng dòng (22 runs, 308 tasks, 1227 events, 310 artifacts, 613 decision_log, 22 llm_calls, 69 engine_results), cột mới mặc định 0/0/0/'[]', chốt dừng mặc định tắt. Khôi phục bản sao → đọc lại bản 2 và run đối chứng `4748c724…` COMPLETED — `latest_logs/a2-db-v3-20261125/real-copy-migrate.log`. DB thật trong volume vẫn ở bản 2 (container đang chạy chưa đổi image).
+- 0 lời gọi DeepSeek thật.
+
+**Chưa làm (lùi theo phiếu):** chặn dispatch mới khi `system_stop.stopped=1` và kiểm ai được phép bấm dừng/mở lại — để A3.
+
+**Đường quay lại:** commit `25ee168` (A1) + image `levelup-vmm-demo:baseline-v2`; chưa chạy migration trên volume `demo_data` thật trong lượt này (chỉ test trên DB tạm), nên không cần bản sao riêng để quay lại.
+
+**A2: Jarvis nghiệm thu 25/11/2026.** Đã commit/push nhánh `phase-a2-db-v3`, chưa mở A3.
