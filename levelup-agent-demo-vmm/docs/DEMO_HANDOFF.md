@@ -2,6 +2,21 @@
 
 Trạng thái từng phase: `DEMO_PHASE_STATUS.md` (nguồn duy nhất). Checkpoint bên dưới là mốc lịch sử, mới nhất ở trên. Phiên sau bắt đầu bằng prompt ở `DEMO_PLAN.md` mục 9.
 
+## Checkpoint 25/11/2026 — A4 mở: phiếu phạm vi đã chốt
+
+- Nhánh `phase-a4-rework` tách từ `fd197b1` (A3 đã nghiệm thu, đã push).
+- **Phạm vi (đúng `DEMO_PLAN_OPTION_A.md` §7.2 phần A4, bước 1–11, và prompt A4):**
+  - `graph`: `can_rework()` chỉ cho COMPLETED→PENDING; `rework_plan(findings, statuses, rounds_used, graph, soft, max_rework, fixable)` trả kế hoạch hoặc `(None, lý do)` với `business_task_not_completed` / `no_fixable_rule` / `exhausted`. Không sửa `TRANSITIONS`, `retry()`, `retry_plan()`.
+  - `app/agents/checks.py` (mới): `CHECKS`, `FIX` = {QA `reference` → `verify_supplier_cost:<sku>` (cấp facts, learnable), Audit `blocked_action` → `drop_blocked_action:<tool>` (cấp artifact, không learnable)}; `apply_facts` / `apply_artifact` thuần, trả before/after.
+  - `workflow`: móc ở điểm `next_ready == 'monitor'` khi `max_rework > 0`; chốt yêu cầu cũ (RESOLVED / NO_CHANGE / EXHAUSTED), lập kế hoạch mới; ghi `rework_requests` + `rework_requested` (agent 01) / `rework_resolved` / `rework_skipped` (chỉ khi có FAIL hoặc task nghiệp vụ FAILED/SKIPPED); `Ctx` thêm `feedback`, `memory`, `rework`, `checks`; phép kiểm cấp facts áp cho mọi task chạy lại; `check_applied` ghi trong tx của `task_completed`; task trong `changes` luôn narrative mock; `evidence()['rework']`.
+  - Monitor: WARN `reworked` (khác `retried`) và `rework_exhausted`. `runs_api`: `max_rework` 0..`MAX_REWORK_CEILING=2`, mặc định 0, ngoài miền 422. `get_run` trả dữ liệu rework để A9 vẽ.
+  - Test `tests/test_rework.py`: các ca S6 (`bad_cost` + `max_rework=2` → 1 vòng `product`, QA PASS, HOLD_DRAFT, giá vốn 180; `publish_attempt` → `campaign` bỏ `meta_ads.publish`, Audit PASS; `missing_field:offer` → FAILED, NEEDS_REVIEW, `rework_skipped`), run lành không có dòng làm lại, hai lần chạy cùng chuỗi decision_log, `max_rework=0` không đổi hành vi cũ, 422 khi `max_rework=3`, `mode=llm` với client giả không tạo `llm_calls` cho task làm lại.
+- **Lùi sang A9 (chủ dự án chọn 25/11/2026, như A1):** tài liệu đỏ + bong bóng "Làm lại: <luật>" + dấu tích trong văn phòng 3D, và ô `max_rework` trên form Start (mặc định 2 theo OA-D02). A4 không đổi dashboard.
+- **Ngoài phạm vi A4:** ký ức `check` đã ghim trong `active_checks` (A6); phòng thảo luận (A5). `Ctx.memory` chỉ có giá trị mặc định.
+- **Gemini** (`ai-jobs/oa-a4`): bảng test `rework_plan` (đích, hậu duệ, giới hạn, các lý do None, retry + làm lại cùng run) và `FIX`. Bỏ phần chữ 3D vì UI lùi sang A9.
+- Ghi chú đọc đặc tả: S6 "decision-log có `rule='rework'` ở task chạy lại" hiểu là dòng `rework_requested` của task đích có `detail.rule` và dòng `dispatch` của task chạy lại có lý do làm lại. Sẽ ghi lại nếu cách hiểu khác.
+- **Bước tiếp theo:** triển khai A4 theo phiếu trên.
+
 ## Checkpoint 25/11/2026 — A3 đã nghiệm thu: gateway chạy lại an toàn, dừng khẩn, token
 
 - Triển khai đúng phiếu "A3 mở" bên dưới trên nhánh `phase-a3-gateway-rerun`. Chi tiết, số test, hạn chế: `DEMO_TEST_REPORT.md` mục "A3". Log: `latest_logs/a3-gateway-20261125/`.
