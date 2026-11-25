@@ -2,6 +2,18 @@
 
 Trạng thái từng phase: `DEMO_PHASE_STATUS.md` (nguồn duy nhất). Checkpoint bên dưới là mốc lịch sử, mới nhất ở trên. Phiên sau bắt đầu bằng prompt ở `DEMO_PLAN.md` mục 9.
 
+## Checkpoint 23/11/2026 — A0 DONE: baseline mới, tag baseline-v2
+
+- Người dùng duyệt tiếp A0. Đo lại hoàn toàn, không dùng số cũ; không mở A1, không commit/push.
+- Lần đo đầu (16:26–16:41): pytest 441 passed/7 skipped; E2E 2 lần: API 7/7, restart OK, trình duyệt 8/9 rồi 7/9 — lỗi `locator.check` timeout chập chờn, mỗi lần ở ca injection khác nhau. Ca `dock-and-viewport` (lỗi cũ 06/11) **đạt cả hai lần**, kết luận ca đó đã hết lỗi.
+- Điều tra: đọc `app/web/panels.js`, `app/web/main.js` — không có re-render hay CSS transition nào xóa trạng thái checkbox tình huống; `startFormBody` là DOM tĩnh, `renderOverview()` (chạy mỗi 1s khi poll) không đụng tới nó. Không có lỗi ứng dụng tái hiện được → xác nhận lỗi chập chờn do script/môi trường (tranh tài nguyên Docker khi `lalahoa-db`, `aiops-demo-n8n-1`, `openmausbot-computer` chạy song song), không phải lỗi logic dashboard.
+- Sửa `tests/e2e/browser/dashboard.e2e.mjs`: tăng timeout `.check()`/`.uncheck()`/`.selectOption()` từ 5000ms → 15000ms, thêm `assert.ok(isChecked())` ngay sau mỗi lần tick để lộ sớm nếu không giữ trạng thái. Không sửa mã `app/web/`.
+- Tạm dừng `lalahoa-db` (DB thử local của LaLaHoa, không phải DB thật trên VPS) và `aiops-demo-n8n-1`, không đụng `openmausbot-computer`. Chạy `pytest` (441 passed/7 skipped) rồi `python tools/e2e/run_e2e.py` 3 lần liên tiếp: cả 3 lần API 7/7, restart OK, trình duyệt **9/9 PASS**. Bật lại 2 container ngay sau khi đo.
+- Build lại image, gắn tag `levelup-vmm-demo:baseline-v2` (ID `d041ad35b2a7`). Cập nhật `DEMO_TEST_REPORT.md`, `DEMO_PHASE_STATUS.md` (A0 → DONE), file này.
+- Log/ảnh: `latest_logs/a0-baseline-20261123/` (lần PARTIAL) và `latest_logs/a0-baseline-20261123/rerun2/run1-3.log` (3 lần đạt sau khi sửa).
+- DeepSeek thật: không gọi mới, sổ vẫn 1/2.
+- **Bước tiếp theo:** chờ chủ dự án quyết định mở A1 (nhật ký điều phối) và chốt 2 việc còn treo — ai được ủy quyền duyệt/dừng/mở lại và kích hoạt ký ức; ngưỡng dữ liệu đủ để kết luận (chốt ở F1, chưa cần ngay).
+
 ## Checkpoint 06/11/2026 — A0 PARTIAL: tài liệu xong, baseline bị chặn
 
 - Người dùng xác nhận đã hoàn thành UX và yêu cầu triển khai đúng A0. Không sửa app/, không nhảy A1.

@@ -46,32 +46,38 @@ async function startDemo(page, injections = []) {
   for (let i = 0; i < cbCount; i++) {
     const cb = checkboxes.nth(i);
     if (await cb.isChecked()) {
-      await cb.uncheck({ timeout: 5000 });
+      await cb.uncheck({ timeout: 15000 });
     }
   }
 
   // Ensure Mock mode radio is selected
   const mockRadio = formBody.locator('input[type="radio"][name="run_mode"][value="mock"]');
   if (!(await mockRadio.isChecked())) {
-    await mockRadio.check({ timeout: 5000 });
+    await mockRadio.check({ timeout: 15000 });
   }
 
   // Tick requested injections
   for (const rawInj of injections) {
     const inj = String(rawInj).trim();
     if (inj === 'bad_cost' || inj === 'publish_attempt') {
-      await formBody.locator(`input[data-inject-type="${inj}"]`).check({ timeout: 5000 });
+      const cb = formBody.locator(`input[data-inject-type="${inj}"]`);
+      await cb.check({ timeout: 15000 });
+      await assert.ok(await cb.isChecked(), `checkbox ${inj} did not stay checked after check()`);
     } else {
       const [prefix, taskKey] = inj.split(':');
       const cleanPrefix = prefix.replace(/:$/, '');
       if (taskKey) {
         const select = formBody.locator(`select[data-inject-select="${cleanPrefix}"]`);
-        await select.selectOption(taskKey, { timeout: 5000 });
+        await select.selectOption(taskKey, { timeout: 15000 });
       }
       const prefixCheckbox = formBody.locator(`input[data-inject-prefix="${cleanPrefix}"]`);
       if (!(await prefixCheckbox.isChecked())) {
-        await prefixCheckbox.check({ timeout: 5000 });
+        await prefixCheckbox.check({ timeout: 15000 });
       }
+      await assert.ok(
+        await prefixCheckbox.isChecked(),
+        `checkbox ${cleanPrefix} did not stay checked after check()`
+      );
     }
   }
 
@@ -143,7 +149,7 @@ async function main() {
   const results = [];
 
   const browser = await chromium.launch({
-    headless: true,
+    headless: true,
     executablePath: process.env.PW_EXECUTABLE_PATH || undefined,
     args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],
   });
@@ -222,6 +228,21 @@ async function main() {
           const summaryText = await summaryPanel.textContent();
           assert.ok(summaryText.includes('Giữ ở bản nháp'), 'Expected "Giữ ở bản nháp" in final summary');
           assert.ok(summaryText.includes('LU-PH-001'), 'Expected LU-PH-001 in final summary');
+
+          // A1: Nhật ký tab shows dispatch reasons for each hand-off.
+          await openTab(page, 'Nhật ký');
+          const logsPanel = page.locator('[data-tab-panel="logs"]');
+          await logsPanel.waitFor({ state: 'visible', timeout: 10000 });
+          await page.waitForFunction(
+            () => (document.querySelector('[data-tab-panel="logs"]')?.textContent || '').includes('Giao việc'),
+            null,
+            { timeout: 15000 }
+          );
+          const logsText = await logsPanel.textContent();
+          assert.ok(logsText.includes('Giao việc'), 'Expected "Giao việc" (dispatch) rows in the log');
+          assert.ok(logsText.includes('Kết quả giao việc'), 'Expected "Kết quả giao việc" (dispatch_result) rows in the log');
+          assert.ok(logsText.includes('sẵn sàng chạy ngay') || logsText.includes('Mọi phụ thuộc đã hoàn tất'),
+            'Expected a human-readable dispatch reason in the log');
         },
       },
       {

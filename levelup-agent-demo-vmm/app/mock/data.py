@@ -27,8 +27,9 @@ _MARKET_ALIASES = [
 ]
 
 
-def _extract_custom_product_name(objective: str) -> str:
-    # Look for explicit product name patterns in Vietnamese or English
+def _extract_custom_product_name(objective: str) -> tuple[str, bool]:
+    # Look for explicit product name patterns in Vietnamese or English. Second value says whether a
+    # pattern actually matched (True) or the generic fallback name was used (False, so A1 flags it for review).
     patterns = [
         r'(?:sản phẩm|bán thử|ra mắt|kinh doanh|mặt hàng)\s+([^,.;—\-]{4,55})',
         r'["“]([^"”]{4,55})["”]',
@@ -39,36 +40,72 @@ def _extract_custom_product_name(objective: str) -> str:
             cand = m.group(1).strip()
             cand = re.sub(r'\s+(?:tại|ở|với|ngân sách|giá|mục tiêu).*$', '', cand, flags=re.IGNORECASE).strip()
             if len(cand) >= 4:
-                return cand
-    return 'Máy pha cà phê cầm tay EspressoGo'
+                return cand, True
+    return 'Máy pha cà phê cầm tay EspressoGo', False
+
+
+def _is_default_objective(obj: str) -> bool:
+    if len(obj) < 28 or obj in _DEFAULT_OBJECTIVES:
+        return True
+    # Keep default fixtures if it's the standard Philippines bracelet prompt without custom product/market
+    return 'philippines' in obj.lower() and ('bracelet' in obj.lower() or 'vòng tay' in obj.lower()
+                                              or 'sản phẩm tiềm năng' in obj.lower())
+
+
+def _parse_objective(obj: str) -> dict:
+    """Pure parse of a validated custom objective string: values plus where each one came from
+    (extracted from the text, or a default guess that A1 flags as 'needs_review')."""
+    market_name, market_source = 'Đông Nam Á', 'default'
+    for pat, name in _MARKET_ALIASES:
+        if re.search(pat, obj, flags=re.IGNORECASE):
+            market_name, market_source = name, 'extracted'
+            break
+    prod_name, prod_matched = _extract_custom_product_name(obj)
+    price_match = re.search(r'giá(?:\s*bán|\s*dự kiến)?\s*(\d{3,5})', obj, flags=re.IGNORECASE)
+    budget_match = re.search(r'ngân\s*sách(?:\s*quảng\s*cáo|\s*thử\s*nghiệm)?\s*(\d{3,6})', obj, flags=re.IGNORECASE)
+    price = int(price_match.group(1)) if price_match else 1290
+    budget = int(budget_match.group(1)) if budget_match else 3500
+    sources = {
+        'market': market_source,
+        'product': 'extracted' if prod_matched else 'default',
+        'price': 'extracted' if price_match else 'default',
+        'budget': 'extracted' if budget_match else 'default',
+    }
+    currency_note = None
+    if market_name != 'Philippines':
+        currency_note = (f'Thị trường "{market_name}" chưa có dữ liệu tiền tệ riêng trong bản mô phỏng — '
+                          'mọi số tiền vẫn đang tính bằng PHP.')
+    return {'market': market_name, 'product': prod_name, 'price': price, 'budget': budget, 'sources': sources,
+            'needs_review': sorted(k for k, v in sources.items() if v == 'default'), 'currency_note': currency_note}
+
+
+_FIXTURE_SOURCES = {'sources': {'market': 'fixture', 'product': 'fixture', 'price': 'fixture', 'budget': 'fixture'},
+                    'needs_review': [], 'currency_note': None}
+
+
+def input_sources_for(objective: str | None) -> dict:
+    """Where each parsed-objective field came from (A1 dispatch log): sample fixture, extracted from the
+    operator's text, or a default guess (flagged in 'needs_review'). Pure; never mutates fixtures."""
+    if not objective or not isinstance(objective, str):
+        return _FIXTURE_SOURCES
+    obj = objective.strip()
+    if _is_default_objective(obj):
+        return _FIXTURE_SOURCES
+    parsed = _parse_objective(obj)
+    return {'sources': parsed['sources'], 'needs_review': parsed['needs_review'], 'currency_note': parsed['currency_note']}
 
 
 def _apply_custom_objective(facts: dict, objective: str | None) -> None:
     if not objective or not isinstance(objective, str):
         return
     obj = objective.strip()
-    if len(obj) < 28 or obj in _DEFAULT_OBJECTIVES:
-        return
-    # Keep default fixtures if it's the standard Philippines bracelet prompt without custom product/market
-    if 'philippines' in obj.lower() and ('bracelet' in obj.lower() or 'vòng tay' in obj.lower() or 'sản phẩm tiềm năng' in obj.lower()):
+    if _is_default_objective(obj):
         return
 
-    # 1. Detect target market
-    market_name = 'Đông Nam Á'
-    for pat, name in _MARKET_ALIASES:
-        if re.search(pat, obj, flags=re.IGNORECASE):
-            market_name = name
-            break
+    parsed = _parse_objective(obj)
+    market_name, prod_name, price, spend = parsed['market'], parsed['product'], parsed['price'], parsed['budget']
     facts['market']['market'] = market_name
     facts['market']['demand_signal'] = 'synthetic_high_growth'
-
-    # 2. Detect custom product name & price/budget overrides
-    prod_name = _extract_custom_product_name(obj)
-    price_match = re.search(r'giá(?:\s*bán|\s*dự kiến)?\s*(\d{3,5})', obj, flags=re.IGNORECASE)
-    budget_match = re.search(r'ngân\s*sách(?:\s*quảng\s*cáo|\s*thử\s*nghiệm)?\s*(\d{3,6})', obj, flags=re.IGNORECASE)
-
-    price = int(price_match.group(1)) if price_match else 1290
-    spend = int(budget_match.group(1)) if budget_match else 3500
     unit_cost = max(120, round(price * 0.35))
 
     # Update the 3 candidate SKUs to reflect the custom product line

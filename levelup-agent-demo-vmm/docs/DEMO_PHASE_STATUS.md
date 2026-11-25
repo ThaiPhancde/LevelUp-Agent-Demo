@@ -69,9 +69,9 @@ Còn lại, không chặn: 21 dòng `llm_calls` giả cũ (`run_id` rỗng) tron
 
 | Phase | Mục tiêu | Trạng thái |
 |---|---|---|
-| A0 | Chốt quyết định, tài liệu | PARTIAL |
-| A1 | Nhật ký điều phối | NOT_STARTED |
-| A2 | DB v3 | NOT_STARTED |
+| A0 | Chốt quyết định, tài liệu | **DONE** |
+| A1 | Nhật ký điều phối | **DONE** |
+| A2 | DB v3 | ĐANG SOẠN PHIẾU PHẠM VI |
 | A3 | Gateway chạy lại an toàn | NOT_STARTED |
 | A4 | Vòng làm lại | NOT_STARTED |
 | A5 | Phòng thảo luận | NOT_STARTED |
@@ -82,4 +82,6 @@ Còn lại, không chặn: 21 dòng `llm_calls` giả cũ (`run_id` rỗng) tron
 | A9 | Hoàn thiện dashboard và API | NOT_STARTED |
 | A10 | E2E và bàn giao | NOT_STARTED |
 
-A0: tài liệu hoàn tất; chưa có baseline mới và tag image vì Docker daemon không sẵn sàng. Xem checkpoint 06/11 trong HANDOFF.
+A0: hoàn tất 23/11/2026. Baseline mới đo lại 3 lần: pytest 441 passed/7 skipped, E2E API 7/7, restart OK, trình duyệt 9/9 (cả 3 lần). Sửa `tests/e2e/browser/dashboard.e2e.mjs` (timeout checkbox 5000ms → 15000ms, có kiểm tra ngay sau khi tick) sau khi xác nhận không có lỗi ứng dụng gây mất trạng thái tick. Image tag `levelup-vmm-demo:baseline-v2` (ID `d041ad35b2a7`). Xem `DEMO_TEST_REPORT.md` mục "A0 — mốc cơ sở 23/11/2026" và `DEMO_HANDOFF.md`.
+
+A1: Jarvis nghiệm thu 24/11/2026 (chưa commit); A2 được mở cùng ngày, đang soạn phiếu phạm vi. Mỗi lần giao việc (`dispatch`) và kết quả (`dispatch_result`) ghi vào `decision_log` kèm lý do (ví dụ "Mọi phụ thuộc đã hoàn tất: …", "Làm lại lần thử #2…"), không đổi schema DB. Mỗi trường objective nhập tay (market/product/price/budget) ghi rõ nguồn: `fixture` | `extracted` | `default` (default → `needs_review`); thị trường khác Philippines luôn kèm `currency_note` nói rõ vẫn tính bằng PHP. Tab "Nhật ký" trên web hiện cột "Lý do / Nguồn" và banner cảnh báo khi có `needs_review`/`currency_note`. Màn hình "bấm lùi" đầy đủ và bong bóng 3D lùi sang A9 theo phiếu đã duyệt; A1 chỉ bảo đảm API trả đủ liên kết (`tasks[].last_dispatch`, `inputs_from`). Test mới: `tests/test_dispatch.py` (9 test). Kiểm thử toàn luồng 3 lần: pytest 450 passed/7 skipped (trong container), E2E API 7/7, restart OK, trình duyệt 9/9 — cả 3 lần, không đụng `levelup-vmm-demo:baseline-v2` hay `openmausbot-computer`. Xem `DEMO_TEST_REPORT.md` mục "A1" và `DEMO_HANDOFF.md`.

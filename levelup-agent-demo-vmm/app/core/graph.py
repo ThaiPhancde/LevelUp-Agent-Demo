@@ -99,6 +99,19 @@ def next_ready(statuses: dict, graph: dict, soft=()):
     return None
 
 
+def dispatch_reason(key: str, graph: dict, soft=(), attempt: int = 1) -> str:
+    """Human-readable reason a task is dispatched now (A1 decision log). Pure; attempt>1 is a retry."""
+    if attempt > 1:
+        return f'Làm lại lần thử #{attempt} sau khi được retry.'
+    deps = graph[key]
+    if not deps:
+        return 'Không phụ thuộc task nào, sẵn sàng chạy ngay.'
+    listed = ', '.join(deps)
+    if key in soft:
+        return f'Task giám sát: mọi phụ thuộc đã kết thúc (hoàn tất/lỗi/bỏ qua): {listed}.'
+    return f'Mọi phụ thuộc đã hoàn tất: {listed}.'
+
+
 def run_status(statuses: dict) -> str:
     """Overall run status from task statuses (WAITING_APPROVAL is set by the approval flow, not here).
     Empty -> PENDING. Any RUNNING -> RUNNING. Any CANCELLED -> CANCELLED. All COMPLETED -> COMPLETED.

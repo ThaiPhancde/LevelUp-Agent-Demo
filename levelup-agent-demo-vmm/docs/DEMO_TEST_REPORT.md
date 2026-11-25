@@ -184,3 +184,31 @@ Lệnh cuối: `docker compose run --rm -T demo pytest -p no:cacheprovider -q` �
 - `tests/e2e/results/latest.json` có sẵn: ok=false, browser dock-and-viewport bị đóng page/context. Cần chạy lại trước kết luận hồi quy.
 - Tag `levelup-vmm-demo:baseline-v2`: chưa tạo. Không sửa code, không gọi DeepSeek, không xóa volume.
 - Tài liệu kiểm đủ 13 OA-D, 18 OA-M, 12 phase A (A8 tách a/b), sơ đồ TO-BE và bảng API đánh dấu kế hoạch. Gemini job api-plan exit 0, stray writes 0.
+
+## A0 — mốc cơ sở 23/11/2026 (ĐẠT, baseline-v2)
+
+Đo lại hoàn toàn, không dùng số cũ. Git HEAD `6a2eb56a4a214687c3f4f16c8bc9839dca137b92` (working tree chỉ có 2 tài liệu mới chưa track, không thay đổi mã khi bắt đầu).
+
+**Lần đo 16:26–16:41 (PARTIAL):** `docker compose run --rm -T demo pytest` → 441 passed, 7 skipped. E2E 2 lần: API 7/7 cả hai; restart OK; trình duyệt 8/9 rồi 7/9 — lỗi `locator.check` timeout chập chờn, mỗi lần ở ca khác nhau (qa-bad-cost, timeout-then-retry, publish-blocked). Ca `dock-and-viewport` (lỗi cũ 06/11) **đạt cả hai lần**. Kết luận ban đầu: nghi do tranh tài nguyên Docker với các container khác (`lalahoa-db`, `aiops-demo-n8n-1`, `openmausbot-computer`) chạy song song trên máy.
+
+**Điều tra nguyên nhân:** đọc `app/web/panels.js` và `app/web/main.js` — `startFormBody`/checkbox tình huống là DOM tĩnh, tạo một lần; `renderOverview()` (gọi lại mỗi 1s khi poll run) chỉ cập nhật số liệu/danh sách việc, không đụng tới `startFormBody` hay các checkbox; không có CSS transition trên `.start-form-body`/`.scenario-item` làm chậm hiển thị. Không tìm thấy lỗi tái hiện ở ứng dụng — xác nhận là **lỗi script/môi trường (Playwright flaky do tranh tài nguyên)**, không phải lỗi logic dashboard.
+
+**Sửa:** `tests/e2e/browser/dashboard.e2e.mjs` — tăng timeout các bước `.check()`/`.uncheck()`/`.selectOption()` từ 5000ms lên 15000ms, thêm `assert.ok(isChecked())` ngay sau mỗi `.check()` để phát hiện sớm nếu tick không giữ. Không sửa mã ứng dụng (`app/web/`).
+
+**Đo lại 17:0x–17:1x, dừng `lalahoa-db` và `aiops-demo-n8n-1` trước khi chạy (chỉ là DB thử cục bộ của LaLaHoa, không phải DB thật trên VPS; không đụng `openmausbot-computer`):**
+- `pytest` trong container: 441 passed, 7 skipped, 0 failed.
+- `python tools/e2e/run_e2e.py` chạy 3 lần liên tiếp, môi trường tách biệt (cổng 8090/8091, không đụng volume demo chính):
+
+| Lần | API | Restart | Trình duyệt (9 ca) |
+|---|---|---|---|
+| 1 | 7/7 | OK, COMPLETED | **9/9 PASS** |
+| 2 | 7/7 | OK, COMPLETED | **9/9 PASS** |
+| 3 | 7/7 | OK, COMPLETED | **9/9 PASS** |
+
+0 lời gọi DeepSeek thật cả 3 lần. 2 container đã dừng được bật lại ngay sau khi đo (`lalahoa-db`, `aiops-demo-n8n-1` đều `Up`).
+
+**Image:** build lại, ID `d041ad35b2a7`, gắn tag `levelup-vmm-demo:baseline-v2`.
+
+**Bằng chứng:** `latest_logs/a0-baseline-20261123/` (log lần đo 16:26 PARTIAL) và `latest_logs/a0-baseline-20261123/rerun2/run1.log`, `run2.log`, `run3.log` (3 lần đạt 9/9 sau khi sửa).
+
+**A0: DONE.**

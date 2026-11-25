@@ -96,6 +96,7 @@ def placeholder(ctx: Ctx) -> dict:
 
 def create_run(objective: str, mode: str = 'mock', inject=()) -> str:
     run_id = str(uuid.uuid4())
+    sources = data.input_sources_for(objective)
     with db.tx() as c:
         c.execute('INSERT INTO runs(run_id,objective,mode,status,inject,created_at) VALUES (?,?,?,?,?,?)',
                   (run_id, objective, mode, 'PENDING', json.dumps(list(inject)), db.now()))
@@ -103,7 +104,9 @@ def create_run(objective: str, mode: str = 'mock', inject=()) -> str:
             c.execute('INSERT INTO tasks(run_id,task_key,agent_id,status,depends_on) VALUES (?,?,?,?,?)',
                       (run_id, key, agent_id, g.PENDING, json.dumps(list(deps))))
         _decision(c, run_id, 'plan_tasks', 'plan', '01',
-                  detail={'objective': objective, 'mode': mode, 'inject': list(inject), 'graph': g.GRAPH})
+                  detail={'objective': objective, 'mode': mode, 'inject': list(inject), 'graph': g.GRAPH,
+                          'input_sources': sources['sources'], 'needs_review': sources['needs_review'],
+                          'currency_note': sources['currency_note']})
     db.log_event(run_id, 'Commander', 'run_started', {'objective': objective, 'mode': mode, 'inject': list(inject)})
     return run_id
 
@@ -138,9 +141,12 @@ async def execute(run_id: str) -> None:
                     break
                 attempt = c.execute('SELECT attempt FROM tasks WHERE run_id=? AND task_key=?',
                                     (run_id, key)).fetchone()[0] + 1
+                reason = g.dispatch_reason(key, g.GRAPH, g.SOFT, attempt)
                 if not _move(c, run_id, key, g.PENDING, g.RUNNING, attempt=attempt, started_at=db.now(),
                              finished_at=None, error=None):
                     continue
+                _decision(c, run_id, 'dispatch', key, g.TASKS[key][0],
+                          detail={'reason': reason, 'attempt': attempt, 'deps': g.GRAPH[key]})
                 inputs = {}
                 for dep in g.GRAPH[key]:
                     row = c.execute('SELECT a.payload FROM tasks t JOIN artifacts a ON a.artifact_id=t.artifact_id '
@@ -189,6 +195,8 @@ async def _run_task(ctx: Ctx) -> None:
             _decision(c, ctx.run_id, 'task_completed', ctx.task_key, ctx.agent_id, input_hash=input_hash,
                       output_ref=f'artifact:{art}', duration_ms=ms,
                       detail={'inputs_from': sorted(ctx.inputs), 'attempt': ctx.attempt})
+            _decision(c, ctx.run_id, 'dispatch_result', ctx.task_key, ctx.agent_id,
+                      detail={'outcome': 'done', 'attempt': ctx.attempt})
     db.log_event(ctx.run_id, ctx.agent_id, 'task_completed', {'task': ctx.task_key, 'artifact_id': art})
 
 
@@ -207,15 +215,20 @@ def _fail(ctx: Ctx, error: str, started: float, input_hash: str) -> None:
         if _move(c, ctx.run_id, ctx.task_key, g.RUNNING, g.FAILED, error=error, finished_at=db.now()):
             _decision(c, ctx.run_id, 'task_failed', ctx.task_key, ctx.agent_id, input_hash=input_hash,
                       duration_ms=ms, detail={'error': error, 'attempt': ctx.attempt})
+            _decision(c, ctx.run_id, 'dispatch_result', ctx.task_key, ctx.agent_id,
+                      detail={'outcome': 'failed', 'attempt': ctx.attempt})
     db.log_event(ctx.run_id, ctx.agent_id, 'task_failed', {'task': ctx.task_key, 'error': error})
 
 
 def _interrupt_orphans(c, run_id: str, reason: str) -> list:
     """Tasks still RUNNING with no executor (process stopping, or a crash) become FAILED so they can be retried."""
     hit = []
-    for key, st in _statuses(c, run_id).items():
+    for row in c.execute('SELECT task_key, status, attempt FROM tasks WHERE run_id=?', (run_id,)).fetchall():
+        key, st, attempt = row['task_key'], row['status'], row['attempt']
         if st == g.RUNNING and _move(c, run_id, key, g.RUNNING, g.FAILED, error=f'interrupted: {reason}', finished_at=db.now()):
             _decision(c, run_id, 'task_interrupted', key, g.TASKS[key][0], detail={'reason': reason})
+            _decision(c, run_id, 'dispatch_result', key, g.TASKS[key][0],
+                      detail={'outcome': 'interrupted', 'attempt': attempt})
             hit.append(key)
     return hit
 
@@ -332,6 +345,13 @@ def get_run(run_id: str) -> dict:
         engines = [{**dict(r), 'findings': json.loads(r['findings'])} for r in c.execute(
             'SELECT * FROM engine_results WHERE run_id=? ORDER BY id', (run_id,))]
         approvals = [dict(r) for r in c.execute('SELECT * FROM approvals WHERE run_id=? ORDER BY id', (run_id,))]
+        dispatch_rows = c.execute("SELECT task_key, detail, ts FROM decision_log WHERE run_id=? AND action='dispatch' "
+                                  'ORDER BY id', (run_id,)).fetchall()
+    last_dispatch = {}  # latest dispatch per task (a retry dispatches again); links each task back to its reason
+    for r in dispatch_rows:
+        last_dispatch[r['task_key']] = {**json.loads(r['detail']), 'ts': r['ts']}
+    for t in tasks:
+        t['last_dispatch'] = last_dispatch.get(t['task_key'])
     run['inject'] = json.loads(run['inject'])
     latest = {e['engine']: e for e in engines}  # newest per engine (a retry re-runs supervisors)
     return {'environment': 'MOCK_ONLY', 'run': run, 'tasks': tasks,

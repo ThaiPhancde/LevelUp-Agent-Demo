@@ -112,11 +112,16 @@ export function overviewCounts(run) {
 
 // Decision-log vocabulary (action codes and tool names -> what happened).
 export const ACTION_LABEL = {
-  plan_tasks: 'Lập kế hoạch', task_completed: 'Hoàn tất bước', task_failed: 'Bước bị lỗi', task_skipped: 'Bỏ qua bước',
+  plan_tasks: 'Lập kế hoạch', dispatch: 'Giao việc', dispatch_result: 'Kết quả giao việc',
+  task_completed: 'Hoàn tất bước', task_failed: 'Bước bị lỗi', task_skipped: 'Bỏ qua bước',
   task_retry: 'Thử lại bước', task_interrupted: 'Bước bị gián đoạn', tool_call: 'Gọi công cụ bên ngoài',
   engine_result: 'Kết quả kiểm tra', human_approval: 'Người duyệt quyết định', run_finished: 'Kết thúc lượt',
   run_cancelled: 'Hủy lượt', run_recovered: 'Khôi phục sau khi khởi động lại',
 };
+
+export const DISPATCH_OUTCOME_LABEL = { done: 'Hoàn tất', failed: 'Lỗi', interrupted: 'Bị gián đoạn' };
+
+export const INPUT_SOURCE_LABEL = { fixture: 'Dữ liệu mẫu', extracted: 'Trích từ câu lệnh', default: 'Giá trị mặc định' };
 
 export const TOOL_LABEL = {
   'meta_ads.create_draft': 'Tạo bản nháp quảng cáo', 'meta_ads.publish': 'Đăng quảng cáo thật',

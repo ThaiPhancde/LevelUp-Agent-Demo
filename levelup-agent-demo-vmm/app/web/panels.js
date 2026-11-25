@@ -1,4 +1,4 @@
-import { RUN_STATUS_LABEL, TASK_STATUS_LABEL, TASK_TITLE, AGENT_ROLE, SCENARIOS, SCENARIO_LABEL, RULE_LABEL, SEVERITY_LABEL, CHECK_STATUS_LABEL, ENGINE_LABEL, DECISION_LABEL, DECISION_HINT, LLM_SOURCE_LABEL, errorText, scenarioText, runTitle, formatTime, overviewCounts, ACTION_LABEL, TOOL_LABEL, APPROVAL_STATUS_LABEL } from './labels.js';
+import { RUN_STATUS_LABEL, TASK_STATUS_LABEL, TASK_TITLE, AGENT_ROLE, SCENARIOS, SCENARIO_LABEL, RULE_LABEL, SEVERITY_LABEL, CHECK_STATUS_LABEL, ENGINE_LABEL, DECISION_LABEL, DECISION_HINT, LLM_SOURCE_LABEL, errorText, scenarioText, runTitle, formatTime, overviewCounts, ACTION_LABEL, TOOL_LABEL, APPROVAL_STATUS_LABEL, DISPATCH_OUTCOME_LABEL, INPUT_SOURCE_LABEL } from './labels.js';
 
 const DEFAULT_OBJECTIVE =
   'Phân tích thị trường Philippines, chọn sản phẩm tiềm năng và lập chiến dịch bán hàng giả lập.';
@@ -1780,9 +1780,45 @@ export function createPanels(root, handlers = {}) {
   }
 
   // --- Tab 4: Nhật ký ---
+  function parseLogDetail(row) {
+    if (row && typeof row.detail === 'string') {
+      try { return JSON.parse(row.detail); } catch { return {}; }
+    }
+    return (row && row.detail) || {};
+  }
+
+  function reasonText(row) {
+    const act = row.action ?? row.event_type ?? '';
+    const detail = parseLogDetail(row);
+    if (act === 'dispatch' && detail.reason) return detail.reason;
+    if (act === 'dispatch_result' && detail.outcome) {
+      return `Kết quả: ${DISPATCH_OUTCOME_LABEL[detail.outcome] || detail.outcome} (lần thử ${detail.attempt ?? 1})`;
+    }
+    if (act === 'plan_tasks' && Array.isArray(detail.needs_review) && detail.needs_review.length) {
+      return `Giả định cần xem lại: ${detail.needs_review.join(', ')}`;
+    }
+    return '—';
+  }
+
   function renderDecisionLogTab() {
     const container = tabPanels.logs;
     clearChildren(container);
+
+    const planRow = state.decisionLogs.find((r) => (r.action ?? r.event_type) === 'plan_tasks');
+    const planDetail = planRow ? parseLogDetail(planRow) : {};
+    if (planDetail.currency_note || (Array.isArray(planDetail.needs_review) && planDetail.needs_review.length)) {
+      const bits = [];
+      if (planDetail.currency_note) bits.push(planDetail.currency_note);
+      if (Array.isArray(planDetail.needs_review) && planDetail.needs_review.length) {
+        const fields = planDetail.needs_review.map((k) => INPUT_SOURCE_LABEL[k] || k);
+        bits.push(`Giả định cần xem lại: ${planDetail.needs_review.join(', ')} (${fields.join(', ')} dùng giá trị mặc định).`);
+      }
+      container.appendChild(
+        h('div', { style: 'margin-bottom:8px;padding:6px 8px;border:1px solid var(--warn,#c99);border-radius:4px;'
+          + 'font-size:12px;color:var(--text,inherit);background:var(--warn-bg,rgba(255,180,0,.08));',
+          textContent: bits.join(' ') })
+      );
+    }
 
     const topRow = h(
       'div',
@@ -1809,7 +1845,7 @@ export function createPanels(root, handlers = {}) {
           'tr',
           {},
           h('td', {
-            colSpan: '6',
+            colSpan: '7',
             textContent: hasActiveRun
               ? 'Chưa có mục nhật ký nào cho lượt chạy này.'
               : 'Chưa chọn lượt chạy.',
@@ -1847,7 +1883,8 @@ export function createPanels(root, handlers = {}) {
             h('td', { title: String(agVal), textContent: roleText }),
             h('td', { title: String(actVal), textContent: actionText }),
             h('td', { title: String(toolVal), textContent: toolText }),
-            h('td', { title: String(row.allowed ?? row.decision ?? ''), textContent: allowedText })
+            h('td', { title: String(row.allowed ?? row.decision ?? ''), textContent: allowedText }),
+            h('td', { textContent: reasonText(row) })
           )
         );
       }
@@ -1868,7 +1905,8 @@ export function createPanels(root, handlers = {}) {
             h('th', { textContent: 'Vai trò' }),
             h('th', { textContent: 'Hoạt động' }),
             h('th', { textContent: 'Công cụ' }),
-            h('th', { textContent: 'Quyền thực thi' })
+            h('th', { textContent: 'Quyền thực thi' }),
+            h('th', { textContent: 'Lý do / Nguồn' })
           )
         ),
         tbody

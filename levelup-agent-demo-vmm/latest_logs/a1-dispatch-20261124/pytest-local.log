@@ -1,0 +1,27 @@
+sssssss................................................................. [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 47%]
+........................................................................ [ 63%]
+........................................................................ [ 78%]
+........................................................................ [ 94%]
+.........................                                                [100%]
+============================== warnings summary ===============================
+C:\Users\ADMIN\AppData\Local\Programs\Python\Python311\Lib\site-packages\requests\__init__.py:102
+  C:\Users\ADMIN\AppData\Local\Programs\Python\Python311\Lib\site-packages\requests\__init__.py:102: RequestsDependencyWarning: urllib3 (1.26.20) or chardet (5.2.0)/charset_normalizer (2.0.12) doesn't match a supported version!
+    warnings.warn("urllib3 ({}) or chardet ({})/charset_normalizer ({}) doesn't match a supported "
+
+C:\Users\ADMIN\AppData\Local\Programs\Python\Python311\Lib\site-packages\seleniumbase\plugins\pytest_plugin.py:2588
+  C:\Users\ADMIN\AppData\Local\Programs\Python\Python311\Lib\site-packages\seleniumbase\plugins\pytest_plugin.py:2588: PytestRemovedIn10Warning: The hookimpl pytest_runtest_makereport uses old-style configuration options (marks or attributes).
+  Please use the pytest.hookimpl(hookwrapper=True) decorator instead
+   to configure the hooks.
+   See https://docs.pytest.org/en/latest/deprecations.html#configuring-hook-specs-impls-using-markers
+    @pytest.mark.hookwrapper
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+450 passed, 7 skipped, 2 warnings in 17.95s
+C:\Users\ADMIN\AppData\Local\Programs\Python\Python311\Lib\site-packages\seleniumbase\plugins\pytest_plugin.py:1749: PytestRemovedIn10Warning: config.inicfg is deprecated, use config.getini() to access configuration values instead.
+See https://docs.pytest.org/en/stable/deprecations.html#config-inicfg
+  "addopts" in config.inicfg.keys()
+C:\Users\ADMIN\AppData\Local\Programs\Python\Python311\Lib\site-packages\seleniumbase\plugins\pytest_plugin.py:1762: PytestRemovedIn10Warning: config.inicfg is deprecated, use config.getini() to access configuration values instead.
+See https://docs.pytest.org/en/stable/deprecations.html#config-inicfg
+  "addopts" in config.inicfg.keys()
