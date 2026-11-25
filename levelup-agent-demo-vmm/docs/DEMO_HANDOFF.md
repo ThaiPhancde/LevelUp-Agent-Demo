@@ -2,6 +2,20 @@
 
 Trạng thái từng phase: `DEMO_PHASE_STATUS.md` (nguồn duy nhất). Checkpoint bên dưới là mốc lịch sử, mới nhất ở trên. Phiên sau bắt đầu bằng prompt ở `DEMO_PLAN.md` mục 9.
 
+## Checkpoint 25/11/2026 — A3 mở: phiếu phạm vi đã chốt
+
+- Sửa ngoài phạm vi trước khi mở: SeleniumBase cài global trên máy host tự nạp vào pytest và xóa sạch `latest_logs/` mỗi lần chạy (nguyên nhân log A1 mất ở checkpoint A2; làm mất luôn `latest_logs/a2-pre-migrate/demo.sqlite.bak`, file không có trong git). `pytest.ini`: `addopts = -p no:seleniumbase`, `testpaths = tests`. Commit `3f4e8f2` trên `phase-a2-db-v3`, đã push. Không để bản sao lưu trong `latest_logs/` nữa.
+- Nhánh `phase-a3-gateway-rerun` tách từ `3f4e8f2`.
+- **Phạm vi phần 1 (`DEMO_PLAN_OPTION_A.md` §7.2):** `gateway.execute(..., attempt)` lưu `attempt` + `action_hash` (sha256 JSON chuẩn hóa) trong `detail`, ghi `approvals.tool`; luôn gọi `audit.check_action` trước; dùng lại chỉ khi trùng `(run_id, task_key, tool, target, action_hash)` với dòng không BLOCK và trùng phán quyết → không tạo DRAFT/approval mới, vẫn ghi dòng `tool_call` mới chép đủ `detail` + `reused=true`; `workflow.tool_calls()` chỉ giữ lần thử hiện tại (thiếu `attempt` = 1). Test theo kế hoạch (ngưỡng 3000 qua monkeypatch), hồi quy retry, E2E giữ nguyên.
+- **Phạm vi phần 2 (chuyển từ A2, quyết định 24/11 trong `DEMO_KE_HOACH_NANG_CAP_4_MOC.md` mục 2):**
+  - Dừng khẩn: không dispatch task mới khi `system_stop.stopped=1` (task đang chạy được chạy xong, task chờ giữ PENDING, mở lại thì chạy tiếp). `POST /runs` khi đang dừng → **409** (chủ dự án chọn).
+  - Định danh: **token riêng mỗi người** (chủ dự án chọn). Header `Authorization: Bearer <token>`; env `OWNER_TOKEN` và danh sách người được ủy quyền tên:token, giới hạn `MAX_AUTHORIZED=3` (cấu hình, nâng được không sửa mã). Không token/sai → 401; đúng nhưng không đủ quyền → 403. Không ghi token vào log/DB, chỉ ghi tên.
+  - Quyền: người được ủy quyền duyệt/từ chối và dừng khẩn; chỉ chủ dự án mở lại. Quyết định ghi trước có hiệu lực, người sau nhận 409. `approvals.decided_by` và `system_stop.actor` = tên server suy ra từ token.
+  - Hệ quả cần xử lý trong A3: dashboard và E2E đang gọi approve/stop không có token → container E2E đặt token thử; dashboard hỏi token một lần khi gặp 401 và giữ trong `sessionStorage` (sửa tối thiểu, UI đầy đủ để A9).
+- **Gemini** (`ai-jobs/oa-a3`): bảng test cho bộ lọc theo lần thử (chỉ dữ liệu, Claude review).
+- Không làm: vòng làm lại (A4), UI ngoài phần token tối thiểu, không gọi DeepSeek thật.
+- **Bước tiếp theo:** triển khai A3 theo phiếu trên.
+
 ## Checkpoint 25/11/2026 — A2 đã nghiệm thu: DB v3, chốt dừng khẩn (chỉ lưu trữ)
 
 - Jarvis duyệt phiếu phạm vi A2 (gồm cả bảng `system_stop`/`system_stop_log` làm ngay trong A2) và cho commit/push A1 lên GitHub trước khi bắt đầu. Nhánh `phase-a2-db-v3` tách từ `phase-a1-dispatch` (`25ee168`). Jarvis nghiệm thu A2 ngày 25/11/2026, đã commit/push nhánh `phase-a2-db-v3`; A3 chưa mở.
@@ -11,7 +25,7 @@ Trạng thái từng phase: `DEMO_PHASE_STATUS.md` (nguồn duy nhất). Checkpo
 - Test mới `tests/test_db_migrate.py` (6 ca, xem `DEMO_TEST_REPORT.md` mục "A2"). Đo 3 lượt: `pytest` local 456 passed; `pytest` trong container 456 passed/7 skipped; `python tools/e2e/run_e2e.py` API 7/7 + restart OK + trình duyệt 9/9. 0 lời gọi DeepSeek thật. Không đụng `lalahoa-db`/`aiops-demo-n8n-1`/`openmausbot-computer`.
 - Log: `latest_logs/a2-db-v3-20261125/`. Cập nhật `DEMO_TEST_REPORT.md`, `DEMO_PHASE_STATUS.md` (A2 → DONE), file này.
 - Phát hiện ngoài phạm vi (đã sửa khi thấy, không phải lỗi do lượt này gây ra): các file log của A1 ở `latest_logs/a1-dispatch-20261124/` bị xóa khỏi working tree trước khi lượt A2 bắt đầu sửa gì — đã `git checkout --` khôi phục lại từ commit `25ee168`, chưa rõ nguyên nhân xóa.
-- **Bước tiếp theo:** chờ Jarvis nghiệm thu A2 rồi mở A3 (gateway chạy lại an toàn: `attempt`/`action_hash`, chặn dispatch mới khi `system_stop.stopped=1`, kiểm danh sách tối đa 3 người được ủy quyền).
+- **Bước tiếp theo (đã xong, xem checkpoint A3 mở):** mở A3 (gateway chạy lại an toàn: `attempt`/`action_hash`, chặn dispatch mới khi `system_stop.stopped=1`, kiểm danh sách tối đa 3 người được ủy quyền).
 
 ## Checkpoint 24/11/2026 — A1 Jarvis nghiệm thu: nhật ký điều phối có lý do
 
