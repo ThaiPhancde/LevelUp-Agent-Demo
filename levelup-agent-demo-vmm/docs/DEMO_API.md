@@ -36,6 +36,7 @@ Tài liệu tương tác đầy đủ (OpenAPI): `http://localhost:8088/docs`. M
 
 | Method | Đường dẫn | Mục đích | Mã lỗi |
 |---|---|---|---|
+| — | `POST /runs` thân thêm `max_rework` (A4) | Số vòng Commander được trả việc về sau QA/Audit, 0..2, mặc định 0 (hành vi cũ). `GET /runs/{id}` thêm `rework`: `requests` (vòng, task đích, phát hiện, phép kiểm, trạng thái OPEN/RESOLVED/EXHAUSTED/NO_CHANGE), `reworked_tasks`, `exhausted` | 422 khi ngoài 0..2 |
 | POST | `/admin/reset-demo` | Xóa toàn bộ run, task, artifact, nhật ký (giữ schema). Thân bắt buộc `{"confirm": true}` | 400 thiếu xác nhận; 409 còn run đang chạy |
 
 ## Tương thích cũ

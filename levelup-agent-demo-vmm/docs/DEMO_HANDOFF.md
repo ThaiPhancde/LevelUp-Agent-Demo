@@ -2,6 +2,15 @@
 
 Trạng thái từng phase: `DEMO_PHASE_STATUS.md` (nguồn duy nhất). Checkpoint bên dưới là mốc lịch sử, mới nhất ở trên. Phiên sau bắt đầu bằng prompt ở `DEMO_PLAN.md` mục 9.
 
+## Checkpoint 25/11/2026 — A4 đã nghiệm thu: vòng làm lại
+
+- Triển khai đúng phiếu "A4 mở" bên dưới trên nhánh `phase-a4-rework`. Chi tiết, 3 chỗ lệch đặc tả có lý do, số test: `DEMO_TEST_REPORT.md` mục "A4". Log: `latest_logs/a4-rework-20261125/`.
+- File đổi: `app/core/graph.py`, `app/agents/checks.py` (mới), `app/core/workflow.py`, `app/agents/__init__.py`, `app/engines/monitor.py`, `app/runs_api.py`; test `tests/test_rework.py` (mới), `tests/test_rework_plan_table.py` + `tests/test_checks_table.py` (Gemini), `ai-jobs/oa-a4/`.
+- Gemini chạy trên bản sao sạch trong scratchpad như A3 (lý do ở checkpoint A3).
+- Dashboard không đổi; `GET /runs/{id}` có thêm khóa `rework` để A9 vẽ.
+- Chủ dự án nghiệm thu 25/11/2026, đã commit/push nhánh `phase-a4-rework`.
+- **Bước tiếp theo:** mở A5 (phòng thảo luận) hoặc A8a (adapter).
+
 ## Checkpoint 25/11/2026 — A4 mở: phiếu phạm vi đã chốt
 
 - Nhánh `phase-a4-rework` tách từ `fd197b1` (A3 đã nghiệm thu, đã push).

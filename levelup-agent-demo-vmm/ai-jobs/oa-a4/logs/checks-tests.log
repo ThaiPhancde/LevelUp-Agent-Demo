@@ -1,0 +1,18 @@
+Completed [test_checks_table.py](file:///C:/Users/ADMIN/AppData/Local/Temp/claude/c5de980a4c9d07d1/89d2db05-5241-467d-8120-65e85bb8bc7e/scratchpad/gemini-a4/tests/test_checks_table.py) for [checks.py](file:///C:/Users/ADMIN/AppData/Local/Temp/claude/c5de980a4c9d07d1/89d2db05-5241-467d-8120-65e85bb8bc7e/scratchpad/gemini-a4/app/agents/checks.py) following [checks-tests.md](file:///C:/Users/ADMIN/AppData/Local/Temp/claude/c5de980a4c9d07d1/89d2db05-5241-467d-8120-65e85bb8bc7e/scratchpad/gemini-a4/ai-jobs/oa-a4/prompts/checks-tests.md).
+
+### Summary
+- **File created**: [test_checks_table.py](file:///C:/Users/ADMIN/AppData/Local/Temp/claude/c5de980a4c9d07d1/89d2db05-5241-467d-8120-65e85bb8bc7e/scratchpad/gemini-a4/tests/test_checks_table.py) (20 parametrized test cases across 4 test functions).
+- **Coverage**:
+  - `test_constants` (2 cases): Exact literal dictionary checks for `CHECKS` and `FIX`.
+  - `test_level` (5 cases): `verify_supplier_cost`, `drop_blocked_action` (with and without `<arg>`), and an unknown check returning `None`.
+  - `test_apply_facts` (7 cases): `9999 -> 180` replacement for `LU-PH-001`, already equal cost (`applied == []`), unknown SKU, SKU missing in current `facts`, artifact-level check ignored, two checks across two SKUs (`LU-PH-001` and `LU-PH-002`), custom `ref_facts` cost for `LU-PH-003`, and non-mutation verification via `copy.deepcopy`.
+  - `test_apply_artifact` (6 cases): Dropping `meta_ads.publish` while keeping `meta_ads.create_draft` (and `crm.reply_draft`), tool not present (`applied == []`), facts-level check ignored, missing `requested_actions` key, empty `requested_actions`, and non-mutation verification via `copy.deepcopy`.
+- **SUSPECTED BUGS**: None.
+
+### Verification
+- Command: `python -I ai-jobs/oa-a4/checker.py checks-tests .`
+- Output:
+  ```text
+  tests/test_checks_table.py: static cases 20, pytest: 20 passed in 0.48s
+  OK
+  ```

@@ -99,8 +99,11 @@ def next_ready(statuses: dict, graph: dict, soft=()):
     return None
 
 
-def dispatch_reason(key: str, graph: dict, soft=(), attempt: int = 1) -> str:
-    """Human-readable reason a task is dispatched now (A1 decision log). Pure; attempt>1 is a retry."""
+def dispatch_reason(key: str, graph: dict, soft=(), attempt: int = 1, rework: str | None = None) -> str:
+    """Human-readable reason a task is dispatched now (A1 decision log). Pure; attempt>1 is a retry,
+    unless `rework` (A4: the rules the Commander sent back, e.g. 'reference') says it is a rework."""
+    if rework:
+        return f'Làm lại theo yêu cầu của Commander (lần thử #{attempt}): {rework}.'
     if attempt > 1:
         return f'Làm lại lần thử #{attempt} sau khi được retry.'
     deps = graph[key]
@@ -148,3 +151,55 @@ def retry_plan(task: str, statuses: dict, graph: dict, soft=()) -> dict:
         if st == SKIPPED or (d in soft and st in (COMPLETED, FAILED)):
             changes[d] = PENDING
     return changes
+
+
+# ---- A4: rework loop (DEMO_PLAN_OPTION_A 7.2) -------------------------------------------------------
+
+MAX_REWORK_CEILING = 2
+
+
+def can_rework(task: str, src: str, dst: str) -> bool:
+    """The rework exception to TRANSITIONS: a COMPLETED business task is sent back to PENDING by the
+    Commander. Only COMPLETED -> PENDING, only BUSINESS tasks (soft tasks use can_rerun)."""
+    return task in BUSINESS and src == COMPLETED and dst == PENDING
+
+
+def rework_plan(findings: list, statuses: dict, rounds_used: int, graph: dict, soft=(), max_rework: int = 0,
+                fixable: dict | None = None):
+    """Pure. Decide whether the Commander sends work back before the Monitor runs.
+
+    findings: QA + Audit findings ({'rule', 'severity', 'task_key', 'detail', ...}).
+    fixable:  rule -> check name (app.agents.checks.FIX). A check is '<name>:<arg>' where arg is the first word
+              of the finding's detail (the SKU for `reference`, the tool for `blocked_action`).
+    Returns (plan, reason). plan is None, in this order of checks, with reason:
+      'business_task_not_completed'  a BUSINESS task is FAILED or SKIPPED (nothing to compare against)
+      'no_fail'                      no FAIL finding at all
+      'no_fixable_rule'              no FAIL finding on a BUSINESS task has a rule in `fixable`
+      'exhausted'                    rounds_used >= max_rework
+    Otherwise plan = {'target', 'findings', 'feedback', 'checks', 'changes', 'reason'}:
+      target    the earliest BUSINESS task (topo order) carrying a fixable FAIL
+      findings  every fixable FAIL finding (all tasks); feedback = those of the target
+      checks    sorted unique checks for `findings`
+      changes   {task: (COMPLETED, PENDING)} for the target, its COMPLETED descendants (business and soft)
+    """
+    fixable = fixable or {}
+    if any(statuses.get(t) in (FAILED, SKIPPED) for t in BUSINESS):
+        return None, 'business_task_not_completed'
+    fails = [f for f in findings if f.get('severity') == 'FAIL']
+    if not fails:
+        return None, 'no_fail'
+    fix = [f for f in fails if f.get('rule') in fixable and f.get('task_key') in BUSINESS]
+    if not fix:
+        return None, 'no_fixable_rule'
+    if rounds_used >= max_rework:
+        return None, 'exhausted'
+    order = topo_order(graph)
+    target = min({f['task_key'] for f in fix}, key=order.index)
+    # ponytail: the check argument is parsed from the finding text ("LU-PH-001 unit_cost_php ...",
+    # "meta_ads.publish by agent 06 ..."); give findings a structured `ref` field if more rules become fixable.
+    checks = sorted({f"{fixable[f['rule']]}:{str(f.get('detail', '')).split(' ', 1)[0]}" for f in fix})
+    changes = {t: (COMPLETED, PENDING) for t in [target, *sorted(descendants(target, graph), key=order.index)]
+               if statuses.get(t) == COMPLETED}
+    rules = sorted({f['rule'] for f in fix if f['task_key'] == target})
+    return ({'target': target, 'findings': fix, 'feedback': [f for f in fix if f['task_key'] == target],
+             'checks': checks, 'changes': changes, 'reason': f'{", ".join(rules)} tại {target}'}, 'planned')

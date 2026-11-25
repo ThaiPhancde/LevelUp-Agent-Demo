@@ -1,0 +1,3 @@
+{"event": "job", "id": "checks-tests", "mode": "write", "exit": 0, "seconds": 139.0, "timed_out": false, "error": null, "log_bytes": 1902, "check_exit": 0}
+{"event": "job", "id": "rework-plan-tests", "mode": "write", "exit": 0, "seconds": 165.4, "timed_out": false, "error": null, "log_bytes": 1980, "check_exit": 0}
+{"event": "run", "jobs": 2, "failed": 0, "failed_ids": [], "stray_writes": 0, "seconds": 168.0, "exit": 0}

@@ -274,3 +274,33 @@ Theo phiếu phạm vi đã chốt (checkpoint "A3 mở" trong `DEMO_HANDOFF.md`
 **Hạn chế đã biết:** dùng lại theo đúng đặc tả kể cả khi approval cũ đã bị từ chối (lần chạy lại giữ phán quyết cũ, không hỏi lại); hai action giống hệt trong cùng một lần thử cũng chỉ tạo một DRAFT. Container chính (8088) chưa tạo lại với image mới và `.env` chưa có `AUTH_*` → khi tạo lại phải thêm token thì nút Duyệt trên dashboard mới dùng được.
 
 **A3: chủ dự án nghiệm thu 25/11/2026.** Đã commit/push nhánh `phase-a3-gateway-rerun`, chưa mở A4.
+
+## A4 — Vòng làm lại (25/11/2026)
+
+Theo phiếu "A4 mở" trong `DEMO_HANDOFF.md`. Nhánh `phase-a4-rework` từ `fd197b1` (A3). Giao diện (3D tài liệu đỏ, bong bóng, ô `max_rework`) lùi sang A9 theo lựa chọn của chủ dự án.
+
+- `app/core/graph.py`: `MAX_REWORK_CEILING=2`; `can_rework()` (chỉ task nghiệp vụ, COMPLETED→PENDING); `rework_plan()` thuần, luôn trả `(plan, lý do)`: `business_task_not_completed` → `no_fail` → `no_fixable_rule` → `exhausted`, ngược lại `planned`. Đích là task nghiệp vụ sớm nhất có FAIL sửa được; `changes` = đích + hậu duệ đã COMPLETED (gồm qa/audit). `dispatch_reason(..., rework=...)` ghi "Làm lại theo yêu cầu của Commander". Không sửa `TRANSITIONS`, `retry()`, `retry_plan()`.
+- `app/agents/checks.py` (mới): `CHECKS`, `FIX` (QA `reference` → `verify_supplier_cost:<sku>`, cấp facts; Audit `blocked_action` → `drop_blocked_action:<tool>`, cấp artifact, không learnable); `apply_facts` / `apply_artifact` thuần, trả before/after.
+- `app/core/workflow.py`: móc ở điểm `next_ready == 'monitor'` khi `max_rework > 0` (`_rework_point`): chốt yêu cầu cũ (RESOLVED / NO_CHANGE), lập kế hoạch, ghi `rework_requests` + `rework_requested` (agent 01, `detail.rule`, `changes`, `feedback`), đặt lại task (`_move(..., rework=True)`). `rework_skipped` chỉ ghi khi có FAIL hoặc task nghiệp vụ FAILED/SKIPPED. `Ctx` thêm `feedback`, `memory`, `rework`, `checks`, `applied`. Phép kiểm cấp facts áp cho mọi task dựng sau khi có yêu cầu; `drop_blocked_action` chỉ cấp cho đúng task có phát hiện `blocked_action` của tool đó. `check_applied` ghi trong tx của `task_completed`. `evidence()['rework']`, `get_run()['rework']` (requests + `reworked_tasks` + `exhausted`).
+- `app/agents/__init__.py`: `compute()` gọi `apply_artifact` sau đoạn `publish_attempt`; `handle()` thêm `rework_feedback`, `checks_applied`; task làm lại luôn narrative mock.
+- `app/engines/monitor.py`: WARN `reworked` (attempt>1 và nằm trong `reworked_tasks`, còn lại vẫn `retried`), WARN `rework_exhausted`. `app/runs_api.py`: `max_rework` 0..2, ngoài miền 422.
+
+**Lệch so với đặc tả (có lý do):**
+- `verify_supplier_cost` lấy giá chuẩn từ `data.facts_for((), objective)` (đúng nguồn QA đang so), không phải `fixture('suppliers')`: với mục tiêu tùy chỉnh, `_apply_custom_objective` đổi giá nhà cung cấp, nên dùng fixture gốc sẽ "sửa" sai và QA vẫn FAIL.
+- `rework_plan` luôn trả tuple `(plan | None, lý do)` thay vì lúc dict lúc tuple; thêm lý do `no_fail` (không ghi `rework_skipped`).
+- Vòng làm lại đã đổi artifact nhưng còn FAIL: yêu cầu của vòng đó đóng `EXHAUSTED` (đã dùng vòng); việc cả vòng lặp hết lượt do `rework_skipped(reason='exhausted'|'no_change')` cho biết, Monitor đọc từ đó.
+
+**Test mới:**
+- `tests/test_rework.py` (20 ca, Claude): S6 `bad_cost` (QA FAIL→PASS, 1 vòng `product` RESOLVED, COMPLETED, HOLD_DRAFT, giá vốn 180 ở product và offer, Monitor `reworked`, `rework_requested.detail.rule='reference'`, 10 dispatch có lý do làm lại, `check_applied` 9999→180); 14 dispatch có lý do; `publish_attempt` (Audit FAIL→PASS, `campaign` bỏ `meta_ads.publish`, dòng BLOCK vẫn trong lịch sử, chỉ `campaign` nhận phép kiểm); `missing_field:offer` (FAILED, NEEDS_REVIEW, `rework_skipped(business_task_not_completed)`); run lành không có dòng làm lại; hai lần chạy cùng chuỗi decision_log; `max_rework=0` giữ S2/S3; retry vẫn `retried`; 422 cho 3 và -1; NO_CHANGE và EXHAUSTED (giả lập phép sửa hỏng) → `rework_exhausted`; `mode=llm` với client giả: task làm lại không thêm `llm_calls`; bảng Monitor retry + làm lại cùng run; phạm vi `drop_blocked_action`.
+- `tests/test_rework_plan_table.py` (48 ca) và `tests/test_checks_table.py` (20 ca), Gemini `ai-jobs/oa-a4`. Claude đọc từng ca; 0 sửa.
+- Kiểm test bắt lỗi thật: tắt từng cơ chế (móc làm lại, giới hạn phạm vi `drop_blocked_action`, ép mock khi làm lại, luật `reworked`, lưới NO_CHANGE, chọn đích) → mỗi lần đều có test đỏ. Ban đầu lỗi "bỏ giới hạn phạm vi" lọt, đã thêm test riêng.
+
+**Kết quả đo:**
+- `pytest` local: **595 passed, 7 skipped** (507 cũ + 20 + 48 + 20).
+- `docker compose run --rm -T demo pytest -p no:cacheprovider -q`: **595 passed, 7 skipped** — `latest_logs/a4-rework-20261125/pytest-container.log`.
+- `python tools/e2e/run_e2e.py` 3 lượt liên tiếp: lượt nào cũng API 7/7, restart OK, trình duyệt 9/9 — `e2e-run1.log`..`e2e-run3.log`. Dashboard không đổi nên 9 kịch bản trình duyệt cũ là đủ.
+- 0 lời gọi DeepSeek thật. Không đụng `lalahoa-db`/`aiops-demo-n8n-1`/`openmausbot-computer`.
+
+**Ngoài phạm vi / để sau:** giao diện làm lại (A9); ký ức `check` đã ghim trong `active_checks` (A6); phòng thảo luận (A5).
+
+**A4: chủ dự án nghiệm thu 25/11/2026.** Đã commit/push nhánh `phase-a4-rework`, chưa mở A5.

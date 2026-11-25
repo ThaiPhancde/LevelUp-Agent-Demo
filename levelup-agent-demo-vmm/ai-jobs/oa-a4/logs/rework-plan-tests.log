@@ -1,0 +1,10 @@
+Completed `oa-a4 / rework-plan-tests`.
+
+- **Created**: [test_rework_plan_table.py](file:///C:/Users/ADMIN/AppData/Local/Temp/claude/c5de980a4c9d07d1/89d2db05-5241-467d-8120-65e85bb8bc7e/scratchpad/gemini-a4/tests/test_rework_plan_table.py) covering [graph.py](file:///C:/Users/ADMIN/AppData/Local/Temp/claude/c5de980a4c9d07d1/89d2db05-5241-467d-8120-65e85bb8bc7e/scratchpad/gemini-a4/app/core/graph.py) A4 functions (`can_rework`, `rework_plan`, `MAX_REWORK_CEILING`, and `dispatch_reason(..., rework=...)`) with 48 parametrized table cases:
+  - `test_can_rework` (24 cases): `COMPLETED -> PENDING` allowed for all 9 `BUSINESS` tasks; refused for `plan`, all 4 `SOFT` tasks (`qa`, `audit`, `monitor`, `summary`), and non-`COMPLETED -> PENDING` state pairs.
+  - `test_rework_plan_none` (11 cases): `(None, reason)` precedence order (`business_task_not_completed` > `no_fail` > `no_fixable_rule` > `exhausted`), including `FAILED`/`SKIPPED` business tasks, empty/WARN-only findings, unfixable rules (`schema`, `arithmetic`, `not_via_gateway`), non-business `task_key` (`plan`, `qa`), and `rounds_used >= max_rework` / `max_rework == 0`.
+  - `test_rework_plan_planned` (8 cases): `(plan, 'planned')` for `reference` on `product` & `offer` (deduplicated check, target `product`), `blocked_action` on `campaign`, combined `reference` + `blocked_action` (earliest topo target, sorted checks, target-only `feedback` vs all-fixable `findings`), ignored WARN/unfixable findings, multi-SKU/second rework round (`MAX_REWORK_CEILING`), downstream targets (`care`, `finance`), and excluding `PENDING` descendants (`monitor`, `summary`).
+  - `test_dispatch_reason_rework` (5 cases): `dispatch_reason` formatting with `rework` reason and attempt number vs retry and normal dispatch.
+- **Verification**:
+  - `python -I ai-jobs/oa-a4/checker.py rework-plan-tests .` -> `tests/test_rework_plan_table.py: static cases 48, pytest: 48 passed in 0.07s` (`OK`, exit code 0).
+- **SUSPECTED BUGS**: None.

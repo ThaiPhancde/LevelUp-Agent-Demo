@@ -73,7 +73,7 @@ Còn lại, không chặn: 21 dòng `llm_calls` giả cũ (`run_id` rỗng) tron
 | A1 | Nhật ký điều phối | **DONE** |
 | A2 | DB v3 | DONE |
 | A3 | Gateway chạy lại an toàn | **DONE** |
-| A4 | Vòng làm lại | **IN_PROGRESS** |
+| A4 | Vòng làm lại | **DONE** |
 | A5 | Phòng thảo luận | NOT_STARTED |
 | A6 | Ký ức: lưu và đọc | NOT_STARTED |
 | A7 | Tự học | NOT_STARTED |
@@ -90,4 +90,4 @@ A2: Jarvis nghiệm thu 25/11/2026, đã commit/push nhánh `phase-a2-db-v3`. Ph
 
 A3: mở 25/11/2026, nhánh `phase-a3-gateway-rerun` tách từ `phase-a2-db-v3` (`3f4e8f2`, đã push). Phiếu phạm vi đã chốt: xem checkpoint 25/11/2026 "A3 mở" trong `DEMO_HANDOFF.md`. Triển khai xong cùng ngày: gateway dùng lại kết quả khi chạy lại (`attempt`/`action_hash`), Audit chỉ xét lần thử hiện tại, dừng khẩn chặn giao việc mới + `POST /runs` 409, token riêng mỗi người (tối đa 3 người được ủy quyền, chỉ chủ dự án mở lại). pytest 507 passed/7 skipped; E2E API 7/7 + restart + trình duyệt 9/9. Xem `DEMO_TEST_REPORT.md` mục "A3". Chủ dự án nghiệm thu 25/11/2026, đã commit/push nhánh `phase-a3-gateway-rerun`; A4 chưa mở.
 
-A4: mở 25/11/2026, nhánh `phase-a4-rework` tách từ `phase-a3-gateway-rerun` (`fd197b1`). Phiếu phạm vi: checkpoint "A4 mở" trong `DEMO_HANDOFF.md`. Chưa sửa code.
+A4: mở 25/11/2026, nhánh `phase-a4-rework` tách từ `phase-a3-gateway-rerun` (`fd197b1`). Phiếu phạm vi: checkpoint "A4 mở" trong `DEMO_HANDOFF.md`. Triển khai xong cùng ngày: Commander trả việc sau QA/Audit (tối đa `max_rework` vòng, 0..2), sửa tất định bằng `checks.FIX` (giá vốn theo báo giá chuẩn, bỏ hành động bị chặn), Monitor `reworked`/`rework_exhausted`. pytest 595 passed/7 skipped. Xem `DEMO_TEST_REPORT.md` mục "A4". Chủ dự án nghiệm thu 25/11/2026, đã commit/push nhánh `phase-a4-rework`; A5 chưa mở.

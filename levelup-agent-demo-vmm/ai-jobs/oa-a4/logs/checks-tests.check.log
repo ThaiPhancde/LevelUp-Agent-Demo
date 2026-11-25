@@ -1,0 +1,2 @@
+tests/test_checks_table.py: static cases 20, pytest: 20 passed in 0.15s
+OK

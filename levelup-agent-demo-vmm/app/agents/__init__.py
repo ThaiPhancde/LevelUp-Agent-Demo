@@ -9,8 +9,8 @@ Error injection (DEMO_ONLY P5), from the run's `inject` list:
 """
 import asyncio
 
-from app.agents import business, supervisors
-from app.agents.narrate import narrate
+from app.agents import business, checks, supervisors
+from app.agents.narrate import mock_narrative, narrate
 from app.core import artifacts, gateway
 from app.core.graph import GRAPH
 from app.core.registry import AGENTS
@@ -37,6 +37,9 @@ def compute(ctx, run_artifacts=None) -> dict:
         art = _SIMPLE[key](ctx.facts, ctx.inputs)
         if key == 'campaign' and 'publish_attempt' in ctx.inject:
             art['requested_actions'].append({'tool': 'meta_ads.publish', 'target': art['campaign_id']})
+        art, applied = checks.apply_artifact(art, getattr(ctx, 'checks', ()))  # A4: e.g. drop a blocked action
+        if applied:
+            art['checks_applied'] = applied
         return art
     if key == 'summary':
         return business.summary(ctx.objective, run_artifacts)
@@ -68,11 +71,20 @@ async def handle(ctx) -> dict:
     if art.get('requested_actions'):
         art['action_results'] = [gateway.execute(ctx.run_id, ctx.task_key, ctx.agent_id, a, ctx.attempt)
                                  for a in art['requested_actions']]
+    applied = list(getattr(ctx, 'applied', ())) + art.pop('checks_applied', [])
+    if applied:
+        art['checks_applied'] = applied  # split off and logged as check_applied by the workflow
+    if getattr(ctx, 'feedback', ()):
+        art['rework_feedback'] = list(ctx.feedback)
     if _injected(ctx, 'missing_field'):
         field = next(f for f in artifacts.SPEC[art['type']] if f not in _COMMON)
         art.pop(field, None)
-    text, source = ('', 'mock') if _injected(ctx, 'empty_response') else \
-        await narrate(ctx, ctx.task_key, AGENTS[ctx.agent_id], art)
+    if _injected(ctx, 'empty_response'):
+        text, source = '', 'mock'
+    elif getattr(ctx, 'rework', False):  # A4: reworked tasks never spend LLM budget
+        text, source = mock_narrative(ctx.task_key, art), 'mock'
+    else:
+        text, source = await narrate(ctx, ctx.task_key, AGENTS[ctx.agent_id], art)
     if not (text or '').strip():
         raise ValueError('empty narrative (agent returned no text)')
     art['narrative'], art['narrative_source'] = text, source

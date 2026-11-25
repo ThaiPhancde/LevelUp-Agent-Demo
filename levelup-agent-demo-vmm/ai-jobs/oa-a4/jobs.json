@@ -1,0 +1,6 @@
+[{"id": "rework-plan-tests", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/rework-plan-tests.md",
+  "allowed_paths": ["tests/test_rework_plan_table.py"],
+  "check": ["python", "-I", "ai-jobs/oa-a4/checker.py", "rework-plan-tests", "."], "timeout_s": 1500},
+ {"id": "checks-tests", "mode": "write", "model": "gemini-4-argon-high", "prompt_file": "prompts/checks-tests.md",
+  "allowed_paths": ["tests/test_checks_table.py"],
+  "check": ["python", "-I", "ai-jobs/oa-a4/checker.py", "checks-tests", "."], "timeout_s": 1500}]

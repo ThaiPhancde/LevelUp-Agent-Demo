@@ -3,7 +3,9 @@
 evidence = {'tasks': [{task_key, status, attempt, error}], 'llm': {calls, tokens, errors},
             'narrative_sources': {task_key: 'mock'|'llm'|'mock_budget'}}
 Rules: timeout (FAIL) · empty_response (FAIL) · task_failed (FAIL) · skipped (WARN) · retried (WARN) ·
-       llm_errors (WARN) · token_budget (WARN, LLM budget exhausted and mock text used)
+       llm_errors (WARN) · token_budget (WARN, LLM budget exhausted and mock text used) ·
+       reworked (WARN, attempt>1 and sent back by the Commander: evidence['rework']['reworked_tasks'];
+       any other attempt>1 stays `retried`) · rework_exhausted (WARN, the rework loop stopped without a fix)
 """
 from app.core.graph import BUSINESS
 
@@ -25,6 +27,8 @@ def classify(error: str | None) -> str:
 
 def run(evidence: dict) -> dict:
     findings = []
+    rework = evidence.get('rework') or {}
+    reworked = set(rework.get('reworked_tasks') or ())
     for t in evidence['tasks']:
         if t['task_key'] not in WATCHED:
             continue
@@ -33,7 +37,10 @@ def run(evidence: dict) -> dict:
         elif t['status'] == 'SKIPPED':
             findings.append(_f('skipped', t['task_key'], t.get('error') or 'skipped', 'WARN'))
         elif t['status'] == 'COMPLETED' and t['attempt'] > 1:
-            findings.append(_f('retried', t['task_key'], f'completed on attempt {t["attempt"]}', 'WARN'))
+            rule = 'reworked' if t['task_key'] in reworked else 'retried'
+            findings.append(_f(rule, t['task_key'], f'completed on attempt {t["attempt"]}', 'WARN'))
+    if rework.get('exhausted'):
+        findings.append(_f('rework_exhausted', None, 'rework loop stopped without fixing every FAIL', 'WARN'))
     llm = evidence.get('llm', {})
     if llm.get('errors'):
         findings.append(_f('llm_errors', None, f'{llm["errors"]} failed LLM call(s)', 'WARN'))

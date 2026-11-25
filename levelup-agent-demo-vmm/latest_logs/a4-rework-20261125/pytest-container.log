@@ -1,0 +1,18 @@
+ Container levelup-vmm-demo-demo-run-10055232cfd9 Creating 
+ Container levelup-vmm-demo-demo-run-10055232cfd9 Created 
+sssssss................................................................. [ 11%]
+........................................................................ [ 23%]
+........................................................................ [ 35%]
+........................................................................ [ 47%]
+........................................................................ [ 59%]
+........................................................................ [ 71%]
+........................................................................ [ 83%]
+........................................................................ [ 95%]
+..........................                                               [100%]
+=============================== warnings summary ===============================
+../usr/local/lib/python3.12/site-packages/starlette/testclient.py:37
+  /usr/local/lib/python3.12/site-packages/starlette/testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+595 passed, 7 skipped, 1 warning in 13.35s

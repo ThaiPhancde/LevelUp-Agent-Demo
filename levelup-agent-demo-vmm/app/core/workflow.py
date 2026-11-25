@@ -15,6 +15,7 @@ from dataclasses import dataclass
 
 from app import db
 from app.core import artifacts as schemas
+from app.agents import checks as fixes
 from app.core import graph as g
 from app.mock import data
 
@@ -43,6 +44,11 @@ class Ctx:
     attempt: int
     facts: dict   # run-scoped mock data, injections applied
     inputs: dict  # dep task_key -> upstream artifact payload
+    feedback: tuple = ()  # A4: findings the Commander sent back to this task (display + artifact only)
+    memory: tuple = ()    # A6
+    rework: bool = False  # A4: dispatched by the rework loop -> narrative is always mock
+    checks: tuple = ()    # A4: artifact-level checks for this task (checks.apply_artifact)
+    applied: tuple = ()   # A4: facts-level checks already applied to `facts` (recorded as check_applied)
 
 
 def task_timeout(mode: str = 'mock') -> float:
@@ -79,9 +85,11 @@ def _statuses(c, run_id) -> dict:
     return {r['task_key']: r['status'] for r in c.execute('SELECT task_key,status FROM tasks WHERE run_id=?', (run_id,))}
 
 
-def _move(c, run_id, key, src, dst, **fields) -> bool:
-    """Conditional task transition; False when another writer moved it first."""
-    if not (g.can_transition(src, dst) or g.can_rerun(key, src, dst, g.SOFT)):
+def _move(c, run_id, key, src, dst, rework=False, **fields) -> bool:
+    """Conditional task transition; False when another writer moved it first. Only the rework loop passes
+    rework=True, which also allows a COMPLETED business task back to PENDING (g.can_rework)."""
+    if not (g.can_transition(src, dst) or g.can_rerun(key, src, dst, g.SOFT)
+            or (rework and g.can_rework(key, src, dst))):
         raise WorkflowError(409, f'task {key}: {src} -> {dst} not allowed')
     sets = ', '.join(['status=?'] + [f'{k}=?' for k in fields])
     cur = c.execute(f'UPDATE tasks SET {sets} WHERE run_id=? AND task_key=? AND status=?',
@@ -99,17 +107,18 @@ def placeholder(ctx: Ctx) -> dict:
 
 # ---- run lifecycle --------------------------------------------------------------------------------
 
-def create_run(objective: str, mode: str = 'mock', inject=()) -> str:
+def create_run(objective: str, mode: str = 'mock', inject=(), max_rework: int = 0) -> str:
     run_id = str(uuid.uuid4())
     sources = data.input_sources_for(objective)
     with db.tx() as c:
-        c.execute('INSERT INTO runs(run_id,objective,mode,status,inject,created_at) VALUES (?,?,?,?,?,?)',
-                  (run_id, objective, mode, 'PENDING', json.dumps(list(inject)), db.now()))
+        c.execute('INSERT INTO runs(run_id,objective,mode,status,inject,created_at,max_rework) VALUES (?,?,?,?,?,?,?)',
+                  (run_id, objective, mode, 'PENDING', json.dumps(list(inject)), db.now(), max_rework))
         for key, (agent_id, deps) in g.TASKS.items():
             c.execute('INSERT INTO tasks(run_id,task_key,agent_id,status,depends_on) VALUES (?,?,?,?,?)',
                       (run_id, key, agent_id, g.PENDING, json.dumps(list(deps))))
         _decision(c, run_id, 'plan_tasks', 'plan', '01',
-                  detail={'objective': objective, 'mode': mode, 'inject': list(inject), 'graph': g.GRAPH,
+                  detail={'objective': objective, 'mode': mode, 'inject': list(inject), 'max_rework': max_rework,
+                          'graph': g.GRAPH,
                           'input_sources': sources['sources'], 'needs_review': sources['needs_review'],
                           'currency_note': sources['currency_note']})
     db.log_event(run_id, 'Commander', 'run_started', {'objective': objective, 'mode': mode, 'inject': list(inject)})
@@ -161,22 +170,33 @@ async def execute(run_id: str) -> None:
                 key = g.next_ready(st, g.GRAPH, g.SOFT)
                 if key is None:
                     break
+                if key == 'monitor' and run['max_rework'] and _rework_point(c, run_id, run, st):
+                    continue  # work was sent back: dispatch the target first
                 attempt = c.execute('SELECT attempt FROM tasks WHERE run_id=? AND task_key=?',
                                     (run_id, key)).fetchone()[0] + 1
-                reason = g.dispatch_reason(key, g.GRAPH, g.SOFT, attempt)
+                rw = _open_rework(c, run_id)
+                in_rework = bool(rw and key in rw['changes'])
+                reason = g.dispatch_reason(key, g.GRAPH, g.SOFT, attempt, rw['reason'] if in_rework else None)
                 if not _move(c, run_id, key, g.PENDING, g.RUNNING, attempt=attempt, started_at=db.now(),
                              finished_at=None, error=None):
                     continue
                 _decision(c, run_id, 'dispatch', key, g.TASKS[key][0],
-                          detail={'reason': reason, 'attempt': attempt, 'deps': g.GRAPH[key]})
+                          detail={'reason': reason, 'attempt': attempt, 'deps': g.GRAPH[key],
+                                  **({'rework_round': rw['round']} if in_rework else {})})
                 inputs = {}
                 for dep in g.GRAPH[key]:
                     row = c.execute('SELECT a.payload FROM tasks t JOIN artifacts a ON a.artifact_id=t.artifact_id '
                                     'WHERE t.run_id=? AND t.task_key=?', (run_id, dep)).fetchone()
                     if row is not None:  # a soft task may start with failed/skipped deps: only real artifacts are handed on
                         inputs[dep] = json.loads(row['payload'])
-                ctx = Ctx(run_id, key, g.TASKS[key][0], run['objective'], run['mode'], json.loads(run['inject']),
-                          attempt, data.facts_for(json.loads(run['inject']), run['objective']), inputs)
+                inject = json.loads(run['inject'])
+                fact_checks, art_checks = _run_checks(c, run_id)
+                facts, applied = fixes.apply_facts(data.facts_for(inject, run['objective']), fact_checks,
+                                                   data.facts_for((), run['objective']))
+                ctx = Ctx(run_id, key, g.TASKS[key][0], run['objective'], run['mode'], inject, attempt, facts, inputs,
+                          feedback=tuple(rw['feedback']) if in_rework and key == rw['target'] else (),
+                          rework=in_rework, checks=tuple(art_checks.get(key, ())),
+                          applied=tuple(applied) if key in g.BUSINESS else ())
             if step_delay(ctx.mode):
                 await asyncio.sleep(step_delay(ctx.mode))  # task shows RUNNING meanwhile
             await _run_task(ctx)
@@ -197,6 +217,7 @@ async def _run_task(ctx: Ctx) -> None:
             result = await asyncio.wait_for(result, timeout=task_timeout(ctx.mode))
         if not isinstance(result, dict) or not result.get('type'):
             raise ValueError('agent returned no artifact (dict with "type" required)')
+        applied = result.pop('checks_applied', None) or []
         errors = schemas.validate(result) if result['type'] in schemas.SPEC else []
         if errors:
             _store_invalid(ctx, result, errors)
@@ -217,6 +238,9 @@ async def _run_task(ctx: Ctx) -> None:
             _decision(c, ctx.run_id, 'task_completed', ctx.task_key, ctx.agent_id, input_hash=input_hash,
                       output_ref=f'artifact:{art}', duration_ms=ms,
                       detail={'inputs_from': sorted(ctx.inputs), 'attempt': ctx.attempt})
+            for item in applied:
+                _decision(c, ctx.run_id, 'check_applied', ctx.task_key, ctx.agent_id, output_ref=f'artifact:{art}',
+                          detail={**item, 'attempt': ctx.attempt})
             _decision(c, ctx.run_id, 'dispatch_result', ctx.task_key, ctx.agent_id,
                       detail={'outcome': 'done', 'attempt': ctx.attempt})
     db.log_event(ctx.run_id, ctx.agent_id, 'task_completed', {'task': ctx.task_key, 'artifact_id': art})
@@ -367,6 +391,8 @@ def get_run(run_id: str) -> dict:
         engines = [{**dict(r), 'findings': json.loads(r['findings'])} for r in c.execute(
             'SELECT * FROM engine_results WHERE run_id=? ORDER BY id', (run_id,))]
         approvals = [dict(r) for r in c.execute('SELECT * FROM approvals WHERE run_id=? ORDER BY id', (run_id,))]
+        rework = [{**dict(r), **{k: json.loads(r[k]) for k in ('source_result_ids', 'findings', 'checks')}}
+                  for r in c.execute('SELECT * FROM rework_requests WHERE run_id=? ORDER BY round', (run_id,))]
         dispatch_rows = c.execute("SELECT task_key, detail, ts FROM decision_log WHERE run_id=? AND action='dispatch' "
                                   'ORDER BY id', (run_id,)).fetchall()
     last_dispatch = {}  # latest dispatch per task (a retry dispatches again); links each task back to its reason
@@ -378,7 +404,8 @@ def get_run(run_id: str) -> dict:
     latest = {e['engine']: e for e in engines}  # newest per engine (a retry re-runs supervisors)
     return {'environment': 'MOCK_ONLY', 'run': run, 'tasks': tasks,
             'llm': {'calls': llm[0], 'tokens': llm[1], 'cost_est': llm[2]},
-            'engines': latest, 'approvals': approvals}
+            'engines': latest, 'approvals': approvals,
+            'rework': {'requests': rework, **rework_summary(run_id)}}
 
 
 def completed_artifacts(run_id: str) -> dict:
@@ -451,7 +478,8 @@ def evidence(run_id: str) -> dict:
     order = {k: i for i, k in enumerate(g.TASKS)}
     tasks.sort(key=lambda t: order[t['task_key']])
     sources = {k: a.get('narrative_source') for k, a in completed_artifacts(run_id).items()}
-    return {'tasks': tasks, 'llm': {'calls': llm[0], 'tokens': llm[1], 'errors': llm[2]}, 'narrative_sources': sources}
+    return {'tasks': tasks, 'llm': {'calls': llm[0], 'tokens': llm[1], 'errors': llm[2]}, 'narrative_sources': sources,
+            'rework': rework_summary(run_id)}
 
 
 def list_runs(limit: int = 50) -> list:
@@ -467,6 +495,127 @@ def table(run_id: str, name: str) -> list:
     with db.tx() as c:
         _get_run_row(c, run_id)
         return [dict(r) for r in c.execute(f'SELECT * FROM {name} WHERE run_id=? ORDER BY id', (run_id,))]
+
+
+# ---- A4: rework loop (DEMO_PLAN_OPTION_A 7.2) ---------------------------------------------------------
+# Volatile fields left out of the NO_CHANGE hash: they change on every run without the work changing.
+VOLATILE = ('narrative', 'narrative_source', 'rework_feedback', 'memory_notes', 'action_results', 'memory_used',
+            'checks_applied')
+
+
+def _target_hash(c, run_id, task_key):
+    row = c.execute('SELECT a.payload FROM tasks t JOIN artifacts a ON a.artifact_id=t.artifact_id '
+                    'WHERE t.run_id=? AND t.task_key=?', (run_id, task_key)).fetchone()
+    payload = json.loads(row['payload']) if row else {}
+    return _hash({k: v for k, v in payload.items() if k not in VOLATILE})
+
+
+def _latest_engines(c, run_id) -> dict:
+    out = {}
+    for r in c.execute("SELECT id, engine, status, findings FROM engine_results WHERE run_id=? AND engine IN ('qa','audit') "
+                       'ORDER BY id', (run_id,)):
+        out[r['engine']] = {'id': r['id'], 'status': r['status'], 'findings': json.loads(r['findings'])}
+    return out
+
+
+def _open_rework(c, run_id):
+    """The OPEN rework request of the run with the plan it was made from (changes, feedback), or None."""
+    req = c.execute("SELECT * FROM rework_requests WHERE run_id=? AND status='OPEN' ORDER BY round DESC LIMIT 1",
+                    (run_id,)).fetchone()
+    if req is None:
+        return None
+    row = c.execute("SELECT detail FROM decision_log WHERE run_id=? AND action='rework_requested' ORDER BY id DESC LIMIT 1",
+                    (run_id,)).fetchone()
+    plan = json.loads(row['detail']) if row else {}
+    return {'round': req['round'], 'target': req['target_task'], 'changes': plan.get('changes', []),
+            'feedback': plan.get('feedback', []), 'reason': plan.get('reason', '')}
+
+
+def _run_checks(c, run_id):
+    """(facts-level checks, {task_key: artifact-level checks}) from every rework request of this run.
+    drop_blocked_action:<tool> is only given to the task whose own blocked_action finding named that tool."""
+    fact_checks, art_checks = set(), {}
+    for r in c.execute('SELECT findings, checks FROM rework_requests WHERE run_id=?', (run_id,)):
+        fact_checks |= {ch for ch in json.loads(r['checks']) if fixes.level(ch) == 'facts'}
+        for f in json.loads(r['findings']):
+            if f.get('rule') == 'blocked_action':
+                ch = f"{fixes.FIX['blocked_action']}:{str(f.get('detail', '')).split(' ', 1)[0]}"
+                art_checks.setdefault(f['task_key'], set()).add(ch)
+    return sorted(fact_checks), {k: sorted(v) for k, v in art_checks.items()}
+
+
+def _resolved(req, engines) -> bool:
+    """RESOLVED: for each source finding, the newest result of the same engine has no FAIL with the same
+    (rule, task_key) and that engine's status is not FAIL. Leftover WARNs do not block."""
+    for f in json.loads(req['findings']):
+        e = engines.get(f.get('engine'))
+        if e is None or e['status'] == 'FAIL' or any(
+                x['severity'] == 'FAIL' and x['rule'] == f['rule'] and x['task_key'] == f['task_key'] for x in e['findings']):
+            return False
+    return True
+
+
+def _close(c, run_id, req, status):
+    c.execute('UPDATE rework_requests SET status=?, resolved_at=? WHERE id=?', (status, db.now(), req['id']))
+
+
+def _rework_point(c, run_id, run, st) -> bool:
+    """Decision point: QA and Audit are done, the Monitor has not run. Settle the previous request, then maybe
+    send work back. True when tasks were re-armed (the caller loops to dispatch them)."""
+    engines = _latest_engines(c, run_id)
+    reqs = c.execute('SELECT * FROM rework_requests WHERE run_id=? ORDER BY round', (run_id,)).fetchall()
+    last = reqs[-1] if reqs else None
+    unresolved = None
+    if last is not None and last['status'] == 'OPEN':
+        if _resolved(last, engines):
+            _close(c, run_id, last, 'RESOLVED')
+            _decision(c, run_id, 'rework_resolved', last['target_task'], '01', detail={'round': last['round']})
+        elif _target_hash(c, run_id, last['target_task']) == last['prev_hash']:
+            _close(c, run_id, last, 'NO_CHANGE')  # safety net: the rework produced the same artifact
+            _decision(c, run_id, 'rework_skipped', last['target_task'], '01',
+                      detail={'reason': 'no_change', 'round': last['round']})
+            return False
+        else:
+            unresolved = last
+    findings = [{**f, 'engine': name} for name in ('qa', 'audit') if name in engines for f in engines[name]['findings']]
+    plan, reason = g.rework_plan(findings, st, len(reqs), g.GRAPH, g.SOFT, run['max_rework'], fixes.FIX)
+    if unresolved is not None:
+        # ponytail: a round that changed the artifact but left a FAIL is closed EXHAUSTED (its round is spent);
+        # whether the whole loop is exhausted is told by rework_skipped(reason='exhausted'), see rework_summary().
+        _close(c, run_id, unresolved, 'EXHAUSTED')
+    if plan is None:
+        if reason != 'no_fail':  # a healthy run gets no rework rows at all
+            _decision(c, run_id, 'rework_skipped', None, '01', detail={'reason': reason, 'rounds_used': len(reqs)})
+        return False
+    target, rnd = plan['target'], len(reqs) + 1
+    c.execute('INSERT INTO rework_requests(run_id,round,target_task,agent_id,source_result_ids,findings,checks,status,'
+              'prev_hash,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)',
+              (run_id, rnd, target, g.TASKS[target][0], json.dumps(sorted(e['id'] for e in engines.values())),
+               json.dumps(plan['findings'], ensure_ascii=False), json.dumps(plan['checks']), 'OPEN',
+               _target_hash(c, run_id, target), db.now()))
+    for key, (src, dst) in plan['changes'].items():
+        _move(c, run_id, key, src, dst, rework=True, error=None, finished_at=None)
+    _decision(c, run_id, 'rework_requested', target, '01',
+              detail={'round': rnd, 'target': target, 'agent_id': g.TASKS[target][0],
+                      'rule': ', '.join(sorted({f['rule'] for f in plan['feedback']})), 'reason': plan['reason'],
+                      'changes': list(plan['changes']), 'checks': plan['checks'],
+                      'feedback': [{k: f[k] for k in ('rule', 'task_key', 'detail', 'engine')} for f in plan['feedback']]})
+    return True
+
+
+def rework_summary(run_id: str) -> dict:
+    """For the Monitor and get_run: tasks sent back by the rework loop, and whether it stopped without fixing."""
+    with db.tx() as c:
+        rows = c.execute("SELECT action, detail FROM decision_log WHERE run_id=? "
+                         "AND action IN ('rework_requested','rework_skipped') ORDER BY id", (run_id,)).fetchall()
+    reworked, exhausted = set(), False
+    for r in rows:
+        d = json.loads(r['detail'] or '{}')
+        if r['action'] == 'rework_requested':
+            reworked |= set(d.get('changes', []))
+        elif d.get('reason') in ('exhausted', 'no_change'):
+            exhausted = True
+    return {'reworked_tasks': sorted(reworked), 'exhausted': exhausted}
 
 
 # Child-before-parent so `PRAGMA foreign_keys = ON` doesn't block the delete.

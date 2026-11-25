@@ -108,6 +108,9 @@ Câu nào chưa trả lời thì dùng giá trị mặc định ghi trong bảng
 | OA-D14 | Định danh người duyệt/dừng/mở lại (A3, chốt 25/11/2026) | Token riêng mỗi người (`Authorization: Bearer`), cấu hình `AUTH_OWNER` / `AUTH_DELEGATES` / `AUTH_MAX_DELEGATES=3`; server suy ra tên, chỉ lưu tên. Không cấu hình = không ai thao tác được |
 | OA-D15 | Tạo run mới khi đang dừng khẩn (A3, chốt 25/11/2026) | Từ chối 409. Run đang chạy: không giao task mới, task chờ giữ PENDING, mở lại thì chạy tiếp |
 
+| OA-D16 | Giao diện của vòng làm lại (A4, chốt 25/11/2026) | Lùi sang A9 như A1: 3D tài liệu đỏ + bong bóng "Làm lại: <luật>" + dấu tích, ô `max_rework` (mặc định 2 theo OA-D02). A4 chỉ trả dữ liệu qua `GET /runs/{id}` |
+| OA-D17 | Giá chuẩn khi `verify_supplier_cost` (A4, 25/11/2026) | Dùng `data.facts_for((), objective)` — cùng nguồn QA so — thay vì `fixture('suppliers')`, để mục tiêu tùy chỉnh không bị sửa về giá mặc định |
+
 ### 17.2 Mặc định kỹ thuật (OA-M), ràng buộc với agent lập trình
 
 | Mã | Mặc định |

@@ -19,6 +19,7 @@ class RunRequest(BaseModel):
                            min_length=1, max_length=600)
     mode: Literal['mock', 'llm', 'deepseek'] = 'mock'
     inject: list[str] = Field(default_factory=list, max_length=10)
+    max_rework: int = Field(0, ge=0, le=g.MAX_REWORK_CEILING)  # A4: out of range -> 422, never clamped
 
     @field_validator('inject')
     @classmethod
@@ -42,7 +43,7 @@ async def create_run(req: RunRequest, wait: bool = False):
     stop = db.get_stop_state()
     if stop['stopped']:
         raise HTTPException(409, f'emergency stop is on (by {stop["actor"]}): no new runs until the owner resumes')
-    run_id = wf.create_run(req.objective, norm_mode, req.inject)
+    run_id = wf.create_run(req.objective, norm_mode, req.inject, req.max_rework)
     if wait:
         await wf.execute(run_id)
         return wf.get_run(run_id)

@@ -10,3 +10,4 @@
 
 | A0 | 2026-11-06 | Khung bảng endpoint kế hoạch DEMO_API.md | 1 | gemini-4-argon-high, write | 120.4 s | Review đối chiếu §8.1; đánh dấu chưa triển khai | 0 | 0 | Baseline Docker chưa chạy được |
 | A3 | 2026-11-25 | oa-a3: test bảng `gateway.action_hash` / `reusable` / `current_attempt` (31 ca) | 1 | gemini-4-argon-high, write | 248 s | checker 0; pytest toàn bộ 507 passed local | 0 | 1 sửa chữ: tool `pancake.create_draft` không có trong demo → `crm.reply_draft` | Chạy trên bản sao sạch trong scratchpad thay vì `_gemini-work` (thư mục đó bị repo gốc theo dõi và đã cũ). Không có nghi vấn |
+| A4 | 2026-11-25 | oa-a4: test bảng `can_rework` / `rework_plan` / `dispatch_reason(rework)` (48 ca), `checks` (20 ca) | 2 | gemini-4-argon-high, write | 168 s (song song) | checker 0 ×2; pytest toàn bộ 595 passed local | 0 | 0 sửa. Bảng `checks` tự đặt giá LU-PH-002/003 (mỗi ca có tham chiếu riêng, không sai) | Bản sao sạch trong scratchpad như A3. Không có nghi vấn |
