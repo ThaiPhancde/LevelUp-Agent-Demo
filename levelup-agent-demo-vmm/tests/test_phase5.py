@@ -112,6 +112,8 @@ async def test_empty_response_fails_task_and_monitor_flags_it(client):
 
 async def test_human_in_the_loop_parks_draft_above_threshold_until_approved(client, monkeypatch):
     monkeypatch.setenv('APPROVAL_THRESHOLD_PHP', '3000')
+    monkeypatch.setenv('AUTH_DELEGATES', 'an:an-token-0123456789')  # A3: deciding needs a personal token
+    client.headers['Authorization'] = 'Bearer an-token-0123456789'
     body = await run(client)
     rid = body['run']['run_id']
     assert body['run']['status'] == 'WAITING_APPROVAL' and body['run']['finished_at'] is None
@@ -120,7 +122,7 @@ async def test_human_in_the_loop_parks_draft_above_threshold_until_approved(clie
     assert body['engines']['audit']['status'] == 'WARN' and rules(body, 'audit') == {'pending_approval'}
     assert (await client.post(f'/runs/{rid}/approvals/{appr["id"]}', json={'decision': 'MAYBE'})).status_code == 422
     resp = (await client.post(f'/runs/{rid}/approvals/{appr["id"]}', json={'decision': 'APPROVED'})).json()
-    assert resp['run_status'] == 'COMPLETED'
+    assert resp['run_status'] == 'COMPLETED' and resp['decided_by'] == 'an'
     assert (await client.post(f'/runs/{rid}/approvals/{appr["id"]}', json={'decision': 'APPROVED'})).status_code == 409
 
 

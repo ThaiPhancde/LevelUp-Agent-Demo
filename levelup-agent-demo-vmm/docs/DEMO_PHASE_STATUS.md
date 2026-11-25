@@ -72,7 +72,7 @@ Còn lại, không chặn: 21 dòng `llm_calls` giả cũ (`run_id` rỗng) tron
 | A0 | Chốt quyết định, tài liệu | **DONE** |
 | A1 | Nhật ký điều phối | **DONE** |
 | A2 | DB v3 | DONE |
-| A3 | Gateway chạy lại an toàn | **IN_PROGRESS** |
+| A3 | Gateway chạy lại an toàn | **DONE** |
 | A4 | Vòng làm lại | NOT_STARTED |
 | A5 | Phòng thảo luận | NOT_STARTED |
 | A6 | Ký ức: lưu và đọc | NOT_STARTED |
@@ -88,4 +88,4 @@ A1: Jarvis nghiệm thu 24/11/2026, đã commit/push nhánh `phase-a1-dispatch` 
 
 A2: Jarvis nghiệm thu 25/11/2026, đã commit/push nhánh `phase-a2-db-v3`. Phiếu phạm vi Jarvis duyệt 25/11/2026 (kèm bảng `system_stop`/`system_stop_log` làm ngay trong A2, commit A1 lên GitHub trước khi bắt đầu A2). Nhánh `phase-a2-db-v3` từ `phase-a1-dispatch`. Bản sao DB trước migration (`latest_logs/a2-pre-migrate/demo.sqlite.bak`) giữ trên máy, không đưa vào git. `app/db.py` `SCHEMA_VERSION=3`: `ALTER` có điều kiện (`runs.max_rework/rooms/use_memory/memory_ids`, `approvals.tool/decided_by`) cho volume v2 cũ, cộng bảng mới cho rework/phòng/ký ức/đề xuất học/kênh adapter (chỉ tạo khung, logic để các phase sau) và `system_stop`/`system_stop_log` (có logic `get_stop_state`/`set_stop` ngay, vì A3 cần dùng). `app/core/workflow.py` mở rộng `RESET_TABLES`, `reset_demo(include_memory=False)` giữ ký ức + hết hạn đề xuất mở, `include_memory=True` xóa ký ức (chỉ DB thử); `learning_meta`/`system_stop*` không bao giờ bị reset. `app/runs_api.py` thêm `include_memory` vào `/admin/reset-demo` và `GET/POST /admin/stop`, `POST /admin/resume` (mới chỉ lưu trữ, chưa chặn dispatch — để A3). Không đổi UI/`graph.py`/`mock/data.py`. Test mới `tests/test_db_migrate.py` (6 test). Kiểm thử toàn luồng: pytest 456 passed/7 skipped (local + trong container), E2E API 7/7, restart OK, trình duyệt 9/9 — 0 lời gọi DeepSeek thật, không đụng `lalahoa-db`/`aiops-demo-n8n-1`/`openmausbot-computer`. Xem `DEMO_TEST_REPORT.md` mục "A2" và `DEMO_HANDOFF.md`. A3 chưa mở.
 
-A3: mở 25/11/2026, nhánh `phase-a3-gateway-rerun` tách từ `phase-a2-db-v3` (`3f4e8f2`, đã push). Phiếu phạm vi đã chốt: xem checkpoint 25/11/2026 "A3 mở" trong `DEMO_HANDOFF.md`. Chưa sửa code.
+A3: mở 25/11/2026, nhánh `phase-a3-gateway-rerun` tách từ `phase-a2-db-v3` (`3f4e8f2`, đã push). Phiếu phạm vi đã chốt: xem checkpoint 25/11/2026 "A3 mở" trong `DEMO_HANDOFF.md`. Triển khai xong cùng ngày: gateway dùng lại kết quả khi chạy lại (`attempt`/`action_hash`), Audit chỉ xét lần thử hiện tại, dừng khẩn chặn giao việc mới + `POST /runs` 409, token riêng mỗi người (tối đa 3 người được ủy quyền, chỉ chủ dự án mở lại). pytest 507 passed/7 skipped; E2E API 7/7 + restart + trình duyệt 9/9. Xem `DEMO_TEST_REPORT.md` mục "A3". Chủ dự án nghiệm thu 25/11/2026, đã commit/push nhánh `phase-a3-gateway-rerun`; A4 chưa mở.

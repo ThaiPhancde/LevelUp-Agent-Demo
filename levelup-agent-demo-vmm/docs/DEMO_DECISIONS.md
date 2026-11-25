@@ -105,6 +105,9 @@ Câu nào chưa trả lời thì dùng giá trị mặc định ghi trong bảng
 | OA-D12 | Thêm inject `delegate_attempt` để trình diễn bot ngoài bị BLOCK? | Không; test gọi gateway trực tiếp |
 | OA-D13 | Ai được duyệt ký ức? | Chỉ con người: web hoặc thẻ mock với quyền owner (theo `ROLES`). Không có route thêm ký ức tay; test gọi `memory.activate()` trực tiếp |
 
+| OA-D14 | Định danh người duyệt/dừng/mở lại (A3, chốt 25/11/2026) | Token riêng mỗi người (`Authorization: Bearer`), cấu hình `AUTH_OWNER` / `AUTH_DELEGATES` / `AUTH_MAX_DELEGATES=3`; server suy ra tên, chỉ lưu tên. Không cấu hình = không ai thao tác được |
+| OA-D15 | Tạo run mới khi đang dừng khẩn (A3, chốt 25/11/2026) | Từ chối 409. Run đang chạy: không giao task mới, task chờ giữ PENDING, mở lại thì chạy tiếp |
+
 ### 17.2 Mặc định kỹ thuật (OA-M), ràng buộc với agent lập trình
 
 | Mã | Mặc định |

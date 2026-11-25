@@ -11,7 +11,10 @@ Tài liệu tương tác đầy đủ (OpenAPI): `http://localhost:8088/docs`. M
 | GET | `/runs/{run_id}` | Xem lại run: `run`, 14 `tasks` kèm `artifact`, `engines` (kết quả mới nhất của qa/audit/monitor), `approvals`, `llm` (số lời gọi, token, chi phí ước tính). Chỉ đọc DB, không chạy agent, không gọi LLM | 404 |
 | POST | `/runs/{run_id}/cancel` | Hủy run đang PENDING/RUNNING/WAITING_APPROVAL; task đang chạy được chạy xong, task còn lại CANCELLED, yêu cầu duyệt đang chờ bị từ chối | 404; 409 run đã kết thúc |
 | POST | `/runs/{run_id}/tasks/{task_key}/retry` | Chạy lại một task FAILED; task SKIPPED phía sau và các task giám sát chạy lại; artifact cũ của task đã xong giữ nguyên. `?wait=true` như trên | 404 task lạ; 409 run không FAILED hoặc task không FAILED |
-| POST | `/runs/{run_id}/approvals/{approval_id}` | Người duyệt hành động bị giữ (HITL). Thân `{"decision": "APPROVED"\|"REJECTED"}`. Hết yêu cầu chờ thì run WAITING_APPROVAL → COMPLETED | 422 decision lạ; 409 đã quyết hoặc không có |
+| POST | `/runs/{run_id}/approvals/{approval_id}` | Người duyệt hành động bị giữ (HITL). Thân `{"decision": "APPROVED"\|"REJECTED"}`. Cần `Authorization: Bearer <token>` của chủ dự án hoặc người được ủy quyền (A3); trả `decided_by`. Hết yêu cầu chờ thì run WAITING_APPROVAL → COMPLETED | 401 thiếu/sai token; 422 decision lạ; 409 đã quyết hoặc không có |
+| GET | `/admin/stop` | Trạng thái dừng khẩn (ai bấm, lý do, lúc nào) | — |
+| POST | `/admin/stop` | Dừng khẩn (A3): không giao task mới, `POST /runs` trả 409. Thân `{"reason": "…"}`. Token chủ dự án hoặc người được ủy quyền | 401; 403 |
+| POST | `/admin/resume` | Mở lại sau dừng khẩn; run đang chờ chạy tiếp. Chỉ token chủ dự án | 401; 403 |
 | GET | `/runs/{run_id}/decision-log` | Nhật ký quyết định: lập kế hoạch, bàn giao (`input_hash`, `inputs_from`), lời gọi công cụ (`tool`, `permission`, `allowed`), kết quả engine, retry, hủy, duyệt | 404 |
 | GET | `/runs/{run_id}/llm-calls` | Từng lời gọi DeepSeek: model, token vào/ra, `finish_reason`, độ trễ, trạng thái (kể cả lỗi HTTP/timeout), chi phí ước tính | 404 |
 

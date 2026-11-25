@@ -3,9 +3,10 @@ import os
 import re
 from typing import Literal
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field, field_validator
 
+from app import auth, db
 from app.core import graph as g
 from app.core import workflow as wf
 
@@ -38,6 +39,9 @@ async def create_run(req: RunRequest, wait: bool = False):
     key = os.getenv('DEEPSEEK_API_KEY', '')
     if norm_mode == 'llm' and (not key or key == 'PUT_YOUR_KEY_HERE'):
         raise HTTPException(400, 'Missing DEEPSEEK_API_KEY. Use mode="mock" or configure .env.')
+    stop = db.get_stop_state()
+    if stop['stopped']:
+        raise HTTPException(409, f'emergency stop is on (by {stop["actor"]}): no new runs until the owner resumes')
     run_id = wf.create_run(req.objective, norm_mode, req.inject)
     if wait:
         await wf.execute(run_id)
@@ -85,10 +89,12 @@ class ApprovalRequest(BaseModel):
 
 
 @router.post('/runs/{run_id}/approvals/{approval_id}')
-def decide(run_id: str, approval_id: int, req: ApprovalRequest):
+def decide(run_id: str, approval_id: int, req: ApprovalRequest,
+           actor: str = Depends(auth.require(auth.OWNER, auth.DELEGATE))):
+    """Owner or an authorized person; the first decision wins, a later one gets 409."""
     try:
-        return {'run_id': run_id, 'approval_id': approval_id,
-                'run_status': wf.decide_approval(run_id, approval_id, req.decision)}
+        return {'run_id': run_id, 'approval_id': approval_id, 'decided_by': actor,
+                'run_status': wf.decide_approval(run_id, approval_id, req.decision, actor)}
     except wf.WorkflowError as exc:
         raise _http(exc)
 
@@ -134,20 +140,17 @@ class StopRequest(BaseModel):
 
 @router.get('/admin/stop', tags=['admin'])
 def get_stop():
-    """Current emergency-stop state (A2: storage only — A3 enforces who may call this and blocks dispatch)."""
-    from app import db
+    """Current emergency-stop state (open to read)."""
     return db.get_stop_state()
 
 
 @router.post('/admin/stop', tags=['admin'])
-def post_stop(req: StopRequest):
-    """Set the emergency stop (A2: storage only, no auth/dispatch-blocking yet — that is A3's scope)."""
-    from app import db
-    return db.set_stop(True, actor='user', reason=req.reason)
+def post_stop(req: StopRequest, actor: str = Depends(auth.require(auth.OWNER, auth.DELEGATE))):
+    """Owner or an authorized person. Running runs finish their current task, then dispatch nothing new."""
+    return db.set_stop(True, actor=actor, reason=req.reason)
 
 
 @router.post('/admin/resume', tags=['admin'])
-def post_resume(req: StopRequest):
-    """Clear the emergency stop (A2: storage only — A3 restricts this to Jarvis)."""
-    from app import db
-    return db.set_stop(False, actor='user', reason=req.reason)
+def post_resume(req: StopRequest, actor: str = Depends(auth.require(auth.OWNER))):
+    """Project owner only (decision 24/11/2026). Paused runs carry on."""
+    return db.set_stop(False, actor=actor, reason=req.reason)

@@ -66,7 +66,7 @@ async def handle(ctx) -> dict:
     else:
         art = compute(ctx, workflow.completed_artifacts(ctx.run_id) if ctx.task_key == 'summary' else None)
     if art.get('requested_actions'):
-        art['action_results'] = [gateway.execute(ctx.run_id, ctx.task_key, ctx.agent_id, a)
+        art['action_results'] = [gateway.execute(ctx.run_id, ctx.task_key, ctx.agent_id, a, ctx.attempt)
                                  for a in art['requested_actions']]
     if _injected(ctx, 'missing_field'):
         field = next(f for f in artifacts.SPEC[art['type']] if f not in _COMMON)

@@ -2,6 +2,15 @@
 
 Trạng thái từng phase: `DEMO_PHASE_STATUS.md` (nguồn duy nhất). Checkpoint bên dưới là mốc lịch sử, mới nhất ở trên. Phiên sau bắt đầu bằng prompt ở `DEMO_PLAN.md` mục 9.
 
+## Checkpoint 25/11/2026 — A3 đã nghiệm thu: gateway chạy lại an toàn, dừng khẩn, token
+
+- Triển khai đúng phiếu "A3 mở" bên dưới trên nhánh `phase-a3-gateway-rerun`. Chi tiết, số test, hạn chế: `DEMO_TEST_REPORT.md` mục "A3". Log: `latest_logs/a3-gateway-20261125/`.
+- File đổi: `app/core/gateway.py`, `app/core/workflow.py` (`tool_calls`, dừng trong `execute`, `decide_approval(actor)`), `app/agents/__init__.py`, `app/auth.py` (mới), `app/runs_api.py`, `app/main.py` (kiểm cấu hình khi khởi động), `app/web/main.js`, `.env.example`, `tests/test_phase5.py`, `tests/test_a3_gateway_stop.py` (mới), `tests/test_gateway_attempt_table.py` (Gemini), `ai-jobs/oa-a3/`.
+- Gemini: không chạy trong `_gemini-work` vì thư mục đó đang bị repo gốc theo dõi (128 file) và đã cũ so với code (`.git` của nó bị đổi thành `.git.bak`). Thay bằng bản sao sạch có git riêng trong scratchpad của phiên (cùng nguyên tắc: Gemini làm trên bản sao, runner kiểm ghi lạc = 0, Claude nghiệm thu rồi mới chép về). Nên dọn `_gemini-work` khỏi git ở một lượt riêng.
+- **Việc của chủ dự án trước khi tạo lại container chính:** thêm `AUTH_OWNER` (và `AUTH_DELEGATES` nếu cần) vào `.env`, token ≥ 16 ký tự. Thiếu thì app vẫn chạy nhưng không ai bấm Duyệt/Dừng được.
+- Chủ dự án nghiệm thu 25/11/2026, đã commit/push nhánh `phase-a3-gateway-rerun`.
+- **Bước tiếp theo:** mở A4 (vòng làm lại) hoặc A8a (adapter, làm song song được sau A3).
+
 ## Checkpoint 25/11/2026 — A3 mở: phiếu phạm vi đã chốt
 
 - Sửa ngoài phạm vi trước khi mở: SeleniumBase cài global trên máy host tự nạp vào pytest và xóa sạch `latest_logs/` mỗi lần chạy (nguyên nhân log A1 mất ở checkpoint A2; làm mất luôn `latest_logs/a2-pre-migrate/demo.sqlite.bak`, file không có trong git). `pytest.ini`: `addopts = -p no:seleniumbase`, `testpaths = tests`. Commit `3f4e8f2` trên `phase-a2-db-v3`, đã push. Không để bản sao lưu trong `latest_logs/` nữa.

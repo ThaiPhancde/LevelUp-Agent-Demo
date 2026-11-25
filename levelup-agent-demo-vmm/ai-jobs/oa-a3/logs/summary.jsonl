@@ -1,0 +1,2 @@
+{"event": "job", "id": "attempt-tests", "mode": "write", "exit": 0, "seconds": 248.2, "timed_out": false, "error": null, "log_bytes": 1786, "check_exit": 0}
+{"event": "run", "jobs": 1, "failed": 0, "failed_ids": [], "stray_writes": 0, "seconds": 249.8, "exit": 0}

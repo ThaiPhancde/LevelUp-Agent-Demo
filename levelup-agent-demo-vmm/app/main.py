@@ -14,7 +14,9 @@ from app.mock import data
 
 @asynccontextmanager
 async def lifespan(_app):
+    from app import auth
     from app.core import workflow
+    auth.actors()  # fail fast on a bad AUTH_* config instead of on the first Approve click
     for run_id in workflow.recover():  # checkpoint: resume runs that had not finished any task yet
         workflow.spawn(run_id)
     yield

@@ -247,3 +247,30 @@ Theo phiếu phạm vi đã duyệt (`docs/DEMO_PLAN_OPTION_A.md` mục 6.3). Nh
 **Đường quay lại:** commit `25ee168` (A1) + image `levelup-vmm-demo:baseline-v2`; chưa chạy migration trên volume `demo_data` thật trong lượt này (chỉ test trên DB tạm), nên không cần bản sao riêng để quay lại.
 
 **A2: Jarvis nghiệm thu 25/11/2026.** Đã commit/push nhánh `phase-a2-db-v3`, chưa mở A3.
+
+## A3 — Gateway chạy lại an toàn, dừng khẩn, phân quyền bằng token (25/11/2026)
+
+Theo phiếu phạm vi đã chốt (checkpoint "A3 mở" trong `DEMO_HANDOFF.md`). Nhánh `phase-a3-gateway-rerun` từ `phase-a2-db-v3` (`3f4e8f2`).
+
+- `app/core/gateway.py`: `execute(..., attempt=1)` luôn gọi `audit.check_action` trước; `detail` có thêm `attempt` + `action_hash` (sha256 JSON chuẩn hóa toàn bộ action); `approvals.tool` có giá trị. Dùng lại khi đã có dòng `tool_call` không BLOCK cùng `(run_id, task_key, tool, target, action_hash)` **và** trùng phán quyết: không tạo DRAFT/approval mới, vẫn ghi dòng `tool_call` mới chép đủ `detail` gốc + `reused=true` + `attempt` hiện tại. Ba hàm thuần mới `action_hash()`, `reusable()`, `current_attempt()`.
+- `app/agents/__init__.py`: truyền `ctx.attempt` vào gateway. `app/core/workflow.py`: `tool_calls()` chỉ giữ lời gọi của lần thử hiện tại của từng task (thiếu `attempt` = 1); `/runs/{id}/decision-log` vẫn trả đủ lịch sử.
+- Dừng khẩn: vòng `execute()` không giao task mới khi `system_stop.stopped=1` (task đang chạy chạy xong, task chờ giữ PENDING, run giữ RUNNING; ghi `dispatch_paused` / `dispatch_resumed` một lần mỗi đợt); mở lại thì chạy tiếp; hủy vẫn được khi đang dừng. Hỏi lại mỗi `STOP_POLL_S` (mặc định 0,5 s). `POST /runs` khi đang dừng → 409.
+- Phân quyền (`app/auth.py`): token riêng mỗi người qua `Authorization: Bearer <token>`; env `AUTH_OWNER=<tên>:<token>`, `AUTH_DELEGATES=<tên>:<token>,…`, `AUTH_MAX_DELEGATES=3`. Token ≥ 16 ký tự, tên/token không trùng; cấu hình sai thì app không khởi động (kiểm trong lifespan). Không cấu hình = không ai duyệt/dừng được. Duyệt/từ chối và dừng: chủ dự án hoặc người được ủy quyền; mở lại: chỉ chủ dự án. 401 thiếu/sai token, 403 không đủ quyền. Ghi trước có hiệu lực (người sau 409). DB/log chỉ lưu tên (`approvals.decided_by`, `system_stop.actor`, `decision_log`), không lưu token.
+- `app/web/main.js`: gặp 401 thì hỏi token một lần (`prompt`), giữ trong `sessionStorage` của tab, gửi lại; token sai thì xóa. Giao diện đăng nhập đầy đủ để A9.
+- `tests/test_phase5.py`: test HITL thêm token (bắt buộc từ A3), các kỳ vọng cũ giữ nguyên, thêm kiểm `decided_by`.
+
+**Test mới:**
+- `tests/test_a3_gateway_stop.py` (20 ca, Claude): happy path vẫn 8 `tool_call`, tất cả attempt 1 có hash; `missing_field:campaign` + ngưỡng 3000 → retry lần 2 cùng action chỉ 1 approval, dòng `reused` chép đủ `detail`, Audit không báo `not_via_gateway` (hồi quy retry); ngưỡng đổi giữa 2 lần thử → approval PENDING mới; Audit lần 2 không thấy BLOCK của lần 1 nhưng decision-log vẫn giữ; 401/403/200 cho stop/resume; `POST /runs` 409 khi dừng; run đang chạy dừng giao việc rồi chạy tiếp; hủy khi đang dừng; ghi trước có hiệu lực; không lưu token; 9 ca cấu hình (quá 3 người, nâng giới hạn bằng env, token ngắn/trùng, 2 owner, rỗng).
+- `tests/test_gateway_attempt_table.py` (31 ca, Gemini `ai-jobs/oa-a3`): bảng `action_hash` / `reusable` / `current_attempt`. Claude đọc từng ca; 1 sửa chữ (tool `pancake.create_draft` không có trong demo → `crm.reply_draft`).
+- Kiểm test bắt lỗi thật: tắt từng cơ chế (dùng lại, lọc lần thử, so phán quyết, chặn khi dừng) → mỗi lần đều có test đỏ; khôi phục code sau đó.
+
+**Kết quả đo:**
+- `pytest` local: **507 passed, 7 skipped** (456 cũ + 20 + 31).
+- `docker compose run --rm -T demo pytest -p no:cacheprovider -q`: **476 passed, 7 skipped** trước khi nhận file Gemini (`latest_logs/a3-gateway-20261125/pytest-container.log`); checker Gemini chạy file đó trong image: 31 passed.
+- `python tools/e2e/run_e2e.py` (E2E không gọi duyệt nên không cần token): 3 lượt liên tiếp đều API 7/7, restart OK, trình duyệt 9/9 — `e2e-run1.log`..`e2e-run3.log`.
+- Kiểm tay trên trình duyệt thật (container tạm cổng 8092, token thử, ngưỡng 3000): bấm Duyệt → hộp nhập token → run COMPLETED, `decided_by=an`; curl: stop không token 401, người ủy quyền stop 200, `POST /runs` 409, người ủy quyền resume 403, chủ dự án resume 200; log container không chứa token.
+- 0 lời gọi DeepSeek thật. Không đụng `lalahoa-db`/`aiops-demo-n8n-1`/`openmausbot-computer`.
+
+**Hạn chế đã biết:** dùng lại theo đúng đặc tả kể cả khi approval cũ đã bị từ chối (lần chạy lại giữ phán quyết cũ, không hỏi lại); hai action giống hệt trong cùng một lần thử cũng chỉ tạo một DRAFT. Container chính (8088) chưa tạo lại với image mới và `.env` chưa có `AUTH_*` → khi tạo lại phải thêm token thì nút Duyệt trên dashboard mới dùng được.
+
+**A3: chủ dự án nghiệm thu 25/11/2026.** Đã commit/push nhánh `phase-a3-gateway-rerun`, chưa mở A4.

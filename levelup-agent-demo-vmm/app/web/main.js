@@ -8,9 +8,23 @@ let runId = null;
 let timer = null;
 let office = null;
 
-async function api(path, options = {}) {
-  const res = await fetch(path, { headers: { 'content-type': 'application/json' }, ...options });
+// A3: Approve/Stop need a personal token. Asked once on 401, kept for this tab only (sessionStorage);
+// the server turns it into the person's name. ponytail: native prompt(); a proper sign-in panel belongs to A9.
+const TOKEN_KEY = 'levelup.token';
+
+async function api(path, options = {}, asked = false) {
+  const token = sessionStorage.getItem(TOKEN_KEY);
+  const headers = { 'content-type': 'application/json', ...(token ? { authorization: `Bearer ${token}` } : {}) };
+  const res = await fetch(path, { ...options, headers });
   const body = await res.json().catch(() => ({}));
+  if (res.status === 401 && !asked) {
+    const entered = prompt('Nhập mã cá nhân (token) để thực hiện thao tác này:');
+    if (entered && entered.trim()) {
+      sessionStorage.setItem(TOKEN_KEY, entered.trim());
+      return api(path, options, true);
+    }
+  }
+  if (res.status === 401) sessionStorage.removeItem(TOKEN_KEY);
   if (!res.ok) throw new Error(typeof body.detail === 'string' ? body.detail : `HTTP ${res.status}`);
   return body;
 }

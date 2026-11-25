@@ -58,6 +58,11 @@ def step_delay(mode: str) -> float:
     return float(os.getenv('MOCK_STEP_DELAY_S', '0.8')) if mode == 'mock' else 0.0
 
 
+def stop_poll() -> float:
+    """How often a run paused by the emergency stop re-checks it (seconds)."""
+    return float(os.getenv('STOP_POLL_S', '0.5'))
+
+
 def _hash(obj) -> str:
     return hashlib.sha256(json.dumps(obj, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:16]
 
@@ -122,8 +127,25 @@ async def execute(run_id: str) -> None:
     with db.tx() as c:
         if c.execute("UPDATE runs SET status='RUNNING' WHERE run_id=? AND status='PENDING'", (run_id,)).rowcount != 1:
             return  # someone else owns the run, or it is not runnable
+    paused = False
     try:
         while True:
+            # Emergency stop (A3): dispatch nothing new; the task that was running has finished, PENDING ones
+            # wait here and the run carries on after /admin/resume. Cancel still works while paused.
+            # ponytail: polls system_stop every STOP_POLL_S; an asyncio.Event if many runs ever wait at once.
+            if db.get_stop_state()['stopped']:
+                with db.tx() as c:
+                    if _get_run_row(c, run_id)['status'] != 'RUNNING':
+                        break
+                    if not paused:
+                        _decision(c, run_id, 'dispatch_paused', None, '01', detail={'reason': 'emergency stop'})
+                paused = True
+                await asyncio.sleep(stop_poll())
+                continue
+            if paused:
+                with db.tx() as c:
+                    _decision(c, run_id, 'dispatch_resumed', None, '01', detail={'reason': 'emergency stop cleared'})
+                paused = False
             with db.tx() as c:
                 run = c.execute('SELECT * FROM runs WHERE run_id=?', (run_id,)).fetchone()
                 if run['status'] != 'RUNNING':
@@ -376,10 +398,15 @@ def rejected_artifacts(run_id: str) -> dict:
 
 
 def tool_calls(run_id: str) -> list:
+    """Gateway calls of each task's current attempt only (A3): a retried task's old calls, e.g. a BLOCK of
+    attempt 1, are no longer reported by the Audit. decision-log over HTTP still returns every row."""
+    from app.core import gateway
     with db.tx() as c:
         rows = c.execute("SELECT task_key, agent_id, tool, permission, allowed, detail FROM decision_log "
                          "WHERE run_id=? AND action='tool_call' ORDER BY id", (run_id,)).fetchall()
-    return [{**dict(r), 'detail': json.loads(r['detail'] or '{}')} for r in rows]
+        attempts = {r['task_key']: r['attempt'] for r in c.execute('SELECT task_key, attempt FROM tasks WHERE run_id=?',
+                                                                   (run_id,))}
+    return gateway.current_attempt([{**dict(r), 'detail': json.loads(r['detail'] or '{}')} for r in rows], attempts)
 
 
 def save_engine_result(run_id: str, result: dict) -> int:
@@ -392,24 +419,25 @@ def save_engine_result(run_id: str, result: dict) -> int:
     return rid
 
 
-def decide_approval(run_id: str, approval_id: int, decision: str) -> str:
+def decide_approval(run_id: str, approval_id: int, decision: str, actor: str | None = None) -> str:
     """Human decision on a parked action. The run leaves WAITING_APPROVAL when nothing is pending.
     Approval only marks the mock DRAFT as approved; nothing is published (DEMO ONLY)."""
     if decision not in ('APPROVED', 'REJECTED'):
         raise WorkflowError(422, 'decision must be APPROVED or REJECTED')
     with db.tx() as c:
         run = _get_run_row(c, run_id)
-        if c.execute("UPDATE approvals SET status=?, decided_at=? WHERE id=? AND run_id=? AND status='PENDING'",
-                     (decision, db.now(), approval_id, run_id)).rowcount != 1:
+        if c.execute("UPDATE approvals SET status=?, decided_at=?, decided_by=? WHERE id=? AND run_id=? "
+                     "AND status='PENDING'", (decision, db.now(), actor, approval_id, run_id)).rowcount != 1:
             raise WorkflowError(409, 'approval not found or already decided')
-        _decision(c, run_id, 'human_approval', None, None, detail={'approval_id': approval_id, 'decision': decision})
+        _decision(c, run_id, 'human_approval', None, None,
+                  detail={'approval_id': approval_id, 'decision': decision, 'decided_by': actor})
         left = c.execute("SELECT COUNT(*) FROM approvals WHERE run_id=? AND status='PENDING'", (run_id,)).fetchone()[0]
         status = run['status']
         if run['status'] == 'WAITING_APPROVAL' and not left:
             status = 'COMPLETED'
             c.execute("UPDATE runs SET status='COMPLETED', finished_at=? WHERE run_id=? AND status='WAITING_APPROVAL'",
                       (db.now(), run_id))
-    db.log_event(run_id, 'Human', 'approval', {'approval_id': approval_id, 'decision': decision})
+    db.log_event(run_id, actor or 'Human', 'approval', {'approval_id': approval_id, 'decision': decision})
     return status
 
 

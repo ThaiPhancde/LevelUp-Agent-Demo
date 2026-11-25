@@ -1,0 +1,16 @@
+root agent idle; waiting up to 20m0s for 1 background task(s)
+Running `python -I ai-jobs/oa-a3/checker.py attempt-tests .` and waiting for it to finish.
+Created [test_gateway_attempt_table.py](file:///C:/Users/ADMIN/AppData/Local/Temp/claude/c5de980a4c9d07d1/89d2db05-5241-467d-8120-65e85bb8bc7e/scratchpad/gemini-a3/tests/test_gateway_attempt_table.py) with 31 `@pytest.mark.parametrize` cases covering the three pure functions in [gateway.py](file:///C:/Users/ADMIN/AppData/Local/Temp/claude/c5de980a4c9d07d1/89d2db05-5241-467d-8120-65e85bb8bc7e/scratchpad/gemini-a3/app/core/gateway.py):
+
+- `gateway.action_hash` (8 cases): 64-character lowercase hex format, top-level and nested key order invariance, UTF-8 Vietnamese stability, and digest inequality on changed `budget_php`, `target`, `tool`, or note text.
+- `gateway.reusable` (12 cases): empty `prior`, exact match (`ALLOW` and `NEEDS_APPROVAL`), `BLOCK` exclusion, decision mismatch (`ALLOW` vs `NEEDS_APPROVAL` both directions), target mismatch, hash mismatch, pre-A3 rows missing `action_hash`, newest match selection when multiple matches exist, match preserved before non-matching rows, and reused rows (`reused: True`).
+- `gateway.current_attempt` (11 cases): empty input, all rows at attempt 1, retried task at attempt 2 isolating only its attempt-2 rows while leaving other tasks unaffected, missing `attempt` defaulting to 1, `detail` `None` or missing defaulting to 1, task missing from `attempts` defaulting to 1, `BLOCK` row from attempt 1 disappearing at attempt 2, and order preservation.
+
+### Verification
+
+- Command: `python -I ai-jobs/oa-a3/checker.py attempt-tests .`
+- Output: `tests/test_gateway_attempt_table.py: static cases 31, pytest: 31 passed in 0.13s` (`OK`, exit code `0`).
+
+### SUSPECTED BUGS
+
+None.
